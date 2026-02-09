@@ -24,6 +24,15 @@ docker run -d --name mtgrl-frontend -p 8080:80 \
   mtgrl-frontend
 ```
 
+To point at a different leaderboard sheet, set `LEADERBOARD_SHEET_ID` (defaults
+to the shared MTGRL sheet):
+
+```bash
+docker run -d --name mtgrl-frontend -p 8080:80 \
+  -e LEADERBOARD_SHEET_ID=15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ \
+  mtgrl-frontend
+```
+
 ## Cloudflare Same-Domain API
 
 Point your Cloudflare DNS (CNAME or A record) at the Unraid host and enable the
@@ -34,4 +43,4 @@ same Cloudflare domain.
 ## Leaderboard
 
 Visit `/leaderboard.html` to view live standings pulled from the shared Google
-Sheet. Ensure the sheet is publicly readable so the browser can fetch it.
+Sheet. Ensure the sheet is publicly readable so the container can fetch it.

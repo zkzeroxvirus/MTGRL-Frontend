@@ -109,8 +109,7 @@
       const thead = table.querySelector("thead");
       const tbody = table.querySelector("tbody");
 
-      const sheetId = "15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ";
-      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+      const sheetUrl = "/leaderboard-data";
 
       const updateStatus = (text, tone) => {
         statusElement.textContent = text;
@@ -120,15 +119,14 @@
         statusElement.style.color = tone === "ok" ? "#86efac" : "#fca5a5";
       };
 
-      const parseCsv = (text) => {
-        const rows = [];
-        let row = [];
+      const parseCsvLine = (line) => {
+        const cells = [];
         let value = [];
         let inQuotes = false;
 
-        for (let i = 0; i < text.length; i += 1) {
-          const char = text[i];
-          const nextChar = text[i + 1];
+        for (let i = 0; i < line.length; i += 1) {
+          const char = line[i];
+          const nextChar = line[i + 1];
 
           if (char === "\"") {
             if (inQuotes && nextChar === "\"") {
@@ -141,18 +139,7 @@
           }
 
           if (char === "," && !inQuotes) {
-            row.push(value.join(""));
-            value = [];
-            continue;
-          }
-
-          if ((char === "\n" || char === "\r") && !inQuotes) {
-            if (char === "\r" && nextChar === "\n") {
-              i += 1;
-            }
-            row.push(value.join(""));
-            rows.push(row);
-            row = [];
+            cells.push(value.join(""));
             value = [];
             continue;
           }
@@ -160,13 +147,14 @@
           value.push(char);
         }
 
-        if (value.length > 0 || row.length > 0) {
-          row.push(value.join(""));
-          rows.push(row);
-        }
-
-        return rows.map((rowItem) => rowItem.map((cell) => cell.trim()));
+        cells.push(value.join(""));
+        return cells.map((cell) => cell.trim());
       };
+
+      const parseCsv = (text) => text
+        .split(/\r?\n/)
+        .filter((line) => line.length > 0)
+        .map(parseCsvLine);
 
       const clearElement = (element) => {
         element.replaceChildren();
