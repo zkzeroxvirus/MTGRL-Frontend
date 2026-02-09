@@ -4,222 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MTGRL Leaderboard</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-        background: #0b0b10;
-        color: #f4f4f8;
-      }
-      body {
-        margin: 0;
-        min-height: 100vh;
-        padding: 32px 24px 48px;
-      }
-      .card {
-        max-width: 960px;
-        margin: 0 auto;
-        background: #151522;
-        padding: 32px;
-        border-radius: 16px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      }
-      header {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 20px;
-      }
-      h1 {
-        margin: 0;
-        font-size: 2rem;
-      }
-      p {
-        margin: 0;
-        color: #c9c9d4;
-      }
-      .status {
-        margin-top: 16px;
-        padding: 12px 16px;
-        border-radius: 10px;
-        background: rgba(59, 130, 246, 0.15);
-        color: #93c5fd;
-        font-weight: 600;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        font-size: 0.95rem;
-      }
-      th,
-      td {
-        padding: 12px 14px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-        text-align: left;
-      }
-      th {
-        color: #e2e8f0;
-        font-weight: 600;
-        background: rgba(30, 41, 59, 0.5);
-      }
-      tr:nth-child(even) td {
-        background: rgba(15, 23, 42, 0.4);
-      }
-      .actions {
-        margin-top: 24px;
-      }
-      .button {
-        display: inline-block;
-        padding: 10px 16px;
-        border-radius: 8px;
-        background: #2563eb;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 600;
-      }
-      .button:hover {
-        background: #1d4ed8;
-      }
-      .empty {
-        color: #cbd5f5;
-        text-align: center;
-        padding: 20px 0;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
-    <div class="card">
-      <header>
-        <h1>MTGRL Leaderboard</h1>
-        <p>Live standings pulled from the shared Google Sheet.</p>
-      </header>
-      <div class="status" id="status">Loading leaderboard data...</div>
-      <table aria-label="Leaderboard" id="leaderboard">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-      <div class="actions">
-        <a class="button" href="index.html">Back to Home</a>
-      </div>
-    </div>
-    <script>
-      const statusElement = document.getElementById("status");
-      const table = document.getElementById("leaderboard");
-      const thead = table.querySelector("thead");
-      const tbody = table.querySelector("tbody");
-
-      const sheetUrl = "/leaderboard-data";
-
-      const updateStatus = (text, tone) => {
-        statusElement.textContent = text;
-        statusElement.style.background = tone === "ok"
-          ? "rgba(34, 197, 94, 0.15)"
-          : "rgba(239, 68, 68, 0.15)";
-        statusElement.style.color = tone === "ok" ? "#86efac" : "#fca5a5";
-      };
-
-      const parseCsvLine = (line) => line
-          .split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
-          .map((cell) => {
-            const trimmedCell = cell.trim();
-            if (trimmedCell.startsWith("\"") && trimmedCell.endsWith("\"")) {
-              return trimmedCell.slice(1, -1).replace(/\"\"/g, "\"");
-            }
-            return trimmedCell;
-          });
-
-      const parseCsv = (text) => text
-        .split(/\r?\n/)
-        .filter((line) => line.length > 0)
-        .map(parseCsvLine);
-
-      const clearElement = (element) => {
-        element.replaceChildren();
-      };
-
-      const renderEmpty = (message, options = {}) => {
-        const { clearHeader = true, colSpan = 1 } = options;
-        if (clearHeader) {
-          clearElement(thead);
-        }
-        clearElement(tbody);
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-        cell.className = "empty";
-        cell.colSpan = colSpan;
-        cell.textContent = message;
-        row.appendChild(cell);
-        tbody.appendChild(row);
-      };
-
-      const renderTable = (rows) => {
-        if (rows.length === 0) {
-          renderEmpty("No leaderboard data available yet.");
-          return;
-        }
-
-        const [headerRow, ...bodyRows] = rows;
-        const safeHeader = headerRow.length ? headerRow : ["Leaderboard"];
-
-        clearElement(thead);
-        const headerRowElement = document.createElement("tr");
-        safeHeader.forEach((cell) => {
-          const headerCell = document.createElement("th");
-          headerCell.textContent = cell;
-          headerRowElement.appendChild(headerCell);
-        });
-        thead.appendChild(headerRowElement);
-
-        if (bodyRows.length === 0) {
-          renderEmpty("No leaderboard entries yet.", {
-            clearHeader: false,
-            colSpan: safeHeader.length,
-          });
-          return;
-        }
-
-        clearElement(tbody);
-        bodyRows.forEach((row) => {
-          const rowElement = document.createElement("tr");
-          safeHeader.forEach((_, index) => {
-            const cellElement = document.createElement("td");
-            cellElement.textContent = row[index] ?? "";
-            rowElement.appendChild(cellElement);
-          });
-          tbody.appendChild(rowElement);
-        });
-      };
-
-      const friendlyErrorMessage = (error) => {
-        if (error instanceof Error && error.message.startsWith("Sheet responded with")) {
-          return "Leaderboard data source returned an error.";
-        }
-        if (error instanceof TypeError) {
-          return "Failed to connect to the leaderboard data source.";
-        }
-        return "Unable to load leaderboard data.";
-      };
-
-      const loadLeaderboard = async () => {
-        try {
-          const response = await fetch(sheetUrl);
-          if (!response.ok) {
-            throw new Error(`Sheet responded with ${response.status} ${response.statusText}`);
-          }
-          const csv = await response.text();
-          const rows = parseCsv(csv.trim());
-          updateStatus("Leaderboard loaded.", "ok");
-          renderTable(rows);
-        } catch (error) {
-          console.error(error);
-          const message = friendlyErrorMessage(error);
-          updateStatus(message, "error");
-          renderEmpty(message);
-        }
-      };
-
-      loadLeaderboard();
-    </script>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main class="app" id="main">
+      <section class="card">
+        <div class="stack">
+          <header class="hero reveal">
+            <span class="eyebrow">Live Standings</span>
+            <h1>MTGRL Leaderboard</h1>
+            <p>Live standings pulled from the shared Google Sheet.</p>
+          </header>
+          <div class="status reveal delay-1" id="status">Loading leaderboard data...</div>
+          <div class="table-wrap reveal delay-2">
+            <table aria-label="Leaderboard" id="leaderboard">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="actions reveal delay-3">
+            <a class="button secondary" href="index.html">Back to Home</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="assets/leaderboard.js"></script>
   </body>
 </html>

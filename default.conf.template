@@ -8,6 +8,11 @@ server {
   index index.html;
 
   location / {
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://docs.google.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
     try_files $uri /index.html;
   }
 
@@ -22,6 +27,7 @@ server {
   }
 
   location = /leaderboard-data {
+    add_header Cache-Control "public, max-age=60" always;
     limit_req zone=leaderboard_limit burst=10 nodelay;
     set $leaderboard_query "tqx=out:csv";
     proxy_pass https://docs.google.com/spreadsheets/d/${LEADERBOARD_SHEET_ID}/gviz/tq?$leaderboard_query;
