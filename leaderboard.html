@@ -109,7 +109,7 @@
       const thead = table.querySelector("thead");
       const tbody = table.querySelector("tbody");
 
-      const sheetUrl = "/leaderboard-data?tqx=out:csv";
+      const sheetUrl = "/leaderboard-data";
 
       const updateStatus = (text, tone) => {
         statusElement.textContent = text;
@@ -124,7 +124,7 @@
           .map((cell) => {
             const trimmedCell = cell.trim();
             if (trimmedCell.startsWith("\"") && trimmedCell.endsWith("\"")) {
-              return trimmedCell.slice(1, -1).replace(/""/g, "\"");
+              return trimmedCell.slice(1, -1).replace(/\"\"/g, "\"");
             }
             return trimmedCell;
           });
@@ -192,13 +192,11 @@
       };
 
       const friendlyErrorMessage = (error) => {
+        if (error instanceof Error && error.message.startsWith("Sheet responded with")) {
+          return "Leaderboard data source returned an error.";
+        }
         if (error instanceof TypeError) {
           return "Failed to connect to the leaderboard data source.";
-        }
-        if (error instanceof Error) {
-          if (error.message.startsWith("Sheet responded with")) {
-            return "Leaderboard data source returned an error.";
-          }
         }
         return "Unable to load leaderboard data.";
       };
