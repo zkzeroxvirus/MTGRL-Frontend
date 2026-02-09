@@ -3,40 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MTGRL Frontend</title>
+    <title>MTG Roguelike</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <main class="app" id="main">
-      <section class="card">
-        <div class="stack">
-          <div class="hero reveal">
-            <span class="eyebrow">MTGRL Gateway</span>
-            <h1>MTGRL Frontend</h1>
-            <p>
-              This page is served from the Docker container. API requests are routed through
-              <code>/api</code> so a reverse proxy like Cloudflare can keep the frontend and
-              API on the same domain.
-            </p>
-          </div>
-          <div class="status reveal delay-1" id="status">Checking API connectivity...</div>
-          <div class="panel reveal delay-2">
-            <pre id="response">Waiting for API response.</pre>
-          </div>
-          <p class="reveal delay-2">
-            If the API is unavailable, confirm Cloudflare is proxying <code>/api</code> to
-            <code>api.mtginfo.org</code>.
+    <main class="page" id="main">
+      <header class="topbar">
+        <div class="brand">MTGRL</div>
+        <nav class="nav">
+          <a href="rules.html">Rules</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="api-status.html">API Status</a>
+        </nav>
+      </header>
+
+      <section class="hero card reveal">
+        <div class="hero-copy">
+          <span class="eyebrow">MTG Roguelike</span>
+          <h1>Build. Die. Unlock. Repeat.</h1>
+          <p>
+            MTG Roguelike is a tabletop campaign where every run pushes your power forward.
+            Draft risky upgrades, take on crypt bosses, and climb the ladder with each win.
           </p>
-          <div class="actions reveal delay-3">
-            <a class="button" href="leaderboard.html">View Leaderboard</a>
-            <a class="button secondary" href="/api/" target="_blank" rel="noreferrer">Open API Status</a>
+          <div class="actions">
+            <a class="button" href="rules.html">Read the Rules</a>
+            <a class="button secondary" href="leaderboard.html">View Leaderboard</a>
           </div>
+        </div>
+        <div class="hero-panel">
+          <div class="hero-kicker">Run highlights</div>
+          <div class="pill-list">
+            <span class="pill">Roguelike Drafting</span>
+            <span class="pill">Crypt Bosses</span>
+            <span class="pill">Essence Economy</span>
+            <span class="pill">Unlockable Buffs</span>
+            <span class="pill">Persistent Progress</span>
+            <span class="pill">Weekly Challenges</span>
+          </div>
+          <p class="meta">
+            The live API status and detailed stats now live on their own page.
+          </p>
+          <a class="button tertiary" href="api-status.html">Check API Status</a>
+        </div>
+      </section>
+
+      <section class="grid reveal delay-1">
+        <div class="card">
+          <h2>Run-Driven Progression</h2>
+          <p>
+            Every run delivers Essence and unlocks. Riskier paths unlock bigger buffs and
+            faster momentum for your next build.
+          </p>
+        </div>
+        <div class="card">
+          <h2>Compete Together</h2>
+          <p>
+            Track who is stacking the most Essence, buffs, and achievements across runs.
+          </p>
+        </div>
+        <div class="card">
+          <h2>Tabletop Ready</h2>
+          <p>
+            Built for Tabletop Simulator, fast to pick up, and easy to keep running with
+            the same backend powering imports and stats.
+          </p>
         </div>
       </section>
     </main>
-    <script src="assets/index.js"></script>
   </body>
 </html>

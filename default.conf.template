@@ -29,10 +29,7 @@ server {
   location = /leaderboard-data {
     add_header Cache-Control "public, max-age=60" always;
     limit_req zone=leaderboard_limit burst=10 nodelay;
-    set $leaderboard_query "tqx=out:csv";
-    proxy_pass https://docs.google.com/spreadsheets/d/${LEADERBOARD_SHEET_ID}/gviz/tq?$leaderboard_query;
-    proxy_ssl_server_name on;
-    proxy_set_header Host docs.google.com;
+    proxy_pass http://backend:3000/leaderboard-data;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MTGRL API Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main class="page" id="main">
+      <header class="topbar">
+        <div class="brand">MTGRL</div>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="rules.html">Rules</a>
+          <a href="leaderboard.html">Leaderboard</a>
+        </nav>
+      </header>
+
+      <section class="hero card reveal">
+        <div class="hero-copy">
+          <span class="eyebrow">Service Health</span>
+          <h1>API Status</h1>
+          <p>
+            Live checks against the MTGRL backend. Use this page to confirm connectivity,
+            latency, and the status payload powering the app.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <div class="status-line">
+            <span class="status-light" id="status-light" aria-hidden="true"></span>
+            <div>
+              <div class="status-label">Current Status</div>
+              <div class="status" id="status">Checking API connectivity...</div>
+            </div>
+          </div>
+          <div class="status-metrics">
+            <div class="metric">
+              <span class="metric-label">Latency</span>
+              <span class="metric-value" id="latency">-- ms</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">HTTP Code</span>
+              <span class="metric-value" id="http-code">--</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Last Check</span>
+              <span class="metric-value" id="last-check">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid reveal delay-1">
+        <div class="card">
+          <div class="panel-title">Status Details</div>
+          <div class="key-values" id="details">
+            <div class="key-value">
+              <span class="key">Status</span>
+              <span class="value">Waiting for response</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="panel-title">Raw Response</div>
+          <pre id="response">Waiting for API response.</pre>
+        </div>
+      </section>
+    </main>
+    <script src="assets/index.js"></script>
+  </body>
+</html>

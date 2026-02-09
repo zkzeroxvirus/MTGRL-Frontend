@@ -10,24 +10,48 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <main class="app" id="main">
-      <section class="card">
-        <div class="stack">
-          <header class="hero reveal">
-            <span class="eyebrow">Live Standings</span>
-            <h1>MTGRL Leaderboard</h1>
-            <p>Live standings pulled from the shared Google Sheet.</p>
-          </header>
-          <div class="status reveal delay-1" id="status">Loading leaderboard data...</div>
-          <div class="table-wrap reveal delay-2">
-            <table aria-label="Leaderboard" id="leaderboard">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
+    <main class="page" id="main">
+      <header class="topbar">
+        <div class="brand">MTGRL</div>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="rules.html">Rules</a>
+          <a href="api-status.html">API Status</a>
+        </nav>
+      </header>
+
+      <section class="hero card reveal">
+        <div class="hero-copy">
+          <span class="eyebrow">Live Standings</span>
+          <h1>MTGRL Leaderboard</h1>
+          <p>Live standings pulled from the shared Google Sheet.</p>
+          <p class="meta" id="meta">Updated moments ago.</p>
+        </div>
+        <div class="hero-panel">
+          <div class="status" id="status">Loading leaderboard data...</div>
+          <div class="stats" id="stats">
+            <div class="stat">
+              <span class="stat-label">Players</span>
+              <span class="stat-value" data-stat="players">--</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total Essence</span>
+              <span class="stat-value" data-stat="essence">--</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Top Score</span>
+              <span class="stat-value" data-stat="top-score">--</span>
+            </div>
           </div>
-          <div class="actions reveal delay-3">
-            <a class="button secondary" href="index.html">Back to Home</a>
-          </div>
+        </div>
+      </section>
+
+      <section class="card table-card reveal delay-1">
+        <div class="table-wrap">
+          <table aria-label="Leaderboard" id="leaderboard">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </section>
     </main>

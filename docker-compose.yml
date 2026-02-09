@@ -1,4 +1,13 @@
 services:
+  backend:
+    build: ./backend
+    image: mtgrl-leaderboard-backend:local
+    environment:
+      LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
+      LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-0}"
+      GOOGLE_APPLICATION_CREDENTIALS: "/app/service_account.json"
+    volumes:
+      - ./backend/service_account.json:/app/service_account.json:ro
   frontend:
     build: .
     image: mtgrl-frontend:local
@@ -7,3 +16,6 @@ services:
     environment:
       API_BACKEND_URL: "${API_BACKEND_URL:-https://api.mtginfo.org}"
       LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
+      LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-0}"
+    depends_on:
+      - backend
