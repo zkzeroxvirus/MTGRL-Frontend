@@ -59,6 +59,9 @@ app.get("/leaderboard-data", async (req, res) => {
     });
 
     const rows = data.data.values || [];
+    if (req.query.format === "json") {
+      return res.status(200).json({ rows });
+    }
     res.set("Content-Type", "text/csv; charset=utf-8");
     return res.status(200).send(toCsv(rows));
   } catch (error) {

@@ -365,6 +365,12 @@ pre {
   border-color: rgba(28, 31, 36, 0.25);
 }
 
+.button.small {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  align-self: start;
+}
+
 .button.tertiary {
   background: rgba(30, 111, 112, 0.12);
   color: #0d3f40;
@@ -379,6 +385,13 @@ pre {
 
 .button.secondary:hover {
   background: rgba(28, 31, 36, 0.06);
+  box-shadow: none;
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
   box-shadow: none;
 }
 
@@ -539,16 +552,36 @@ tr:nth-child(even) td {
   font-weight: 600;
 }
 
+.rank-cell {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.rank-cell--1 {
+  color: #a87900;
+}
+
+.rank-cell--2 {
+  color: #64748b;
+}
+
+.rank-cell--3 {
+  color: #8f5a2b;
+}
+
 .rank-1 td {
   border-left: 4px solid #d4a017;
+  background: rgba(212, 160, 23, 0.12);
 }
 
 .rank-2 td {
   border-left: 4px solid #9aa5ae;
+  background: rgba(154, 165, 174, 0.12);
 }
 
 .rank-3 td {
   border-left: 4px solid #b17748;
+  background: rgba(177, 119, 72, 0.12);
 }
 
 .empty {

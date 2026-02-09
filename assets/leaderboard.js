@@ -1,5 +1,6 @@
 const statusElement = document.getElementById("status");
 const metaElement = document.getElementById("meta");
+const refreshButton = document.getElementById("refresh");
 const table = document.getElementById("leaderboard");
 const thead = table.querySelector("thead");
 const tbody = table.querySelector("tbody");
@@ -9,7 +10,7 @@ const statElements = {
   topScore: document.querySelector('[data-stat="top-score"]'),
 };
 
-const sheetUrl = "/leaderboard-data";
+const sheetUrl = "/leaderboard-data?format=json";
 
 const ACHIEVEMENT_WEIGHT = 50000;
 const CRYPT_BUFF_WEIGHT = 5000;
@@ -27,22 +28,57 @@ const updateStatus = (text, tone) => {
   statusElement.classList.toggle("error", tone === "error");
 };
 
-const parseCsvLine = (line) => line
-  .split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
-  .map((cell) => {
-    const trimmedCell = cell.trim();
-    if (trimmedCell.startsWith("\"") && trimmedCell.endsWith("\"")) {
-      return trimmedCell.slice(1, -1).replace(/\"\"/g, "\"");
-    }
-    return trimmedCell;
-  });
+const parseCsv = (text) => {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+  let index = 0;
 
-const parseCsv = (text) => text
-  .replace(/^\uFEFF/, "")
-  .split(/\r?\n/)
-  .map((line) => line.trim())
-  .filter((line) => line.length > 0)
-  .map(parseCsvLine);
+  const pushCell = () => {
+    row.push(cell);
+    cell = "";
+  };
+
+  const pushRow = () => {
+    rows.push(row.map((value) => value.trim()));
+    row = [];
+  };
+
+  const normalized = text.replace(/^\uFEFF/, "");
+
+  while (index < normalized.length) {
+    const char = normalized[index];
+
+    if (char === "\"") {
+      if (inQuotes && normalized[index + 1] === "\"") {
+        cell += "\"";
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (char === "," && !inQuotes) {
+      pushCell();
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      pushCell();
+      pushRow();
+      if (char === "\r" && normalized[index + 1] === "\n") {
+        index += 1;
+      }
+    } else {
+      cell += char;
+    }
+
+    index += 1;
+  }
+
+  if (cell.length > 0 || row.length > 0) {
+    pushCell();
+    pushRow();
+  }
+
+  return rows.filter((entry) => entry.length > 0 && entry.some((value) => value.length > 0));
+};
 
 const clearElement = (element) => {
   element.replaceChildren();
@@ -146,7 +182,7 @@ const renderTable = (entries) => {
   }
 
   const headerRowElement = document.createElement("tr");
-  ["Rank", "Player", "Score", "Essence", "Ach", "Buffs", "Tickets", "Unlocks"].forEach((label) => {
+  ["Rank", "Player", "Score", "Essence", "Achievements", "Buffs", "Tickets", "Unlocks"].forEach((label) => {
     const headerCell = document.createElement("th");
     headerCell.textContent = label;
     headerRowElement.appendChild(headerCell);
@@ -163,8 +199,14 @@ const renderTable = (entries) => {
       rowElement.classList.add(`rank-${index + 1}`);
     }
 
+    const rankNumber = index + 1;
+    const rankText = rankNumber === 1 ? "🥇 1"
+      : rankNumber === 2 ? "🥈 2"
+        : rankNumber === 3 ? "🥉 3"
+          : String(rankNumber);
+
     const cells = [
-      String(index + 1),
+      rankText,
       entry.name,
       entry.score.toLocaleString(),
       entry.essence.toLocaleString(),
@@ -177,6 +219,12 @@ const renderTable = (entries) => {
     cells.forEach((value, cellIndex) => {
       const cellElement = document.createElement("td");
       cellElement.textContent = value;
+      if (cellIndex === 0) {
+        cellElement.classList.add("rank-cell");
+        if (rankNumber <= 3) {
+          cellElement.classList.add(`rank-cell--${rankNumber}`);
+        }
+      }
       if (cellIndex === 1) {
         cellElement.classList.add("player-cell");
       }
@@ -201,6 +249,14 @@ const updateStats = (entries) => {
   if (statElements.topScore) {
     statElements.topScore.textContent = topScore.toLocaleString();
   }
+};
+
+const setLoadingState = (isLoading) => {
+  if (!refreshButton) {
+    return;
+  }
+  refreshButton.disabled = isLoading;
+  refreshButton.textContent = isLoading ? "Refreshing..." : "Refresh";
 };
 
 const friendlyErrorMessage = (error) => {
@@ -274,13 +330,21 @@ const buildEntries = (rows) => {
 const loadLeaderboard = async () => {
   try {
     table.setAttribute("aria-busy", "true");
+    setLoadingState(true);
     renderSkeleton(8, 8);
     const response = await fetch(sheetUrl, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Sheet responded with ${response.status} ${response.statusText}`);
     }
-    const csv = await response.text();
-    const rows = parseCsv(csv.trim());
+    const contentType = response.headers.get("content-type") || "";
+    let rows = [];
+    if (contentType.includes("application/json")) {
+      const payload = await response.json();
+      rows = Array.isArray(payload) ? payload : payload.rows || [];
+    } else {
+      const csv = await response.text();
+      rows = parseCsv(csv.trim());
+    }
     const entries = buildEntries(rows);
     updateStatus("Leaderboard loaded.", "ok");
     renderTable(entries);
@@ -295,7 +359,14 @@ const loadLeaderboard = async () => {
     renderEmpty(message);
   } finally {
     table.removeAttribute("aria-busy");
+    setLoadingState(false);
   }
 };
 
 loadLeaderboard();
+
+if (refreshButton) {
+  refreshButton.addEventListener("click", () => {
+    loadLeaderboard();
+  });
+}
