@@ -148,6 +148,9 @@
         }
 
         cells.push(value.join(""));
+        if (inQuotes) {
+          throw new Error("Malformed CSV row");
+        }
         return cells.map((cell) => cell.trim());
       };
 
