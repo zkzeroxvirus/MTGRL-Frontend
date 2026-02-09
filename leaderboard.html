@@ -120,38 +120,20 @@
       };
 
       const parseCsvLine = (line) => {
-        const cells = [];
-        let value = [];
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i += 1) {
-          const char = line[i];
-          const nextChar = line[i + 1];
-
-          if (char === "\"") {
-            if (inQuotes && nextChar === "\"") {
-              value.push("\"");
-              i += 1;
-              continue;
-            }
-            inQuotes = !inQuotes;
-            continue;
-          }
-
-          if (char === "," && !inQuotes) {
-            cells.push(value.join(""));
-            value = [];
-            continue;
-          }
-
-          value.push(char);
-        }
-
-        cells.push(value.join(""));
-        if (inQuotes) {
+        const quoteCount = (line.match(/"/g) || []).length;
+        if (quoteCount % 2 !== 0) {
           throw new Error("Malformed CSV row");
         }
-        return cells.map((cell) => cell.trim());
+
+        return line
+          .split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
+          .map((cell) => {
+            const trimmedCell = cell.trim();
+            if (trimmedCell.startsWith("\"") && trimmedCell.endsWith("\"")) {
+              return trimmedCell.slice(1, -1).replace(/""/g, "\"");
+            }
+            return trimmedCell;
+          });
       };
 
       const parseCsv = (text) => text
@@ -216,6 +198,18 @@
         });
       };
 
+      const friendlyErrorMessage = (error) => {
+        if (error instanceof Error) {
+          if (error.message.includes("Malformed CSV")) {
+            return "Leaderboard data format is invalid.";
+          }
+          if (error.message.includes("fetch")) {
+            return "Failed to connect to the leaderboard data source.";
+          }
+        }
+        return "Unable to load leaderboard data.";
+      };
+
       const loadLeaderboard = async () => {
         try {
           const response = await fetch(sheetUrl);
@@ -227,9 +221,9 @@
           updateStatus("Leaderboard loaded.", "ok");
           renderTable(rows);
         } catch (error) {
+          console.error(error);
           updateStatus("Unable to load leaderboard data.", "error");
-          const message = error instanceof Error ? error.message : String(error);
-          renderEmpty(message);
+          renderEmpty(friendlyErrorMessage(error));
         }
       };
 
