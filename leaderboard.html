@@ -119,13 +119,7 @@
         statusElement.style.color = tone === "ok" ? "#86efac" : "#fca5a5";
       };
 
-      const parseCsvLine = (line) => {
-        const quoteCount = (line.match(/"/g) || []).length;
-        if (quoteCount % 2 !== 0) {
-          throw new Error("CSV row contains unmatched quotes.");
-        }
-
-        return line
+      const parseCsvLine = (line) => line
           .split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/)
           .map((cell) => {
             const trimmedCell = cell.trim();
@@ -134,7 +128,6 @@
             }
             return trimmedCell;
           });
-      };
 
       const parseCsv = (text) => text
         .split(/\r?\n/)
@@ -200,9 +193,6 @@
 
       const friendlyErrorMessage = (error) => {
         if (error instanceof Error) {
-          if (error.message.includes("unmatched quotes")) {
-            return "Leaderboard data format is invalid.";
-          }
           if (error.message.startsWith("Sheet responded with")) {
             return "Leaderboard data source returned an error.";
           }
