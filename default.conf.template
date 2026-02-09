@@ -1,0 +1,34 @@
+limit_req_zone $binary_remote_addr zone=leaderboard_limit:10m rate=2r/s;
+
+server {
+  listen 80;
+  server_name _;
+
+  root /usr/share/nginx/html;
+  index index.html;
+
+  location / {
+    try_files $uri /index.html;
+  }
+
+  location /api/ {
+    rewrite ^/api/?(.*)$ /$1 break;
+    proxy_pass ${API_BACKEND_URL};
+    proxy_ssl_server_name on;
+    proxy_set_header Host $proxy_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location = /leaderboard-data {
+    limit_req zone=leaderboard_limit burst=10 nodelay;
+    set $leaderboard_query "tqx=out:csv";
+    proxy_pass https://docs.google.com/spreadsheets/d/${LEADERBOARD_SHEET_ID}/gviz/tq?$leaderboard_query;
+    proxy_ssl_server_name on;
+    proxy_set_header Host docs.google.com;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
