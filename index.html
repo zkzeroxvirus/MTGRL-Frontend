@@ -64,9 +64,9 @@
     <div class="card">
       <h1>MTGRL Frontend</h1>
       <p>
-        This page is served from the Unraid container. API requests are routed through
-        <code>/api</code> so Cloudflare can keep the frontend and API on the same
-        domain.
+        This page is served from the Docker container. API requests are routed through
+        <code>/api</code> so a reverse proxy like Cloudflare can keep the frontend and
+        API on the same domain.
       </p>
       <div class="status" id="status">Checking API connectivity...</div>
       <pre id="response">Waiting for API response.</pre>

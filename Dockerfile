@@ -1,6 +1,8 @@
 FROM nginx:1.25-alpine
 
-COPY nginx.conf /etc/nginx/nginx.conf
+ENV API_BACKEND_URL=https://api.mtginfo.org
+
+COPY default.conf.template /etc/nginx/templates/default.conf.template
 COPY index.html /usr/share/nginx/html/index.html
 
 EXPOSE 80
