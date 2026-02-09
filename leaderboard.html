@@ -123,7 +123,7 @@
       const parseCsv = (text) => {
         const rows = [];
         let row = [];
-        let value = "";
+        let value = [];
         let inQuotes = false;
 
         for (let i = 0; i < text.length; i += 1) {
@@ -132,7 +132,7 @@
 
           if (char === "\"") {
             if (inQuotes && nextChar === "\"") {
-              value += "\"";
+              value.push("\"");
               i += 1;
               continue;
             }
@@ -141,8 +141,8 @@
           }
 
           if (char === "," && !inQuotes) {
-            row.push(value);
-            value = "";
+            row.push(value.join(""));
+            value = [];
             continue;
           }
 
@@ -150,18 +150,18 @@
             if (char === "\r" && nextChar === "\n") {
               i += 1;
             }
-            row.push(value);
+            row.push(value.join(""));
             rows.push(row);
             row = [];
-            value = "";
+            value = [];
             continue;
           }
 
-          value += char;
+          value.push(char);
         }
 
         if (value.length > 0 || row.length > 0) {
-          row.push(value);
+          row.push(value.join(""));
           rows.push(row);
         }
 
@@ -169,24 +169,14 @@
       };
 
       const clearElement = (element) => {
-        while (element.firstChild) {
-          element.removeChild(element.firstChild);
+        element.replaceChildren();
+      };
+
+      const renderEmpty = (message, options = {}) => {
+        const { clearHeader = true, colSpan = 1 } = options;
+        if (clearHeader) {
+          clearElement(thead);
         }
-      };
-
-      const renderEmpty = (message) => {
-        clearElement(thead);
-        clearElement(tbody);
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-        cell.className = "empty";
-        cell.colSpan = 1;
-        cell.textContent = message;
-        row.appendChild(cell);
-        tbody.appendChild(row);
-      };
-
-      const renderBodyEmpty = (message, colSpan) => {
         clearElement(tbody);
         const row = document.createElement("tr");
         const cell = document.createElement("td");
@@ -216,7 +206,10 @@
         thead.appendChild(headerRowElement);
 
         if (bodyRows.length === 0) {
-          renderBodyEmpty("No leaderboard entries yet.", safeHeader.length);
+          renderEmpty("No leaderboard entries yet.", {
+            clearHeader: false,
+            colSpan: safeHeader.length,
+          });
           return;
         }
 
