@@ -43,4 +43,6 @@ same Cloudflare domain.
 ## Leaderboard
 
 Visit `/leaderboard.html` to view live standings pulled from the shared Google
-Sheet. Ensure the sheet is publicly readable so the container can fetch it.
+Sheet. Ensure the sheet is publicly readable so the container can fetch it. The
+page expects standard Google Sheets CSV output (avoid multiline cells), and
+`LEADERBOARD_SHEET_ID` should be a valid sheet ID.
