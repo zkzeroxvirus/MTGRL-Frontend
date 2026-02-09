@@ -20,7 +20,7 @@ server {
   }
 
   location = /leaderboard-data {
-    proxy_pass https://docs.google.com/spreadsheets/d/${LEADERBOARD_SHEET_ID}/gviz/tq?tqx=out:csv;
+    proxy_pass https://docs.google.com/spreadsheets/d/${LEADERBOARD_SHEET_ID}/gviz/tq?$args;
     proxy_ssl_server_name on;
     proxy_set_header Host docs.google.com;
     proxy_set_header X-Real-IP $remote_addr;

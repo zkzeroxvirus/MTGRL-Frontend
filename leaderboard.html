@@ -109,7 +109,7 @@
       const thead = table.querySelector("thead");
       const tbody = table.querySelector("tbody");
 
-      const sheetUrl = "/leaderboard-data";
+      const sheetUrl = "/leaderboard-data?tqx=out:csv";
 
       const updateStatus = (text, tone) => {
         statusElement.textContent = text;
@@ -122,7 +122,7 @@
       const parseCsvLine = (line) => {
         const quoteCount = (line.match(/"/g) || []).length;
         if (quoteCount % 2 !== 0) {
-          throw new Error("Malformed CSV row");
+          throw new Error("CSV row contains unmatched quotes.");
         }
 
         return line
@@ -200,10 +200,13 @@
 
       const friendlyErrorMessage = (error) => {
         if (error instanceof Error) {
-          if (error.message.includes("Malformed CSV")) {
+          if (error.message.includes("unmatched quotes")) {
             return "Leaderboard data format is invalid.";
           }
-          if (error.message.includes("fetch")) {
+          if (error.message.startsWith("Sheet responded with")) {
+            return "Leaderboard data source returned an error.";
+          }
+          if (error instanceof TypeError) {
             return "Failed to connect to the leaderboard data source.";
           }
         }
