@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MTGRL Leaderboard</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: #0b0b10;
+        color: #f4f4f8;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 32px 24px 48px;
+      }
+      .card {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #151522;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      }
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+      p {
+        margin: 0;
+        color: #c9c9d4;
+      }
+      .status {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+        font-weight: 600;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 0.95rem;
+      }
+      th,
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        text-align: left;
+      }
+      th {
+        color: #e2e8f0;
+        font-weight: 600;
+        background: rgba(30, 41, 59, 0.5);
+      }
+      tr:nth-child(even) td {
+        background: rgba(15, 23, 42, 0.4);
+      }
+      .actions {
+        margin-top: 24px;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: #2563eb;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .button:hover {
+        background: #1d4ed8;
+      }
+      .empty {
+        color: #cbd5f5;
+        text-align: center;
+        padding: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <header>
+        <h1>MTGRL Leaderboard</h1>
+        <p>Live standings pulled from the shared Google Sheet.</p>
+      </header>
+      <div class="status" id="status">Loading leaderboard data...</div>
+      <table aria-label="Leaderboard" id="leaderboard">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+      <div class="actions">
+        <a class="button" href="index.html">Back to Home</a>
+      </div>
+    </div>
+    <script>
+      const statusElement = document.getElementById("status");
+      const table = document.getElementById("leaderboard");
+      const thead = table.querySelector("thead");
+      const tbody = table.querySelector("tbody");
+
+      const sheetId = "15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ";
+      const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+
+      const updateStatus = (text, tone) => {
+        statusElement.textContent = text;
+        statusElement.style.background = tone === "ok"
+          ? "rgba(34, 197, 94, 0.15)"
+          : "rgba(239, 68, 68, 0.15)";
+        statusElement.style.color = tone === "ok" ? "#86efac" : "#fca5a5";
+      };
+
+      const parseCsv = (text) => {
+        const rows = [];
+        let row = [];
+        let value = "";
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i += 1) {
+          const char = text[i];
+          const nextChar = text[i + 1];
+
+          if (char === "\"") {
+            if (inQuotes && nextChar === "\"") {
+              value += "\"";
+              i += 1;
+              continue;
+            }
+            inQuotes = !inQuotes;
+            continue;
+          }
+
+          if (char === "," && !inQuotes) {
+            row.push(value);
+            value = "";
+            continue;
+          }
+
+          if ((char === "\n" || char === "\r") && !inQuotes) {
+            if (char === "\r" && nextChar === "\n") {
+              i += 1;
+            }
+            row.push(value);
+            rows.push(row);
+            row = [];
+            value = "";
+            continue;
+          }
+
+          value += char;
+        }
+
+        if (value.length > 0 || row.length > 0) {
+          row.push(value);
+          rows.push(row);
+        }
+
+        return rows.map((rowItem) => rowItem.map((cell) => cell.trim()));
+      };
+
+      const clearElement = (element) => {
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
+        }
+      };
+
+      const renderEmpty = (message) => {
+        clearElement(thead);
+        clearElement(tbody);
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.className = "empty";
+        cell.colSpan = 1;
+        cell.textContent = message;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      };
+
+      const renderBodyEmpty = (message, colSpan) => {
+        clearElement(tbody);
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.className = "empty";
+        cell.colSpan = colSpan;
+        cell.textContent = message;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      };
+
+      const renderTable = (rows) => {
+        if (rows.length === 0) {
+          renderEmpty("No leaderboard data available yet.");
+          return;
+        }
+
+        const [headerRow, ...bodyRows] = rows;
+        const safeHeader = headerRow.length ? headerRow : ["Leaderboard"];
+
+        clearElement(thead);
+        const headerRowElement = document.createElement("tr");
+        safeHeader.forEach((cell) => {
+          const headerCell = document.createElement("th");
+          headerCell.textContent = cell;
+          headerRowElement.appendChild(headerCell);
+        });
+        thead.appendChild(headerRowElement);
+
+        if (bodyRows.length === 0) {
+          renderBodyEmpty("No leaderboard entries yet.", safeHeader.length);
+          return;
+        }
+
+        clearElement(tbody);
+        bodyRows.forEach((row) => {
+          const rowElement = document.createElement("tr");
+          safeHeader.forEach((_, index) => {
+            const cellElement = document.createElement("td");
+            cellElement.textContent = row[index] ?? "";
+            rowElement.appendChild(cellElement);
+          });
+          tbody.appendChild(rowElement);
+        });
+      };
+
+      const loadLeaderboard = async () => {
+        try {
+          const response = await fetch(sheetUrl);
+          if (!response.ok) {
+            throw new Error(`Sheet responded with ${response.status}`);
+          }
+          const csv = await response.text();
+          const rows = parseCsv(csv.trim());
+          updateStatus("Leaderboard loaded.", "ok");
+          renderTable(rows);
+        } catch (error) {
+          updateStatus("Unable to load leaderboard data.", "error");
+          const message = error instanceof Error ? error.message : String(error);
+          renderEmpty(message);
+        }
+      };
+
+      loadLeaderboard();
+    </script>
+  </body>
+</html>

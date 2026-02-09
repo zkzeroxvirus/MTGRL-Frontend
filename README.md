@@ -30,3 +30,8 @@ Point your Cloudflare DNS (CNAME or A record) at the Unraid host and enable the
 proxy. Nginx inside the container forwards `/api/*` requests to
 `https://api.mtginfo.org/*`, allowing the frontend to call the API through the
 same Cloudflare domain.
+
+## Leaderboard
+
+Visit `/leaderboard.html` to view live standings pulled from the shared Google
+Sheet. Ensure the sheet is publicly readable so the browser can fetch it.
