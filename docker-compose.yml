@@ -1,0 +1,9 @@
+services:
+  frontend:
+    build: .
+    image: mtgrl-frontend:local
+    ports:
+      - "8080:80"
+    environment:
+      API_BACKEND_URL: "${API_BACKEND_URL:-https://api.mtginfo.org}"
+      LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"

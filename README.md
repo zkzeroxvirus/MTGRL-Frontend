@@ -15,6 +15,20 @@ docker run -d --name mtgrl-frontend -p 8080:80 mtgrl-frontend
 In Unraid, add a new Docker template that maps port `8080` on the host to port
 `80` in the container (or any host port you prefer).
 
+### Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Override defaults with environment variables as needed:
+
+```bash
+API_BACKEND_URL=https://api.mtginfo.org \
+LEADERBOARD_SHEET_ID=15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ \
+docker compose up --build
+```
+
 To point at a different backend, set `API_BACKEND_URL` (defaults to
 `https://api.mtginfo.org`):
 
@@ -31,6 +45,14 @@ to the shared MTGRL sheet):
 docker run -d --name mtgrl-frontend -p 8080:80 \
   -e LEADERBOARD_SHEET_ID=15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ \
   mtgrl-frontend
+```
+
+## Tests
+
+Run the lightweight Docker Compose validation suite with:
+
+```bash
+./tests/run.sh
 ```
 
 ## Cloudflare Same-Domain API
