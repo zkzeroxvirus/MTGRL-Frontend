@@ -122,7 +122,7 @@
       const parseCsv = (text) => {
         const rows = [];
         let row = [];
-        let value = [];
+        let value = "";
         let inQuotes = false;
 
         for (let i = 0; i < text.length; i += 1) {
@@ -131,7 +131,7 @@
 
           if (char === "\"") {
             if (inQuotes && nextChar === "\"") {
-              value.push("\"");
+              value += "\"";
               i += 1;
               continue;
             }
@@ -140,8 +140,8 @@
           }
 
           if (char === "," && !inQuotes) {
-            row.push(value.join(""));
-            value = [];
+            row.push(value);
+            value = "";
             continue;
           }
 
@@ -149,14 +149,14 @@
             if (char === "\r" && nextChar === "\n") {
               i += 1;
             }
-            row.push(value.join(""));
+            row.push(value);
             rows.push(row);
             row = [];
-            value = [];
+            value = "";
             continue;
           }
 
-          value.push(char);
+          value += char;
         }
 
         if (inQuotes) {
@@ -164,7 +164,7 @@
         }
 
         if (value.length > 0 || row.length > 0) {
-          row.push(value.join(""));
+          row.push(value);
           rows.push(row);
         }
 
@@ -229,15 +229,15 @@
       };
 
       const friendlyErrorMessage = (error) => {
+        if (error instanceof TypeError) {
+          return "Failed to connect to the leaderboard data source.";
+        }
         if (error instanceof Error) {
           if (error.message.includes("unmatched quotes")) {
             return "Leaderboard data format is invalid.";
           }
           if (error.message.startsWith("Sheet responded with")) {
             return "Leaderboard data source returned an error.";
-          }
-          if (error instanceof TypeError) {
-            return "Failed to connect to the leaderboard data source.";
           }
         }
         return "Unable to load leaderboard data.";
