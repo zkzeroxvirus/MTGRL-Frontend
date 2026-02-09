@@ -8,14 +8,22 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: "/app/service_account.json"
     volumes:
       - ./backend/service_account.json:/app/service_account.json:ro
+    networks:
+      - mtg-net
   frontend:
     build: .
     image: mtgrl-frontend:local
     ports:
       - "8080:80"
     environment:
-      API_BACKEND_URL: "${API_BACKEND_URL:-https://api.mtginfo.org}"
+      API_BACKEND_URL: "${API_BACKEND_URL:-http://mtg-card-importer:3000}"
       LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
       LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-202072059}"
     depends_on:
       - backend
+    networks:
+      - mtg-net
+
+networks:
+  mtg-net:
+    external: true
