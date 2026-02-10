@@ -141,6 +141,10 @@ main {
   align-items: center;
 }
 
+.hero--stacked {
+  grid-template-columns: 1fr;
+}
+
 .hero-copy {
   display: grid;
   gap: 12px;
@@ -174,6 +178,17 @@ main {
   font-size: 0.85rem;
   border: 1px solid rgba(30, 111, 112, 0.2);
 }
+
+.pill-button {
+  cursor: pointer;
+  font: inherit;
+}
+
+.pill-button:focus-visible {
+  outline: 2px solid rgba(30, 111, 112, 0.6);
+  outline-offset: 2px;
+}
+
 
 .eyebrow {
   font-size: 0.82rem;
@@ -507,6 +522,60 @@ pre {
 .meta {
   font-size: 0.9rem;
   color: var(--muted);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 18, 20, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 92vw);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: clamp(20px, 3vw, 32px);
+  display: grid;
+  gap: 14px;
+}
+
+.modal-card h2 {
+  margin: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: none;
+  background: rgba(28, 31, 36, 0.08);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
 }
 
 .table-card {

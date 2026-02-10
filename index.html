@@ -29,24 +29,62 @@
             Draft risky upgrades, take on crypt bosses, and climb the ladder with each win.
           </p>
           <div class="actions">
-            <a class="button" href="rules.html">Read the Rules</a>
-            <a class="button secondary" href="leaderboard.html">View Leaderboard</a>
+            <button class="button" type="button" id="open-overview">Gameplay Overview</button>
+            <a class="button secondary" href="https://discord.gg/tExmv8DZZG" target="_blank" rel="noopener">Join Discord</a>
           </div>
         </div>
         <div class="hero-panel">
           <div class="hero-kicker">Run highlights</div>
           <div class="pill-list">
-            <span class="pill">Roguelike Drafting</span>
-            <span class="pill">Crypt Bosses</span>
-            <span class="pill">Essence Economy</span>
-            <span class="pill">Unlockable Buffs</span>
-            <span class="pill">Persistent Progress</span>
-            <span class="pill">Weekly Challenges</span>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Roguelike Drafting"
+              data-detail="Start each run with a fresh commander draft and a curated opening deck before the journey begins."
+            >
+              Roguelike Drafting
+            </button>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Crypt Bosses"
+              data-detail="Clear about four encounters, then face one of 12 Crypt bosses with boosted rules and rewards."
+            >
+              Crypt Bosses
+            </button>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Essence Economy"
+              data-detail="Essence persists between sessions, powering pre-game upgrades and post-run boosts."
+            >
+              Essence Economy
+            </button>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Unlockable Buffs"
+              data-detail="Achievements and tickets unlock long-term buffs and starting perks."
+            >
+              Unlockable Buffs
+            </button>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Persistent Progress"
+              data-detail="Essence totals, unlockable buffs, and tracked milestones carry forward between games."
+            >
+              Persistent Progress
+            </button>
+            <button
+              class="pill pill-button"
+              type="button"
+              data-title="Weekly Challenges"
+              data-detail="Optional weekly modifiers add new twists for veteran crews."
+            >
+              Weekly Challenges
+            </button>
           </div>
-          <p class="meta">
-            The live API status and detailed stats now live on their own page.
-          </p>
-          <a class="button tertiary" href="api-status.html">Check API Status</a>
         </div>
       </section>
 
@@ -73,5 +111,37 @@
         </div>
       </section>
     </main>
+    <div class="modal" id="gameplay-modal" role="dialog" aria-modal="true" aria-labelledby="overview-title" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-card" role="document">
+        <button class="modal-close" type="button" data-close="true" aria-label="Close overview">×</button>
+        <h2 id="overview-title">Gameplay Overview</h2>
+        <p>
+          A short arc of drafting, events, and encounters that crescendos into the Crypt.
+        </p>
+        <ul class="rule-list">
+          <li>Deck start: 22 drafted cards, 16 lands, 1 Scryfall spawn.</li>
+          <li>Loop: event card, encounter, then a Town stop to tune the deck.</li>
+          <li>Goal: clear about four encounters, then face one of 12 Crypt bosses.</li>
+        </ul>
+        <div class="actions">
+          <a class="button" href="rules.html">Full Rules</a>
+          <button class="button secondary" type="button" data-close="true">Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="highlight-modal" role="dialog" aria-modal="true" aria-labelledby="highlight-modal-title" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-card" role="document">
+        <button class="modal-close" type="button" data-close="true" aria-label="Close highlight">×</button>
+        <h2 id="highlight-modal-title">Run Highlight</h2>
+        <p id="highlight-modal-copy"></p>
+        <div class="actions">
+          <a class="button" href="rules.html">Full Rules</a>
+          <button class="button secondary" type="button" data-close="true">Close</button>
+        </div>
+      </div>
+    </div>
+    <script src="assets/index.js"></script>
   </body>
 </html>
