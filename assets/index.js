@@ -1,16 +1,12 @@
 const statusElement = document.getElementById("status");
+const responseElement = document.getElementById("response");
 const statusLight = document.getElementById("status-light");
 const latencyElement = document.getElementById("latency");
 const httpCodeElement = document.getElementById("http-code");
 const lastCheckElement = document.getElementById("last-check");
 const detailsElement = document.getElementById("details");
 
-const shouldHideDetailKey = (key) => {
-  const lowered = key.toLowerCase();
-  return ["endpoint", "endpoints", "bulk", "metric"].some((token) => lowered.includes(token));
-};
-
-if (statusElement) {
+if (statusElement && responseElement) {
   const updateStatus = (text, tone) => {
     statusElement.textContent = text;
     statusElement.classList.toggle("error", tone === "error");
@@ -25,7 +21,7 @@ if (statusElement) {
       return;
     }
     detailsElement.replaceChildren();
-    const entries = Object.entries(data).filter(([key]) => !shouldHideDetailKey(key));
+    const entries = Object.entries(data);
     if (!entries.length) {
       const emptyRow = document.createElement("div");
       emptyRow.className = "key-value";
@@ -84,92 +80,19 @@ if (statusElement) {
       updateStatus("API online and responding.", "ok");
 
       if (typeof data === "string") {
+        responseElement.textContent = data.trim() || "(Empty API response)";
         renderDetails({ status: "ok", message: data.trim() || "Empty response" });
       } else {
+        responseElement.textContent = JSON.stringify(data, null, 2);
         renderDetails(data);
       }
     } catch (error) {
       updateStatus("Unable to reach the API.", "error");
       const message = error instanceof Error ? error.message : String(error);
+      responseElement.textContent = message;
       renderDetails({ status: "error", message });
     }
   };
 
   checkApi();
 }
-
-const overviewModal = document.getElementById("gameplay-modal");
-const openOverview = document.getElementById("open-overview");
-
-if (overviewModal && openOverview) {
-  const closeModal = () => {
-    overviewModal.classList.remove("is-open");
-    overviewModal.setAttribute("aria-hidden", "true");
-    openOverview.focus();
-  };
-
-  const openModal = () => {
-    overviewModal.classList.add("is-open");
-    overviewModal.setAttribute("aria-hidden", "false");
-    const closeButton = overviewModal.querySelector(".modal-close");
-    if (closeButton) {
-      closeButton.focus();
-    }
-  };
-
-  openOverview.addEventListener("click", openModal);
-
-  overviewModal.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target instanceof HTMLElement && target.dataset.close === "true") {
-      closeModal();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && overviewModal.classList.contains("is-open")) {
-      closeModal();
-    }
-  });
-}
-
-const highlightModal = document.getElementById("highlight-modal");
-const highlightTitle = document.getElementById("highlight-modal-title");
-const highlightCopy = document.getElementById("highlight-modal-copy");
-const highlightButtons = document.querySelectorAll(".pill-button[data-detail]");
-
-if (highlightModal && highlightTitle && highlightCopy && highlightButtons.length) {
-  const closeHighlight = () => {
-    highlightModal.classList.remove("is-open");
-    highlightModal.setAttribute("aria-hidden", "true");
-  };
-
-  const openHighlight = (button) => {
-    highlightTitle.textContent = button.dataset.title || "Run Highlight";
-    highlightCopy.textContent = button.dataset.detail || "";
-    highlightModal.classList.add("is-open");
-    highlightModal.setAttribute("aria-hidden", "false");
-    const closeButton = highlightModal.querySelector(".modal-close");
-    if (closeButton) {
-      closeButton.focus();
-    }
-  };
-
-  highlightButtons.forEach((button) => {
-    button.addEventListener("click", () => openHighlight(button));
-  });
-
-  highlightModal.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target instanceof HTMLElement && target.dataset.close === "true") {
-      closeHighlight();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && highlightModal.classList.contains("is-open")) {
-      closeHighlight();
-    }
-  });
-}
-
