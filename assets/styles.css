@@ -671,3 +671,74 @@ tr:nth-child(even) td {
     transition: none !important;
   }
 }
+
+/* ── Tabs ──────────────────────────────────────────────────────────── */
+
+.tabs-container {
+  display: grid;
+  gap: 0;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-label {
+  cursor: pointer;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fffaf2;
+  font-weight: 600;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab-label:hover {
+  background: rgba(30, 111, 112, 0.12);
+}
+
+/* Active tab label via :has() */
+.tabs-container:has(#tab-overview:checked) .tab-label[for="tab-overview"],
+.tabs-container:has(#tab-town:checked) .tab-label[for="tab-town"],
+.tabs-container:has(#tab-achievements:checked) .tab-label[for="tab-achievements"],
+.tabs-container:has(#tab-shop:checked) .tab-label[for="tab-shop"] {
+  background: var(--accent);
+  color: #fff8f0;
+  border-color: transparent;
+}
+
+/* Tab panels */
+.tab-panel {
+  display: none;
+  gap: 28px;
+}
+
+.tabs-container:has(#tab-overview:checked) #panel-overview,
+.tabs-container:has(#tab-town:checked) #panel-town,
+.tabs-container:has(#tab-achievements:checked) #panel-achievements,
+.tabs-container:has(#tab-shop:checked) #panel-shop {
+  display: grid;
+}
+
+.tab-desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}

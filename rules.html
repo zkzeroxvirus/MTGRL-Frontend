@@ -25,415 +25,521 @@
           <span class="eyebrow">Core Guide</span>
           <h1>MTG Roguelike Rules</h1>
           <p>
-            A custom game mode for Magic: The Gathering. Everything you need to run a
-            full MTGRL session is here. Use the table of contents to jump to the section
-            you need.
+            A custom game mode for Magic: The Gathering. Use the tabs below to
+            navigate: <strong>Quick Play</strong> covers everything to get a session
+            running, <strong>Town</strong> details each building and traveler,
+            <strong>Achievements</strong> lists every unlock and its requirement, and
+            <strong>Shop</strong> covers all Essence spending options.
           </p>
         </div>
-        <div class="hero-panel">
-          <div class="panel">
-            <div class="panel-title">Table of Contents</div>
-            <nav class="toc">
-              <a href="#resources">Resources</a>
-              <a href="#pre-game">Pre-Game Purchases</a>
-              <a href="#deckbuilding">Deckbuilding</a>
-              <a href="#gameplay">Gameplay Loop</a>
-              <a href="#turns">Turn Structure</a>
-              <a href="#town">Town Actions</a>
-              <a href="#travelers">Travelers</a>
-              <a href="#cash-outs">Cash Outs</a>
-              <a href="#encounters">Encounters</a>
-              <a href="#affixes">Affixes</a>
-              <a href="#crypt-path">Progression to Crypt</a>
-              <a href="#trinkets">Trinkets</a>
-              <a href="#crypt">Crypt Rules</a>
-              <a href="#achievements">Achievements</a>
-              <a href="#post-run">Post-Run Essence</a>
-              <a href="#limits">Player Limits</a>
-              <a href="#global">Global Rules</a>
-            </nav>
-          </div>
-        </div>
       </section>
 
-      <section class="rules-section card reveal delay-1" id="resources">
-        <h2>📦 Resources</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>✨ Essence</h3>
-            <p>
-              Essence is the long-term resource. It persists between sessions and powers
-              pre-game and post-game actions. Essence is intentionally rare and shared
-              across verified hosts.
+      <div class="tabs-container card reveal delay-1">
+        <input type="radio" name="rules-tab" id="tab-overview" hidden checked />
+        <input type="radio" name="rules-tab" id="tab-town" hidden />
+        <input type="radio" name="rules-tab" id="tab-achievements" hidden />
+        <input type="radio" name="rules-tab" id="tab-shop" hidden />
+
+        <nav class="tab-bar" aria-label="Rules sections">
+          <label class="tab-label" for="tab-overview">🧭 Quick Play</label>
+          <label class="tab-label" for="tab-town">🏘️ Town</label>
+          <label class="tab-label" for="tab-achievements">✨ Achievements</label>
+          <label class="tab-label" for="tab-shop">🛒 Shop</label>
+        </nav>
+
+        <!-- QUICK PLAY -->
+        <div class="tab-panel" id="panel-overview">
+          <p class="tab-desc">
+            Everything you need to get a full run started. Work through each section
+            in order: understand the core rules, build your deck, then jump into the
+            gameplay loop.
+          </p>
+
+          <section class="rules-section" id="global">
+            <h2>📜 Global Rules</h2>
+            <p class="section-desc">
+              These rules apply at all times, in every encounter and phase of the game.
             </p>
-          </div>
-          <div>
-            <h3>🔶 XP</h3>
-            <p>
-              XP is your in-run currency. It is used for upgrades, choices, and rewards
-              during the current session only. Unspent XP is lost on death.
+            <ul class="rule-list">
+              <li>Players save their own data. Cheating is not tolerated.</li>
+              <li>Scryfall commands follow the standard Scryfall syntax.</li>
+              <li>Phase+ activates with 3+ players (host draws an extra card and plays an extra land each turn).</li>
+              <li>Gleemax awards 10,000 Essence immediately.</li>
+              <li>Verified hosts may not alter Essence costs, but can add homebrew rules.</li>
+            </ul>
+          </section>
+
+          <section class="rules-section" id="resources">
+            <h2>📦 Resources</h2>
+            <p class="section-desc">
+              Two currencies power the game. Essence carries over between sessions;
+              XP is earned and spent within a single run.
             </p>
-          </div>
-        </div>
-      </section>
+            <div class="rules-grid">
+              <div>
+                <h3>✨ Essence</h3>
+                <p>
+                  Essence is the long-term resource. It persists between sessions and
+                  powers pre-game and post-game actions. Essence is intentionally rare
+                  and shared across verified hosts.
+                </p>
+              </div>
+              <div>
+                <h3>🔶 XP</h3>
+                <p>
+                  XP is your in-run currency. It is used for upgrades, choices, and
+                  rewards during the current session only. Unspent XP is lost on death.
+                </p>
+              </div>
+            </div>
+          </section>
 
-      <section class="rules-section card reveal" id="pre-game">
-        <h2>🎴 Pre-Game Purchases (Essence)</h2>
-        <ul class="rule-list">
-          <li>🎲 0 Essence — Commander Gamble (mulligan commander, next Castle is free)</li>
-          <li>👪 35 Essence — Partner/Background option (random from 5)</li>
-          <li>🌍 35 Essence — Land Replacement (swap a basic for a dual or Triome)</li>
-          <li>🔁 50 Essence — Commander Mulligan (new 5 commander options)</li>
-          <li>🔄 50 Essence — Card Mulligans (2 extra non-commander mulligans)</li>
-          <li>🎭 75 Essence — Identity Trickster (add/remove a commander color)</li>
-          <li>🌌 150 Essence — Leyline Addition (does not count toward starting 39)</li>
-        </ul>
-      </section>
-
-      <section class="rules-section card reveal" id="deckbuilding">
-        <h2>🎴 Deckbuilding</h2>
-        <ol class="rule-steps">
-          <li>Roll 5 legal commanders, choose 1.</li>
-          <li>
-            Generate 22 nonland cards in your color identity. You may keep any, reroll
-            the rest twice, then keep the final set.
-          </li>
-          <li>
-            Add 16 total lands. Two colors add 2 duals, three colors add 4 duals, four
-            colors add 6 duals, five colors add 8 duals. Fill the rest with basics.
-          </li>
-          <li>
-            Add one free-choice card (not Sol Ring, not banned, no Game Changers).
-          </li>
-          <li>Confirm pre-game actions, buffs, tickets, and bonuses before starting.</li>
-        </ol>
-      </section>
-
-      <section class="rules-section card reveal" id="gameplay">
-        <h2>🎲 Gameplay Loop</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>Step 1 — Event or Trinket</h3>
-            <p>Players vote for an Event or Trinket. Resolve, then continue.</p>
-          </div>
-          <div>
-            <h3>Step 2 — Encounter Draw</h3>
-            <p>Host pulls a random encounter. Teams roll d20 to pick turn order.</p>
-          </div>
-          <div>
-            <h3>Death</h3>
-            <p>Lose half XP (rounded down to nearest 5). If all die, return to Town.</p>
-          </div>
-          <div>
-            <h3>Victory</h3>
-            <p>XP equals host starting HP plus bonuses. Choose to Stay Out or Go to Town.</p>
-          </div>
-        </div>
-        <div class="rules-grid">
-          <div>
-            <h3>🏘️ Town</h3>
-            <p>Heal to full, gain a Traveler, and perform Town Actions.</p>
-          </div>
-          <div>
-            <h3>🏕️ Staying Out</h3>
-            <p>Keep current HP and gain a permanent increase to Town Actions.</p>
-          </div>
-        </div>
-      </section>
-      <section class="rules-section card reveal" id="turns">
-        <h2>📘 Turn Structure (Party vs Host)</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>🛡️ Party Turn</h3>
-            <p>
-              All players act as one. One untap, upkeep, draw, main phase, combat, main
-              phase 2, and end step. Coordinate sequencing.
+          <section class="rules-section" id="limits">
+            <h2>📋 Player Limits</h2>
+            <p class="section-desc">
+              Hard limits on what you can have equipped or active at any one time.
+              Keep these in mind when building and upgrading your deck.
             </p>
-          </div>
-          <div>
-            <h3>👹 Host Turn</h3>
-            <p>
-              Host plays normally. Host chooses attacks. Adjacent players may block for
-              the attacked player.
+            <div class="rules-grid">
+              <div>
+                <h3>Required</h3>
+                <p>1 Commander, 39+ Library.</p>
+              </div>
+              <div>
+                <h3>Maximums</h3>
+                <p>1 Partner, 1 Background, 1 Conspiracy, 1 Vanguard, 1 Emblem, 1 Trinket, 4 Buffs, 1 Ticket.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rules-section" id="deckbuilding">
+            <h2>🎴 Deckbuilding</h2>
+            <p class="section-desc">
+              Build your deck from scratch at the start of each run using random rolls
+              and Scryfall-generated cards. You start with 22 nonland cards, 16 free
+              lands, and one free Scryfall card of your choice.
             </p>
-          </div>
+            <ol class="rule-steps">
+              <li>Roll 5 legal commanders, choose 1.</li>
+              <li>
+                Generate 22 nonland cards in your color identity. You may keep any,
+                reroll the rest twice, then keep the final set.
+              </li>
+              <li>
+                Add 16 total lands. Two colors add 2 duals, three colors add 4 duals,
+                four colors add 6 duals, five colors add 8 duals. Fill the rest with
+                basics.
+              </li>
+              <li>
+                Add one free-choice card (not Sol Ring, not banned, no Game Changers).
+              </li>
+              <li>Confirm pre-game actions, buffs, tickets, and bonuses before starting.</li>
+            </ol>
+          </section>
+
+          <section class="rules-section" id="gameplay">
+            <h2>🎲 Gameplay Loop</h2>
+            <p class="section-desc">
+              Each round follows a fixed sequence. On round 1 only, players choose
+              between a Trinket and an Event. Every round after that is always an
+              Event. Win encounters to earn XP and push toward the Crypt.
+            </p>
+            <div class="rules-grid">
+              <div>
+                <h3>Step 1 &mdash; Event or Trinket (Round 1 Only)</h3>
+                <p>On the very first round, players vote for an Event or a Trinket. All subsequent rounds are always Events. Resolve, then continue.</p>
+              </div>
+              <div>
+                <h3>Step 2 &mdash; Encounter Draw</h3>
+                <p>Host pulls a random encounter. Teams roll d20 to pick turn order.</p>
+              </div>
+              <div>
+                <h3>Death</h3>
+                <p>Lose half XP (rounded down to nearest 5). If all die, return to Town.</p>
+              </div>
+              <div>
+                <h3>Victory</h3>
+                <p>XP equals host starting HP plus bonuses. Choose to Stay Out or Go to Town.</p>
+              </div>
+            </div>
+            <div class="rules-grid">
+              <div>
+                <h3>🏘️ Town</h3>
+                <p>Heal to full, gain a Traveler, and perform Town Actions.</p>
+              </div>
+              <div>
+                <h3>🏕️ Staying Out</h3>
+                <p>Keep current HP and gain a permanent increase to Town Actions.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rules-section" id="turns">
+            <h2>📘 Turn Structure (Party vs Host)</h2>
+            <p class="section-desc">
+              The party acts as a single player against the host. Coordination during
+              the party turn is key to survival.
+            </p>
+            <div class="rules-grid">
+              <div>
+                <h3>🛡️ Party Turn</h3>
+                <p>
+                  All players act as one. One untap, upkeep, draw, main phase, combat,
+                  main phase 2, and end step. Coordinate sequencing.
+                </p>
+              </div>
+              <div>
+                <h3>👹 Host Turn</h3>
+                <p>
+                  Host plays normally. Host chooses attacks. Adjacent players may block
+                  for the attacked player.
+                </p>
+              </div>
+            </div>
+            <p>
+              Extra turns belong only to the player who cast the card. In Crypt, the
+              host always starts first.
+            </p>
+            <p>
+              <strong>Phase+:</strong> When there are 3 or more players, the host draws
+              an extra card and plays an extra land each turn.
+            </p>
+          </section>
+
+          <section class="rules-section" id="encounters">
+            <h2>🧙 Encounters</h2>
+            <p class="section-desc">
+              Each round you face one of these encounter types. Fights scale in
+              difficulty via affixes; Events are drawn every round after the first.
+            </p>
+            <details class="rules-details" open>
+              <summary>Core Encounters</summary>
+              <ul class="rule-list">
+                <li>Master Fight &mdash; choose 1 of 2 Masters decks.</li>
+                <li>Plane Fight &mdash; choose 1 of 2 Plane decks, +1 affix.</li>
+                <li>Precon Battle &mdash; choose 1 of 2 Precons.</li>
+                <li>Story Fight &mdash; -1 affix, host starts with double HP, bonus at 50% HP.</li>
+                <li>Villain Fight &mdash; host builds a bracket 3+ deck.</li>
+                <li>Wild Magic &mdash; host-controlled chaos.</li>
+              </ul>
+            </details>
+            <details class="rules-details">
+              <summary>Event Highlights</summary>
+              <ul class="rule-list">
+                <li>Abandoned Supply Pack, A Pile of Rock, A Super Meeting</li>
+                <li>Artifact on a Pedestal, Bandit Ambush, Beast Ambush</li>
+                <li>Blood Altar, Cabin in the Woods, Card Fetcher, Card Vortex</li>
+                <li>Commander's Guild, Crossroads, Distortion, Dragon Hoard</li>
+                <li>Earthquake, Eldrazi Ambush, Endless Sea, Exotic Car Show</li>
+                <li>Explosive Volcano, Horde Fight, Ivy Forest, Kithkin Hovel</li>
+                <li>Mad Scientist's Tower, Mana Ripple, Molten Darksteel Anvil</li>
+                <li>Mystic Waterwell, Nameless Smith, Planar Excavation</li>
+                <li>Plane Trader, Rapidly Growing Harvest, Reality Twist</li>
+                <li>Reckless Racketeering, Rhystic Library, Sliver King</li>
+                <li>Stoneforge Caravan, Sword in Stone, Timeless Market</li>
+                <li>Trench of the Void, Treasure Goblin, Vanguard Caravan</li>
+                <li>Wandering Planes Assistant, Wishing Well, Witch's Cauldron</li>
+                <li>Zombie Uprising</li>
+              </ul>
+            </details>
+          </section>
+
+          <section class="rules-section" id="affixes">
+            <h2>🔥 Host Scaling &amp; Affixes</h2>
+            <p class="section-desc">
+              Hosts grow stronger after every victory. Each affix adds a new ability
+              and increases the XP reward for the party.
+            </p>
+            <p>Each host victory grants +10 max HP and 1 affix. Duplicate affixes reroll.</p>
+            <details class="rules-details" open>
+              <summary>🟦 Tier 1 Affixes (+5 XP reward)</summary>
+              <ul class="rule-list">
+                <li>+1/+1 Counters, Demonstrate, First Strike, Flying, Menace, Prismatic</li>
+                <li>Rebound, Vigilance</li>
+              </ul>
+            </details>
+            <details class="rules-details">
+              <summary>🟧 Tier 2 Affixes (+10 XP reward)</summary>
+              <ul class="rule-list">
+                <li>-1/-1 Counters, Aether Anomaly, Commanding Presence</li>
+                <li>Deathtouch, Haste, Hero Power, Pack Back Up, Setup Battle, Trample</li>
+              </ul>
+            </details>
+            <details class="rules-details">
+              <summary>🟥 Tier 3 Affixes (+15 XP reward)</summary>
+              <ul class="rule-list">
+                <li>Emblem Battle, Double Strike, Hexproof, Indestructible</li>
+                <li>Infect, Training Grounds, Lifelink, Vanguard Battlements</li>
+              </ul>
+            </details>
+          </section>
+
+          <section class="rules-section" id="crypt-path">
+            <h2>🕱️ Progression to the Crypt</h2>
+            <p class="section-desc">
+              Win enough encounters to unlock the Crypt &mdash; the final boss of a run.
+              Each victory also earns loot for your party.
+            </p>
+            <p>
+              Encounters reward XP equal to host starting HP plus affixes. After each
+              win, the host draws Cash Outs equal to the number of players. Players pick
+              one reward. The defeated deck adds loot cards equal to the number of
+              players.
+            </p>
+          </section>
+
+          <section class="rules-section" id="trinkets">
+            <h2>🧿 Trinkets</h2>
+            <p class="section-desc">
+              Trinkets are persistent items that provide ongoing benefits throughout the
+              run. On round 1 only, players may vote to take a Trinket instead of an
+              Event. Trinkets can be party-wide or personal.
+            </p>
+            <details class="rules-details" open>
+              <summary>Trinket List</summary>
+              <ul class="rule-list">
+                <li><strong>Aegis of Verix</strong> &mdash; Commander blocks can conjure a 4/4 Dragon token once per fight.</li>
+                <li><strong>Aspect of Malfegor</strong> &mdash; Sacrifice a non-token permanent once per encounter for a scaled reward.</li>
+                <li><strong>Bag of Grain</strong> &mdash; Up to 4 servings, each grants +3 max HP for the rest of the run.</li>
+                <li><strong>Blade of the Archmagus</strong> &mdash; Non-creature spells targeting opponents deal 2 damage to creature or host.</li>
+                <li><strong>Campfire</strong> &mdash; End step: one player gains 2 HP and may discard to draw.</li>
+                <li><strong>Cannon</strong> &mdash; Sacrifice a non-token artifact once per party turn to deal damage.</li>
+                <li><strong>Celestine, Hama's Light</strong> &mdash; Commander gains lifelink and cost reduction on friendly targeting spells.</li>
+                <li><strong>Dragovokia</strong> &mdash; Once per town, roll d6; town actions cost that much less (min 1).</li>
+                <li><strong>Garruk's Clipper</strong> &mdash; Upkeep: target creature gains +2/+0 and deathtouch.</li>
+                <li><strong>Gideon's Training Saber</strong> &mdash; Commander gains +1/+0 and first strike.</li>
+                <li><strong>Hu-Blow, the Good</strong> &mdash; Once per turn, a party member may cast a creature as though it had flash.</li>
+                <li><strong>Loch Shield</strong> &mdash; At fight start, target commander gains 2 shield counters.</li>
+                <li><strong>Ludwig's Holy Blade / Sal Bidard</strong> &mdash; Choose one at fight start; grant hexproof or indestructible.</li>
+                <li><strong>Marbles</strong> &mdash; Instant or sorcery casts create a random 1/1 token.</li>
+                <li><strong>Mitsy, Abandoned</strong> &mdash; Fight start: target player gains a Marauder's Axe.</li>
+                <li><strong>Mirror Shield</strong> &mdash; Commander gains +0/+5 and reflects combat damage to an opponent.</li>
+                <li><strong>Oppressive Skeleton / Aggressive Skeleton</strong> &mdash; Choose a 1/1 regenerate or 4/1 menace skeleton.</li>
+                <li><strong>Shovel Pile</strong> &mdash; Once per town roll d20 for XP or a random trinket.</li>
+                <li><strong>Sunforged Slicer</strong> &mdash; Combat damage lets you discard up to 2 and draw that many.</li>
+                <li><strong>Thirsting Axe</strong> &mdash; Combat: deal 1 damage to party creatures; gains counters for each death.</li>
+                <li><strong>Tonitrus, Skullduster</strong> &mdash; Upkeep: power 4+ creature gains +3/+0 and trample.</li>
+                <li><strong>Torch</strong> &mdash; Upkeep: target creature gains tap to venture into the dungeon.</li>
+                <li><strong>Vogar, Bound for Death</strong> &mdash; Sacrifice creatures to create 6/5 zombies.</li>
+                <li><strong>Walking Corpse</strong> &mdash; Fight start: target player gains a 1/2 Zombie with persist.</li>
+                <li><strong>Watcher's X Eye</strong> &mdash; X spells cost 1 less for the party.</li>
+              </ul>
+            </details>
+          </section>
+
+          <section class="rules-section" id="crypt">
+            <h2>⚔️ The Crypt</h2>
+            <p class="section-desc">
+              The final challenge of a run. The Crypt boss is a high-power deck that
+              always takes the first turn. Victory earns major Essence rewards.
+            </p>
+            <div class="rules-grid">
+              <div>
+                <h3>Entering</h3>
+                <p>Triggered at 50 HP or by choice. Host pulls a random boss.</p>
+              </div>
+              <div>
+                <h3>Rules</h3>
+                <p>Crypt starts at 50 HP and always takes the first turn.</p>
+              </div>
+            </div>
+            <p>
+              Crypt bosses are brutal, high-power decks with extra boosts. Expect a
+              challenge.
+            </p>
+            <div class="rules-grid">
+              <div>
+                <h3>❌ Losing</h3>
+                <p>Gain Essence equal to total mana value of deck + sideboard.</p>
+              </div>
+              <div>
+                <h3>🏆 Winning</h3>
+                <p>Gain 500 Essence, a Crypt Buff, and Essence from deck value.</p>
+              </div>
+            </div>
+          </section>
         </div>
-        <p>
-          Extra turns belong only to the player who cast the card. In Crypt, the host
-          always starts first.
-        </p>
-      </section>
+        <!-- /panel-overview -->
 
-      <section class="rules-section card reveal" id="town">
-        <h2>🏘️ Town Actions</h2>
-        <p>
-          Each run starts with 2 Town Actions per town. Staying out adds +2 actions each
-          time. Every action has an XP cost and must be fully paid.
-        </p>
-        <details class="rules-details" open>
-          <summary>Town Locations</summary>
-          <ul class="rule-list">
-            <li>⚒️ Blacksmith — Upgrade (25 XP) or Augment (50 XP)</li>
-            <li>🎲 Casino — 10 XP + a card to roll d20</li>
-            <li>🏰 Castle — 10 XP to roll for commanders</li>
-            <li>⛪ Cathedral — describe a card; add to deck or destroy for Essence</li>
-            <li>🏦 Bank — move up to 6 cards between deck and sideboard</li>
-            <li>🛒 Merchant — buy packs (Mystery, ID, Pro, Set, Mythic, OTAG)</li>
-            <li>🔮 Mystic — destroy a card for a Pro Pack equal to its mana value</li>
-            <li>🌀 Portal — buy Temporal token copies (up to 15 XP)</li>
-            <li>🍻 Tavern — swap cards and lands</li>
-            <li>📦 Trading Post — trade twice per town</li>
-          </ul>
-        </details>
-      </section>
+        <!-- TOWN -->
+        <div class="tab-panel" id="panel-town">
+          <p class="tab-desc">
+            After each encounter you can return to Town to heal, shop, and trade.
+            You start with 2 Town Actions per visit; Staying Out adds +2 each time.
+            Every action has an XP cost that must be fully paid. Travelers and Cash
+            Outs are free and do not use a Town Action.
+          </p>
 
-      <section class="rules-section card reveal" id="travelers">
-        <h2>🌟 Travelers in Town</h2>
-        <p>Travelers do not cost a Town Action.</p>
-        <details class="rules-details" open>
-          <summary>Traveler Options</summary>
-          <ul class="rule-list">
-            <li>Bearded Grunt, Bullywug Royal, Card Copier, Card-Eating Ogre</li>
-            <li>Cats in a Coat, Centaur Scouter, Centepoid Warrior</li>
-            <li>Dwarven Artificer, Elven Demonologist, Fungal Lich</li>
-            <li>Giff Bandito, Hell's Librarian, Hollyphant</li>
-            <li>Kimi the Cat, Silly the Jester, The Trader</li>
-            <li>Vanguard Mercenaries, Wandering Card Merchant, Zorbo</li>
-          </ul>
-        </details>
-      </section>
+          <section class="rules-section" id="town">
+            <h2>🏘️ Town Locations</h2>
+            <p class="section-desc">
+              Each location offers a unique service. Visit as many as your Town
+              Actions allow.
+            </p>
+            <details class="rules-details" open>
+              <summary>Town Locations</summary>
+              <ul class="rule-list">
+                <li>⚒️ Blacksmith &mdash; Upgrade (25 XP) or Augment (50 XP)</li>
+                <li>🎲 Casino &mdash; 10 XP + a card to roll d20</li>
+                <li>🏰 Castle &mdash; 10 XP to roll for commanders</li>
+                <li>⛪ Cathedral &mdash; describe a card; add to deck or destroy for Essence</li>
+                <li>🏦 Bank &mdash; move up to 6 cards between deck and sideboard</li>
+                <li>🛒 Merchant &mdash; buy packs (Mystery, ID, Pro, Set, Mythic, OTAG)</li>
+                <li>🔮 Mystic &mdash; destroy a card for a Pro Pack equal to its mana value</li>
+                <li>🌀 Portal &mdash; buy Temporal token copies (up to 15 XP)</li>
+                <li>🍻 Tavern &mdash; swap cards and lands</li>
+                <li>📦 Trading Post &mdash; trade twice per town</li>
+              </ul>
+            </details>
+          </section>
 
-      <section class="rules-section card reveal" id="cash-outs">
-        <h2>💎 Cash Outs</h2>
-        <p>Claimed in Town and do not cost a Town Action.</p>
-        <details class="rules-details" open>
-          <summary>Available Rewards</summary>
-          <ul class="rule-list">
-            <li>Alpha Pack, Artifact Packs, Artifact Pro Packs</li>
-            <li>Bonus Bank, Cathedral, Mystic, Tavern, Trading Post</li>
-            <li>Enchantment Packs, ID Packs, Extra Town Action</li>
-            <li>Free Augment, Free Casino, Free Castle, Free Portal</li>
-            <li>Free Upgrade, Mono Packs, Mono Pro Packs</li>
-            <li>Mystery Pack, Mythic Pack, Planeswalker Packs</li>
-            <li>Utility Land Pack</li>
-          </ul>
-        </details>
-      </section>
+          <section class="rules-section" id="travelers">
+            <h2>🌟 Travelers</h2>
+            <p class="section-desc">
+              A random Traveler arrives in Town after each encounter. Interacting
+              with them is free and does not cost a Town Action.
+            </p>
+            <details class="rules-details" open>
+              <summary>Traveler Options</summary>
+              <ul class="rule-list">
+                <li>Bearded Grunt, Bullywug Royal, Card Copier, Card-Eating Ogre</li>
+                <li>Cats in a Coat, Centaur Scouter, Centepoid Warrior</li>
+                <li>Dwarven Artificer, Elven Demonologist, Fungal Lich</li>
+                <li>Giff Bandito, Hell's Librarian, Hollyphant</li>
+                <li>Kimi the Cat, Silly the Jester, The Trader</li>
+                <li>Vanguard Mercenaries, Wandering Card Merchant, Zorbo</li>
+              </ul>
+            </details>
+          </section>
 
-      <section class="rules-section card reveal" id="encounters">
-        <h2>🧙 Encounters</h2>
-        <details class="rules-details" open>
-          <summary>Core Encounters</summary>
-          <ul class="rule-list">
-            <li>Master Fight — choose 1 of 2 Masters decks.</li>
-            <li>Plane Fight — choose 1 of 2 Plane decks, +1 affix.</li>
-            <li>Precon Battle — choose 1 of 2 Precons.</li>
-            <li>Story Fight — -1 affix, host starts with double HP, bonus at 50% HP.</li>
-            <li>Villain Fight — host builds a bracket 3+ deck.</li>
-            <li>Wild Magic — host-controlled chaos.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>Event Highlights</summary>
-          <ul class="rule-list">
-            <li>Abandoned Supply Pack, A Pile of Rock, A Super Meeting</li>
-            <li>Artifact on a Pedestal, Bandit Ambush, Beast Ambush</li>
-            <li>Blood Altar, Cabin in the Woods, Card Fetcher, Card Vortex</li>
-            <li>Commander’s Guild, Crossroads, Distortion, Dragon Hoard</li>
-            <li>Earthquake, Eldrazi Ambush, Endless Sea, Exotic Car Show</li>
-            <li>Explosive Volcano, Horde Fight, Ivy Forest, Kithkin Hovel</li>
-            <li>Mad Scientist’s Tower, Mana Ripple, Molten Darksteel Anvil</li>
-            <li>Mystic Waterwell, Nameless Smith, Planar Excavation</li>
-            <li>Plane Trader, Rapidly Growing Harvest, Reality Twist</li>
-            <li>Reckless Racketeering, Rhystic Library, Sliver King</li>
-            <li>Stoneforge Caravan, Sword in Stone, Timeless Market</li>
-            <li>Trench of the Void, Treasure Goblin, Vanguard Caravan</li>
-            <li>Wandering Planes Assistant, Wishing Well, Witch’s Cauldron</li>
-            <li>Zombie Uprising</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="affixes">
-        <h2>🔥 Host Scaling & Affixes</h2>
-        <p>Each host victory grants +10 max HP and 1 affix. Duplicate affixes reroll.</p>
-        <details class="rules-details" open>
-          <summary>🟦 Tier 1 Affixes (+5 XP reward)</summary>
-          <ul class="rule-list">
-            <li>+1/+1 Counters, Demonstrate, First Strike, Flying, Menace, Prismatic</li>
-            <li>Rebound, Vigilance</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>🟧 Tier 2 Affixes (+10 XP reward)</summary>
-          <ul class="rule-list">
-            <li>-1/-1 Counters, Aether Anomaly, Commanding Presence</li>
-            <li>Deathtouch, Haste, Hero Power, Pack Back Up, Setup Battle, Trample</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>🟥 Tier 3 Affixes (+15 XP reward)</summary>
-          <ul class="rule-list">
-            <li>Emblem Battle, Double Strike, Hexproof, Indestructible</li>
-            <li>Infect, Training Grounds, Lifelink, Vanguard Battlements</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="crypt-path">
-        <h2>🕱 Progression to the Crypt</h2>
-        <p>
-          Encounters reward XP equal to host starting HP plus affixes. After each win, the
-          host draws Cash Outs equal to the number of players. Players pick one reward.
-          The defeated deck adds loot cards equal to the number of players.
-        </p>
-      </section>
-
-      <section class="rules-section card reveal" id="trinkets">
-        <h2>🧿 Trinkets</h2>
-        <p>Trinkets can be party-wide or personal. Below is the full list with effects.</p>
-        <details class="rules-details" open>
-          <summary>Trinket List</summary>
-          <ul class="rule-list">
-            <li><strong>Aegis of Verix</strong> — Commander blocks can conjure a 4/4 Dragon token once per fight.</li>
-            <li><strong>Aspect of Malfegor</strong> — Sacrifice a non-token permanent once per encounter for a scaled reward.</li>
-            <li><strong>Bag of Grain</strong> — Up to 4 servings, each grants +3 max HP for the rest of the run.</li>
-            <li><strong>Blade of the Archmagus</strong> — Non-creature spells targeting opponents deal 2 damage to creature or host.</li>
-            <li><strong>Campfire</strong> — End step: one player gains 2 HP and may discard to draw.</li>
-            <li><strong>Cannon</strong> — Sacrifice a non-token artifact once per party turn to deal damage.</li>
-            <li><strong>Celestine, Hama's Light</strong> — Commander gains lifelink and cost reduction on friendly targeting spells.</li>
-            <li><strong>Dragovokia</strong> — Once per town, roll d6; town actions cost that much less (min 1).</li>
-            <li><strong>Garruk's Clipper</strong> — Upkeep: target creature gains +2/+0 and deathtouch.</li>
-            <li><strong>Gideon's Training Saber</strong> — Commander gains +1/+0 and first strike.</li>
-            <li><strong>Hu-Blow, the Good</strong> — Once per turn, a party member may cast a creature as though it had flash.</li>
-            <li><strong>Loch Shield</strong> — At fight start, target commander gains 2 shield counters.</li>
-            <li><strong>Ludwig's Holy Blade / Sal Bidard</strong> — Choose one at fight start; grant hexproof or indestructible.</li>
-            <li><strong>Marbles</strong> — Instant or sorcery casts create a random 1/1 token.</li>
-            <li><strong>Mitsy, Abandoned</strong> — Fight start: target player gains a Marauder's Axe.</li>
-            <li><strong>Mirror Shield</strong> — Commander gains +0/+5 and reflects combat damage to an opponent.</li>
-            <li><strong>Oppressive Skeleton / Aggressive Skeleton</strong> — Choose a 1/1 regenerate or 4/1 menace skeleton.</li>
-            <li><strong>Shovel Pile</strong> — Once per town roll d20 for XP or a random trinket.</li>
-            <li><strong>Sunforged Slicer</strong> — Combat damage lets you discard up to 2 and draw that many.</li>
-            <li><strong>Thirsting Axe</strong> — Combat: deal 1 damage to party creatures; gains counters for each death.</li>
-            <li><strong>Tonitrus, Skullduster</strong> — Upkeep: power 4+ creature gains +3/+0 and trample.</li>
-            <li><strong>Torch</strong> — Upkeep: target creature gains tap to venture into the dungeon.</li>
-            <li><strong>Vogar, Bound for Death</strong> — Sacrifice creatures to create 6/5 zombies.</li>
-            <li><strong>Walking Corpse</strong> — Fight start: target player gains a 1/2 Zombie with persist.</li>
-            <li><strong>Watcher's X Eye</strong> — X spells cost 1 less for the party.</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="crypt">
-        <h2>⚔️ The Crypt</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>Entering</h3>
-            <p>Triggered at 50 HP or by choice. Host pulls a random boss.</p>
-          </div>
-          <div>
-            <h3>Rules</h3>
-            <p>Crypt starts at 50 HP and always takes the first turn.</p>
-          </div>
+          <section class="rules-section" id="cash-outs">
+            <h2>💎 Cash Outs</h2>
+            <p class="section-desc">
+              Cash Outs are bonus rewards drawn after each encounter victory. They
+              are claimed in Town and are free &mdash; they do not cost a Town Action.
+            </p>
+            <details class="rules-details" open>
+              <summary>Available Rewards</summary>
+              <ul class="rule-list">
+                <li>Alpha Pack, Artifact Packs, Artifact Pro Packs</li>
+                <li>Bonus Bank, Cathedral, Mystic, Tavern, Trading Post</li>
+                <li>Enchantment Packs, ID Packs, Extra Town Action</li>
+                <li>Free Augment, Free Casino, Free Castle, Free Portal</li>
+                <li>Free Upgrade, Mono Packs, Mono Pro Packs</li>
+                <li>Mystery Pack, Mythic Pack, Planeswalker Packs</li>
+                <li>Utility Land Pack</li>
+              </ul>
+            </details>
+          </section>
         </div>
-        <p>
-          Crypt bosses are brutal, high-power decks with extra boosts. Expect a challenge.
-        </p>
-        <div class="rules-grid">
-          <div>
-            <h3>❌ Losing</h3>
-            <p>Gain Essence equal to total mana value of deck + sideboard.</p>
-          </div>
-          <div>
-            <h3>🏆 Winning</h3>
-            <p>Gain 500 Essence, a Crypt Buff, and Essence from deck value.</p>
-          </div>
+        <!-- /panel-town -->
+
+        <!-- ACHIEVEMENTS -->
+        <div class="tab-panel" id="panel-achievements">
+          <p class="tab-desc">
+            Earn Achievements by completing special challenges during your runs. Each
+            Achievement unlocks a permanent bonus that carries into future sessions.
+            Color Combo Tickets require beating the Crypt with a specific strategy;
+            Land and Misc Achievements have their own unique conditions.
+          </p>
+
+          <section class="rules-section" id="achievements">
+            <h2>✨ Achievements &amp; Buffs</h2>
+            <p class="section-desc">
+              Unlock permanent bonuses by meeting each achievement's requirement.
+              The bonus is active from your very next run once earned.
+            </p>
+            <details class="rules-details" open>
+              <summary>Color Combination Tickets</summary>
+              <ul class="rule-list">
+                <li><strong>Azorius &mdash; Law of Efficiency</strong> &mdash; W: gain 1 life when casting on another player's turn. U: draw when you counter a spell or ability.</li>
+                <li><strong>Boros &mdash; Charge of Conviction</strong> &mdash; W: untap a creature when you attack. R: solo attacker gains +2/+0.</li>
+                <li><strong>Dimir &mdash; Whisper Network</strong> &mdash; U: untap a nonland when casting on opponents' turns. B: exile a card when you target a permanent you do not control.</li>
+                <li><strong>Golgari &mdash; Cycle of Rot</strong> &mdash; B: -1/-1 counter on a creature when your permanent dies. G: create a Food token when a creature dies.</li>
+                <li><strong>Gruul &mdash; Primal Fury</strong> &mdash; R: give haste when a creature becomes modified. G: give trample when a creature attacks.</li>
+                <li><strong>Izzet &mdash; Experimental Sparks</strong> &mdash; U: scry 1 then draw 1 on instant cast. R: deal 1 damage on sorcery cast.</li>
+                <li><strong>Orzhov &mdash; Tithe and Toil</strong> &mdash; W: populate on token entry. B: create a 1/1 Zombie when a creature you control dies.</li>
+                <li><strong>Rakdos &mdash; Showstopper's Encore</strong> &mdash; B: draw 1 and lose 1 life when a creature dies. R: create a Treasure on combat damage to an opponent.</li>
+                <li><strong>Selesnya &mdash; Harmony's Bloom</strong> &mdash; W: +1/+1 counter when you gain life. G: gain 1 life when you cast a creature.</li>
+                <li><strong>Simic &mdash; Adaptive Pattern</strong> &mdash; U: +1/+1 counter when you draw your second card. G: draw when a +1/+1 counter is placed.</li>
+              </ul>
+            </details>
+            <details class="rules-details">
+              <summary>Land Achievements</summary>
+              <ul class="rule-list">
+                <li><strong>Nature's Blessing</strong> &mdash; Replace duals with Triomes. Requirement: beat a Crypt with 50+ lands.</li>
+                <li><strong>Dawn of Crabs</strong> &mdash; Start with a Plains. Requirement: beat a Crypt with a Crab commander.</li>
+                <li><strong>Fish's Pond</strong> &mdash; Start with an Island. Requirement: beat a Crypt with a Fish commander.</li>
+                <li><strong>Scorpion's Nest</strong> &mdash; Start with a Swamp. Requirement: beat a Crypt with a Scorpion commander.</li>
+                <li><strong>Raccoon's Rage</strong> &mdash; Start with a Mountain. Requirement: beat a Crypt with a Raccoon commander.</li>
+                <li><strong>Horse's Gallop</strong> &mdash; Start with a Forest. Requirement: beat a Crypt with a Horse commander.</li>
+                <li><strong>Construct's Salvation</strong> &mdash; Start with a Wastes. Requirement: beat a Crypt with a Construct commander.</li>
+                <li><strong>Changeling's LandForm</strong> &mdash; Start with a random basic land. Requirement: beat a Crypt with a Changeling commander.</li>
+              </ul>
+            </details>
+            <details class="rules-details">
+              <summary>Miscellaneous Achievements</summary>
+              <ul class="rule-list">
+                <li><strong>Booster Tutor</strong> &mdash; Add Booster Tutor at deckbuilding. Requirement: reach 250 XP in a session.</li>
+                <li><strong>Compelling Madness</strong> &mdash; Once per encounter, gain 5 life at instant speed. Requirement: indirectly kill a non-host player.</li>
+                <li><strong>Dog's Best Friend</strong> &mdash; Start with a random Companion. Requirement: beat a Crypt with a Companion.</li>
+                <li><strong>Gambler's Never Quit</strong> &mdash; Coin flip for first town action cost. Requirement: win six coin flips in a row.</li>
+                <li><strong>Happy Fun Land</strong> &mdash; Start with 5 Attractions. Requirement: beat a Crypt with Attractions.</li>
+                <li><strong>One With Death</strong> &mdash; Gain a second free card; one may be a Game Changer. Requirement: beat a Crypt on turn one.</li>
+                <li><strong>Stick It To Me</strong> &mdash; Start with 5 Sticker Sheets. Requirement: beat a Crypt with Stickers.</li>
+                <li><strong>Victory Lap</strong> &mdash; Buff maximum increases to 7. Requirement: beat 3 Crypt bosses in one session.</li>
+              </ul>
+            </details>
+          </section>
         </div>
-      </section>
+        <!-- /panel-achievements -->
 
-      <section class="rules-section card reveal" id="achievements">
-        <h2>✨ Achievements & Buffs</h2>
-        <details class="rules-details" open>
-          <summary>Color Combination Tickets</summary>
-          <ul class="rule-list">
-            <li><strong>Azorius — Law of Efficiency</strong> — W: gain 1 life when casting on another player's turn. U: draw when you counter a spell or ability.</li>
-            <li><strong>Boros — Charge of Conviction</strong> — W: untap a creature when you attack. R: solo attacker gains +2/+0.</li>
-            <li><strong>Dimir — Whisper Network</strong> — U: untap a nonland when casting on opponents' turns. B: exile a card when you target a permanent you do not control.</li>
-            <li><strong>Golgari — Cycle of Rot</strong> — B: -1/-1 counter on a creature when your permanent dies. G: create a Food token when a creature dies.</li>
-            <li><strong>Gruul — Primal Fury</strong> — R: give haste when a creature becomes modified. G: give trample when a creature attacks.</li>
-            <li><strong>Izzet — Experimental Sparks</strong> — U: scry 1 then draw 1 on instant cast. R: deal 1 damage on sorcery cast.</li>
-            <li><strong>Orzhov — Tithe and Toil</strong> — W: populate on token entry. B: create a 1/1 Zombie when a creature you control dies.</li>
-            <li><strong>Rakdos — Showstopper's Encore</strong> — B: draw 1 and lose 1 life when a creature dies. R: create a Treasure on combat damage to an opponent.</li>
-            <li><strong>Selesnya — Harmony's Bloom</strong> — W: +1/+1 counter when you gain life. G: gain 1 life when you cast a creature.</li>
-            <li><strong>Simic — Adaptive Pattern</strong> — U: +1/+1 counter when you draw your second card. G: draw when a +1/+1 counter is placed.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>Land Achievements</summary>
-          <ul class="rule-list">
-            <li><strong>Nature's Blessing</strong> — Replace duals with Triomes. Requirement: beat a Crypt with 50+ lands.</li>
-            <li><strong>Dawn of Crabs</strong> — Start with a Plains. Requirement: beat a Crypt with a Crab commander.</li>
-            <li><strong>Fish's Pond</strong> — Start with an Island. Requirement: beat a Crypt with a Fish commander.</li>
-            <li><strong>Scorpion's Nest</strong> — Start with a Swamp. Requirement: beat a Crypt with a Scorpion commander.</li>
-            <li><strong>Raccoon's Rage</strong> — Start with a Mountain. Requirement: beat a Crypt with a Raccoon commander.</li>
-            <li><strong>Horse's Gallop</strong> — Start with a Forest. Requirement: beat a Crypt with a Horse commander.</li>
-            <li><strong>Construct's Salvation</strong> — Start with a Wastes. Requirement: beat a Crypt with a Construct commander.</li>
-            <li><strong>Changeling's LandForm</strong> — Start with a random basic land. Requirement: beat a Crypt with a Changeling commander.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>Miscellaneous Achievements</summary>
-          <ul class="rule-list">
-            <li><strong>Booster Tutor</strong> — Add Booster Tutor at deckbuilding. Requirement: reach 250 XP in a session.</li>
-            <li><strong>Compelling Madness</strong> — Once per encounter, gain 5 life at instant speed. Requirement: indirectly kill a non-host player.</li>
-            <li><strong>Dog's Best Friend</strong> — Start with a random Companion. Requirement: beat a Crypt with a Companion.</li>
-            <li><strong>Gambler's Never Quit</strong> — Coin flip for first town action cost. Requirement: win six coin flips in a row.</li>
-            <li><strong>Happy Fun Land</strong> — Start with 5 Attractions. Requirement: beat a Crypt with Attractions.</li>
-            <li><strong>One With Death</strong> — Gain a second free card; one may be a Game Changer. Requirement: beat a Crypt on turn one.</li>
-            <li><strong>Stick It To Me</strong> — Start with 5 Sticker Sheets. Requirement: beat a Crypt with Stickers.</li>
-            <li><strong>Victory Lap</strong> — Buff maximum increases to 7. Requirement: beat 3 Crypt bosses in one session.</li>
-          </ul>
-        </details>
-      </section>
+        <!-- SHOP -->
+        <div class="tab-panel" id="panel-shop">
+          <p class="tab-desc">
+            Spend Essence to improve your starting position before a run or to
+            unlock permanent upgrades after one. Pre-game options apply to the
+            current run only; post-run options persist into future sessions.
+          </p>
 
-      <section class="rules-section card reveal" id="post-run">
-        <h2>💸 Post-Run Essence Options</h2>
-        <ul class="rule-list">
-          <li>250 Essence — Sell Buffs</li>
-          <li>500 Essence — Capture Non-Commander (cost increases each time)</li>
-          <li>1500 Essence — Sol Ring Ticket</li>
-          <li>2000 Essence — Color Combo Ticket</li>
-          <li>2500 Essence — Trinket Ticket</li>
-          <li>4000 Essence — Conspiracy Ticket</li>
-          <li>5000 Essence — Vanguard Ticket</li>
-          <li>10000 Essence — Emblem Ticket</li>
-        </ul>
-      </section>
+          <section class="rules-section" id="pre-game">
+            <h2>🎴 Pre-Game Purchases</h2>
+            <p class="section-desc">
+              Spend Essence before deckbuilding begins to customize your starting
+              conditions for this run.
+            </p>
+            <ul class="rule-list">
+              <li>🎲 0 Essence &mdash; Commander Gamble (mulligan commander, next Castle is free)</li>
+              <li>👪 35 Essence &mdash; Partner/Background option (random from 5)</li>
+              <li>🌍 35 Essence &mdash; Land Replacement (swap a basic for a dual or Triome)</li>
+              <li>🔁 50 Essence &mdash; Commander Mulligan (new 5 commander options)</li>
+              <li>🔄 50 Essence &mdash; Card Mulligans (2 extra non-commander mulligans)</li>
+              <li>🎭 75 Essence &mdash; Identity Trickster (add/remove a commander color)</li>
+              <li>🌌 150 Essence &mdash; Leyline Addition (does not count toward starting 39)</li>
+            </ul>
+          </section>
 
-      <section class="rules-section card reveal" id="limits">
-        <h2>📦 Player Limits</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>Required</h3>
-            <p>1 Commander, 39+ Library.</p>
-          </div>
-          <div>
-            <h3>Maximums</h3>
-            <p>1 Partner, 1 Background, 1 Conspiracy, 1 Vanguard, 1 Emblem, 1 Trinket, 4 Buffs, 1 Ticket.</p>
-          </div>
+          <section class="rules-section" id="post-run">
+            <h2>💸 Post-Run Essence Options</h2>
+            <p class="section-desc">
+              After a run ends, spend earned Essence on permanent upgrades and
+              tickets that carry over into every future session.
+            </p>
+            <ul class="rule-list">
+              <li>250 Essence &mdash; Sell Buffs</li>
+              <li>500 Essence &mdash; Capture Non-Commander (cost increases each time)</li>
+              <li>1500 Essence &mdash; Sol Ring Ticket</li>
+              <li>2000 Essence &mdash; Color Combo Ticket</li>
+              <li>2500 Essence &mdash; Trinket Ticket</li>
+              <li>4000 Essence &mdash; Conspiracy Ticket</li>
+              <li>5000 Essence &mdash; Vanguard Ticket</li>
+              <li>10000 Essence &mdash; Emblem Ticket</li>
+            </ul>
+          </section>
         </div>
-      </section>
-
-      <section class="rules-section card reveal" id="global">
-        <h2>📜 Global Rules</h2>
-        <ul class="rule-list">
-          <li>Players save their own data. Cheating is not tolerated.</li>
-          <li>Scryfall commands follow the standard Scryfall syntax.</li>
-          <li>Phase+ activates with 3+ players (host draws 2, plays 2 lands).</li>
-          <li>Gleemax awards 10,000 Essence immediately.</li>
-          <li>Verified hosts may not alter Essence costs, but can add homebrew rules.</li>
-        </ul>
-      </section>
+        <!-- /panel-shop -->
+      </div>
+      <!-- /tabs-container -->
     </main>
   </body>
 </html>
