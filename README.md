@@ -1,6 +1,6 @@
-# MTGRL-Frontend
+# MTGR-Frontend
 
-Frontend for the MTGRL webpage, packaged as a lightweight Unraid-friendly Docker
+Frontend for the MTGR webpage, packaged as a lightweight Unraid-friendly Docker
 container. The container serves a static page and proxies `/api` to
 `https://api.mtginfo.org` so the frontend and API stay on the same domain when
 Cloudflare is in front.
@@ -8,8 +8,8 @@ Cloudflare is in front.
 ## Build & Run (Docker/Unraid)
 
 ```bash
-docker build -t mtgrl-frontend .
-docker run -d --name mtgrl-frontend -p 8080:80 mtgrl-frontend
+docker build -t mtgr-frontend .
+docker run -d --name mtgr-frontend -p 8080:80 mtgr-frontend
 ```
 
 In Unraid, add a new Docker template that maps port `8080` on the host to port
@@ -33,18 +33,18 @@ To point at a different backend, set `API_BACKEND_URL` (defaults to
 `https://api.mtginfo.org`):
 
 ```bash
-docker run -d --name mtgrl-frontend -p 8080:80 \
+docker run -d --name mtgr-frontend -p 8080:80 \
   -e API_BACKEND_URL=https://api.mtginfo.org \
-  mtgrl-frontend
+  mtgr-frontend
 ```
 
 To point at a different leaderboard sheet, set `LEADERBOARD_SHEET_ID` (defaults
-to the shared MTGRL sheet):
+to the shared MTGR sheet):
 
 ```bash
-docker run -d --name mtgrl-frontend -p 8080:80 \
+docker run -d --name mtgr-frontend -p 8080:80 \
   -e LEADERBOARD_SHEET_ID=15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ \
-  mtgrl-frontend
+  mtgr-frontend
 ```
 
 ## Tests

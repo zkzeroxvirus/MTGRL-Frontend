@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MTGRL Leaderboard</title>
+    <title>MTGR Leaderboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="assets/styles.css" />
@@ -12,20 +12,33 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <main class="page" id="main">
       <header class="topbar">
-        <div class="brand">MTGRL</div>
+        <div class="brand">
+          <span class="brand-mark">MTGR</span>
+          <span class="brand-sub">Commander Roguelike</span>
+        </div>
         <nav class="nav">
           <a href="index.html">Home</a>
           <a href="rules.html">Rules</a>
           <a href="api-status.html">API Status</a>
+          <a href="leaderboard.html" aria-current="page">Leaderboard</a>
         </nav>
       </header>
 
       <section class="hero card reveal">
         <div class="hero-copy">
           <span class="eyebrow">Live Standings</span>
-          <h1>MTGRL Leaderboard</h1>
-          <p>Live standings pulled from the shared Google Sheet.</p>
+          <h1>MTGR Leaderboard</h1>
+          <p>
+            Live standings pulled from the shared progression sheet and scored by
+            unlock depth plus Essence.
+          </p>
           <p class="meta" id="meta">Updated moments ago.</p>
+          <div class="badge-row" aria-label="Scoring weights">
+            <span class="badge">Achievement +50,000</span>
+            <span class="badge">Crypt Buff +5,000</span>
+            <span class="badge">Ticket +500</span>
+            <span class="badge badge--ok">+ Essence</span>
+          </div>
         </div>
         <div class="hero-panel">
           <div class="status" id="status">Loading leaderboard data...</div>
@@ -47,13 +60,42 @@
         </div>
       </section>
 
-      <section class="card table-card reveal delay-1">
+      <section class="card reveal delay-1">
+        <div class="section-head">
+          <span class="eyebrow">Top Players</span>
+          <h2>Current Podium</h2>
+        </div>
+        <div class="podium" id="podium" aria-live="polite"></div>
+      </section>
+
+      <section class="card table-card reveal delay-2">
         <div class="table-wrap">
           <table aria-label="Leaderboard" id="leaderboard">
             <thead></thead>
             <tbody></tbody>
           </table>
         </div>
+      </section>
+
+      <section class="split-grid reveal delay-3">
+        <article class="card stack">
+          <span class="eyebrow">Scoring Formula</span>
+          <h2>How Rank Is Calculated</h2>
+          <p>
+            Leaderboard score combines high-impact unlock counts with current Essence,
+            so long-term progression and active play both matter.
+          </p>
+          <p><strong>Score = (Achievements * 50000) + (Buffs * 5000) + (Tickets * 500) + Essence</strong></p>
+        </article>
+        <article class="card stack">
+          <span class="eyebrow">Reading The Table</span>
+          <h2>What To Track</h2>
+          <ul class="list-clean">
+            <li>Score shows overall progression power.</li>
+            <li>Unlocks shows combined achievement, buff, and ticket depth.</li>
+            <li>Essence is your flexible spend for future upgrades.</li>
+          </ul>
+        </article>
       </section>
     </main>
     <script src="assets/leaderboard.js"></script>

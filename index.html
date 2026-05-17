@@ -12,8 +12,12 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <main class="page" id="main">
       <header class="topbar">
-        <div class="brand">MTGRL</div>
+        <div class="brand">
+          <span class="brand-mark">MTGR</span>
+          <span class="brand-sub">Commander Roguelike</span>
+        </div>
         <nav class="nav">
+          <a href="index.html" aria-current="page">Home</a>
           <a href="rules.html">Rules</a>
           <a href="leaderboard.html">Leaderboard</a>
           <a href="api-status.html">API Status</a>
@@ -23,11 +27,26 @@
       <section class="hero card reveal">
         <div class="hero-copy">
           <span class="eyebrow">MTG Roguelike</span>
-          <h1>Build. Die. Unlock. Repeat.</h1>
+          <h1>Your 4-6 Hour Co-op Boss Run</h1>
           <p>
-            MTG Roguelike is a tabletop campaign where every run pushes your power forward.
-            Draft risky upgrades, take on crypt bosses, and climb the ladder with each win.
+            MTG Roguelike is built for full game-night sessions. Draft risky upgrades,
+            route through Town or Stay Out, and fight your way to the Crypt with lasting
+            progression between runs.
           </p>
+          <div class="hero-statbar" aria-label="Run snapshot">
+            <div class="hero-stat">
+              <span class="hero-stat-label">Run Length</span>
+              <span class="hero-stat-value">4-6 Hours</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-label">Players</span>
+              <span class="hero-stat-value">1-6 Party</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-label">Format</span>
+              <span class="hero-stat-value">Host vs Party</span>
+            </div>
+          </div>
           <div class="actions">
             <a class="button" href="rules.html">Read the Rules</a>
             <a class="button secondary" href="leaderboard.html">View Leaderboard</a>
@@ -50,7 +69,37 @@
         </div>
       </section>
 
-      <section class="grid reveal delay-1">
+      <section class="card reveal delay-1">
+        <div class="section-head">
+          <span class="eyebrow">How A Night Flows</span>
+          <h2>Session Arc</h2>
+          <p>Use this to brief new players before your first encounter starts.</p>
+        </div>
+        <div class="timeline" aria-label="Session timeline">
+          <article class="timeline-item">
+            <span class="timeline-step">Step 01</span>
+            <h3>Deckbuild</h3>
+            <p>Choose commanders, draft 22 cards from each player's own 100-card pool, and lock legal decks.</p>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-step">Step 02</span>
+            <h3>Encounter Loop</h3>
+            <p>Fight escalating encounters with scaling Host systems and Affixes.</p>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-step">Step 03</span>
+            <h3>Branch Choice</h3>
+            <p>Go Town for controlled upgrades or Stay Out for faster momentum.</p>
+          </article>
+          <article class="timeline-item">
+            <span class="timeline-step">Step 04</span>
+            <h3>Crypt Finale</h3>
+            <p>Clear the final boss to cash in long-term progression rewards.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="feature-grid reveal delay-2">
         <div class="card">
           <h2>Run-Driven Progression</h2>
           <p>
@@ -71,6 +120,29 @@
             the same backend powering imports and stats.
           </p>
         </div>
+      </section>
+
+      <section class="split-grid reveal delay-3">
+        <article class="card stack">
+          <span class="eyebrow">Host Track</span>
+          <h2>Run It Like A Raid</h2>
+          <ul class="list-clean">
+            <li>Scale pressure with Affixes, Doom, and Authority.</li>
+            <li>Control pacing through encounter sequencing and branch timing.</li>
+            <li>Keep fights dangerous without stalling momentum.</li>
+          </ul>
+          <a class="button secondary" href="rules.html#encounters">View Encounter Rules</a>
+        </article>
+        <article class="card stack">
+          <span class="eyebrow">Player Track</span>
+          <h2>Build, Adapt, Survive</h2>
+          <ul class="list-clean">
+            <li>Convert wins into XP, Cash Outs, and Loot Pool picks.</li>
+            <li>Shape mana and card quality through Town systems.</li>
+            <li>Carry progression between runs for long-term growth.</li>
+          </ul>
+          <a class="button" href="rules.html#quickstart">Open Quick Start</a>
+        </article>
       </section>
     </main>
   </body>

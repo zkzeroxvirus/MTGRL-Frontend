@@ -4,6 +4,7 @@ const refreshButton = document.getElementById("refresh");
 const table = document.getElementById("leaderboard");
 const thead = table.querySelector("thead");
 const tbody = table.querySelector("tbody");
+const podiumElement = document.getElementById("podium");
 const statElements = {
   players: document.querySelector('[data-stat="players"]'),
   essence: document.querySelector('[data-stat="essence"]'),
@@ -235,6 +236,50 @@ const renderTable = (entries) => {
   });
 };
 
+const renderPodium = (entries) => {
+  if (!podiumElement) {
+    return;
+  }
+
+  podiumElement.replaceChildren();
+
+  if (!entries.length) {
+    const empty = document.createElement("p");
+    empty.className = "meta";
+    empty.textContent = "No players yet. Podium appears when entries are available.";
+    podiumElement.appendChild(empty);
+    return;
+  }
+
+  const medals = ["🥇", "🥈", "🥉"];
+  entries.slice(0, 3).forEach((entry, index) => {
+    const card = document.createElement("article");
+    card.className = `podium-card rank-${index + 1}`;
+
+    const rank = document.createElement("div");
+    rank.className = "podium-rank";
+    rank.textContent = `${medals[index] || "#"} Rank ${index + 1}`;
+
+    const name = document.createElement("div");
+    name.className = "podium-name";
+    name.textContent = entry.name;
+
+    const score = document.createElement("div");
+    score.className = "podium-score";
+    score.textContent = `${entry.score.toLocaleString()} score`;
+
+    const meta = document.createElement("p");
+    meta.className = "meta";
+    meta.textContent = `${entry.totalUnlocks} unlocks • ${entry.essence.toLocaleString()} essence`;
+
+    card.appendChild(rank);
+    card.appendChild(name);
+    card.appendChild(score);
+    card.appendChild(meta);
+    podiumElement.appendChild(card);
+  });
+};
+
 const updateStats = (entries) => {
   const totalPlayers = entries.length;
   const totalEssence = entries.reduce((total, entry) => total + entry.essence, 0);
@@ -348,6 +393,7 @@ const loadLeaderboard = async () => {
     const entries = buildEntries(rows);
     updateStatus("Leaderboard loaded.", "ok");
     renderTable(entries);
+    renderPodium(entries);
     updateStats(entries);
     if (metaElement) {
       metaElement.textContent = `Updated ${new Date().toLocaleString()}`;
@@ -357,6 +403,7 @@ const loadLeaderboard = async () => {
     const message = friendlyErrorMessage(error);
     updateStatus(message, "error");
     renderEmpty(message);
+    renderPodium([]);
   } finally {
     table.removeAttribute("aria-busy");
     setLoadingState(false);

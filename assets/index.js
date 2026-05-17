@@ -71,19 +71,28 @@ if (statusElement && responseElement) {
       if (lastCheckElement) {
         lastCheckElement.textContent = new Date().toLocaleTimeString();
       }
-
-      if (!response.ok) {
-        throw new Error(`API responded with ${response.status}`);
-      }
-
       const data = await parseResponseData(response);
-      updateStatus("API online and responding.", "ok");
 
       if (typeof data === "string") {
         responseElement.textContent = data.trim() || "(Empty API response)";
-        renderDetails({ status: "ok", message: data.trim() || "Empty response" });
       } else {
         responseElement.textContent = JSON.stringify(data, null, 2);
+      }
+
+      if (!response.ok) {
+        const message = typeof data === "string"
+          ? data.trim() || `API responded with ${response.status}`
+          : data?.error || data?.message || `API responded with ${response.status}`;
+        updateStatus("API responded with an error.", "error");
+        renderDetails({ status: "error", httpCode: response.status, message });
+        return;
+      }
+
+      updateStatus("API online and responding.", "ok");
+
+      if (typeof data === "string") {
+        renderDetails({ status: "ok", message: data.trim() || "Empty response" });
+      } else {
         renderDetails(data);
       }
     } catch (error) {

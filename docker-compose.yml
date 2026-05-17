@@ -1,8 +1,8 @@
 services:
   backend:
     build: ./backend
-    image: mtgrl-leaderboard-backend:local
-    container_name: MTGRL-Backend
+    image: mtgr-leaderboard-backend:local
+    container_name: MTGR-Backend
     environment:
       LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
       LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-202072059}"
@@ -13,8 +13,8 @@ services:
       - mtg-net
   frontend:
     build: .
-    image: mtgrl-frontend:local
-    container_name: MTGRL-Frontend
+    image: mtgr-frontend:local
+    container_name: MTGR-Frontend
     ports:
       - "8080:80"
     environment:

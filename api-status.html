@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MTGRL API Status</title>
+    <title>MTGR API Status</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="assets/styles.css" />
@@ -12,11 +12,15 @@
     <a class="skip-link" href="#main">Skip to content</a>
     <main class="page" id="main">
       <header class="topbar">
-        <div class="brand">MTGRL</div>
+        <div class="brand">
+          <span class="brand-mark">MTGR</span>
+          <span class="brand-sub">Commander Roguelike</span>
+        </div>
         <nav class="nav">
           <a href="index.html">Home</a>
           <a href="rules.html">Rules</a>
           <a href="leaderboard.html">Leaderboard</a>
+          <a href="api-status.html" aria-current="page">API Status</a>
         </nav>
       </header>
 
@@ -25,9 +29,14 @@
           <span class="eyebrow">Service Health</span>
           <h1>API Status</h1>
           <p>
-            Live checks against the MTGRL backend. Use this page to confirm connectivity,
+            Live checks against the MTGR backend. Use this page to confirm connectivity,
             latency, and the status payload powering the app.
           </p>
+          <div class="badge-row" aria-label="Monitoring tags">
+            <span class="badge badge--ok">Live check</span>
+            <span class="badge">No-store fetch</span>
+            <span class="badge badge--warn">Single endpoint</span>
+          </div>
         </div>
         <div class="hero-panel">
           <div class="status-line">
@@ -51,6 +60,10 @@
               <span class="metric-value" id="last-check">--</span>
             </div>
           </div>
+          <div class="surface">
+            <div class="panel-title">Endpoint</div>
+            <p><strong>/api/</strong> is queried on page load with cache bypass enabled.</p>
+          </div>
         </div>
       </section>
 
@@ -68,6 +81,27 @@
           <div class="panel-title">Raw Response</div>
           <pre id="response">Waiting for API response.</pre>
         </div>
+      </section>
+
+      <section class="split-grid reveal delay-2">
+        <article class="card stack">
+          <span class="eyebrow">Operator Notes</span>
+          <h2>If Status Is Red</h2>
+          <ol class="list-clean">
+            <li>Verify backend process is running and reachable from this client.</li>
+            <li>Check CORS or proxy routing if browser can load pages but not the API.</li>
+            <li>Use the HTTP code and response body to pinpoint auth, routing, or server errors.</li>
+          </ol>
+        </article>
+        <article class="card stack">
+          <span class="eyebrow">Signal Guide</span>
+          <h2>How To Read This Panel</h2>
+          <ul class="list-clean">
+            <li>Low latency and 2xx code indicates healthy app connectivity.</li>
+            <li>High latency with 2xx suggests backend pressure but still available.</li>
+            <li>4xx or 5xx with a payload usually gives the fastest path to the fix.</li>
+          </ul>
+        </article>
       </section>
     </main>
     <script src="assets/index.js"></script>
