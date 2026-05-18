@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MTGR — Card Spawner Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main class="page" id="main">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">MTGR</span>
+          <span class="brand-sub">Commander Roguelike</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="rules.html">Rules</a>
+          <a href="leaderboard.html">Leaderboard</a>
+          <a href="api-status.html">API Status</a>
+          <a href="scryfall.html" aria-current="page">Card Spawner</a>
+          <a class="nav-discord" href="https://discord.gg/tExmv8DZZG" target="_blank" rel="noopener noreferrer" aria-label="Join Discord">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.084.11 18.11.128 18.13a19.895 19.895 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            Discord
+          </a>
+        </nav>
+      </header>
+
+      <!-- ═══════════════════════════════════════════════════════════════ HERO -->
+      <section class="hero card reveal">
+        <div class="hero-copy">
+          <span class="eyebrow">Tools &amp; Reference</span>
+          <h1>Card Spawner Guide</h1>
+          <p>
+            MTGR runs on a modified version of <strong>Amuzet's Card Importer</strong> mod in Tabletop Simulator —
+            a Scryfall-powered tool that lets you spawn any card, generate
+            commander pools, and more, all from the TTS chat bar.
+          </p>
+          <div class="pill-list" aria-label="Quick facts">
+            <span class="pill">Type commands in TTS chat</span>
+            <span class="pill">Powered by Scryfall API</span>
+            <span class="pill">Commander format enforced by default</span>
+          </div>
+          <div class="actions">
+            <a class="button" href="#basics">Quick Start</a>
+            <a class="button secondary" href="#syntax">Search Syntax</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="panel">
+            <div class="panel-title">On this page</div>
+            <nav class="toc">
+              <a href="#basics">Spawning a Card</a>
+              <a href="#random">Random &amp; Pool Generation</a>
+              <a href="#syntax">Query Filters</a>
+              <a href="#utility">All Commands</a>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════ BASICS -->
+      <section class="card reveal delay-1" id="basics">
+        <div class="section-head">
+          <span class="eyebrow">Getting Started</span>
+          <h2>Spawning Cards</h2>
+          <p>All commands are typed into the TTS chat bar and start with <strong>Scryfall</strong> followed by a space.</p>
+        </div>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Spawn a named card</h3>
+            <p>Type the card name. Partial names and common shorthand usually work.</p>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Lightning Bolt</code></li>
+              <li><code>Scryfall Sol Ring</code></li>
+              <li><code>Scryfall Arcane Signet</code></li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Spawn with custom art (proxy)</h3>
+            <p>Add an image URL after the card name. Uses Scryfall's official stats but displays your art. Supports Imgur and Steam CDN links.</p>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Island https://i.imgur.com/abc123.jpg</code></li>
+              <li><code>Scryfall Black Lotus https://i.imgur.com/xyz.png</code></li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Tips</h3>
+            <ul class="rule-list compact-list">
+              <li>If a card fails to spawn, check the spelling against Scryfall — some names include punctuation.</li>
+              <li>Stuck or slow? Run <code>Scryfall clear queue</code> to force-reset the importer.</li>
+              <li>Large pools (100 cards) take a moment — a progress ticker appears in chat while it builds.</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Color Identity Codes</h3>
+            <p>Used with <code>id:</code> in Random queries.</p>
+            <ul class="rule-list compact-list">
+              <li><strong>Mono:</strong> <code>w</code> <code>u</code> <code>b</code> <code>r</code> <code>g</code></li>
+              <li><strong>Two-color:</strong> <code>wu</code> <code>wb</code> <code>ub</code> <code>ur</code> <code>br</code> <code>bg</code> <code>rg</code> <code>rw</code> <code>gw</code> <code>gu</code></li>
+              <li><strong>Three-color:</strong> <code>wub</code> <code>ubr</code> <code>brg</code> <code>rgw</code> <code>gwu</code> <code>wbg</code> <code>ubg</code> <code>wur</code> <code>wbr</code> <code>urg</code></li>
+              <li><strong>Four-color:</strong> <code>wubr</code> <code>ubrg</code> <code>brgw</code> <code>rgwu</code> <code>gwub</code></li>
+              <li><strong>Five-color:</strong> <code>wubrg</code></li>
+              <li><strong>Colorless:</strong> use <code>id:c</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════ RANDOM -->
+      <section class="card reveal" id="random">
+        <div class="section-head">
+          <span class="eyebrow">Random &amp; Pool Generation</span>
+          <h2>Random Command</h2>
+          <p>
+            <code>Scryfall Random</code> is the workhorse of MTGR setup. It pulls random cards
+            matching a Scryfall query — one card, or a full pool at once. The count at the end
+            controls how many cards spawn.
+          </p>
+        </div>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Syntax</h3>
+            <p>Use the <code>?q=</code> URL-style format with <code>+</code> between filters — this is the most reliable format for multi-filter queries. Count goes at the end after a space.</p>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Random ?q=[filter]+[filter]+... [count]</code></li>
+              <li><code>Scryfall Random q=[filter]+[filter]+... [count]</code> — same without <code>?</code></li>
+            </ul>
+            <p style="margin-top:0.5rem; font-size:0.85em; color:var(--muted);">Simple single-filter spaced queries also work (e.g. <code>is:commander</code>), but for anything more complex use the <code>?q=</code> format.</p>
+          </div>
+          <div class="callout">
+            <h3>Examples</h3>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Random ?q=id:rb+t:creature+cmc&lt;5 22</code> — 22 black/red creatures with mana value under 5</li>
+              <li><code>Scryfall Random ?q=is:commander+id:wubr 5</code> — 5 random commanders within WUBR identity</li>
+              <li><code>Scryfall Random ?q=f:commander+id:rw+-t:land 100</code> — 100 non-land Commander-legal cards in Boros colors</li>
+              <li><code>Scryfall Random ?q=r:rare+f:commander 1</code> — 1 random rare legal in Commander</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════ SYNTAX -->
+      <section class="card reveal" id="syntax">
+        <div class="section-head">
+          <span class="eyebrow">Scryfall Search Syntax</span>
+          <h2>Query Filters</h2>
+          <p>These filters go inside <code>?q=</code> queries. Join multiple with <code>+</code>. Prefix any filter with <code>-</code> to exclude it.</p>
+        </div>
+        <div class="callout">
+          <ul class="rule-list compact-list">
+            <li><code>c:COLOR</code> — Card color. Values: <code>w</code> <code>u</code> <code>b</code> <code>r</code> <code>g</code> &nbsp;|&nbsp; <code>m</code> = multicolor, <code>c</code> = colorless</li>
+            <li><code>id:COLORS</code> — Color identity. Combine letters: <code>id:wubr</code>, <code>id:rg</code>, <code>id:w</code></li>
+            <li><code>t:TYPE</code> — Type line. Values: <code>creature</code> <code>instant</code> <code>sorcery</code> <code>enchantment</code> <code>artifact</code> <code>land</code> <code>legendary</code> <code>planeswalker</code></li>
+            <li><code>is:commander</code> — Valid commander (legendary creature or planeswalker with the ability)</li>
+            <li><code>r:RARITY</code> — Rarity. Values: <code>common</code> <code>uncommon</code> <code>rare</code> <code>mythic</code></li>
+            <li><code>f:commander</code> — Legal in Commander format</li>
+            <li><code>mv:N</code> — Mana value. Supports comparisons: <code>mv&lt;5</code> &nbsp;<code>mv&gt;=3</code> &nbsp;<code>mv=4</code></li>
+            <li><code>pow:N</code> — Power. Supports comparisons: <code>pow&gt;=4</code> &nbsp;<code>pow=2</code></li>
+            <li><code>tou:N</code> — Toughness. Supports comparisons: <code>tou&lt;=3</code></li>
+            <li><code>o:TEXT</code> — Oracle text contains a word or phrase. Example: <code>o:draw</code> &nbsp;<code>o:flying</code></li>
+            <li><code>kw:KEYWORD</code> — Has a keyword ability. Example: <code>kw:flying</code> &nbsp;<code>kw:haste</code> &nbsp;<code>kw:trample</code></li>
+            <li><code>otag:TAG</code> — Oracle tag — curated functional categories. Example: <code>otag:removal</code> &nbsp;<code>otag:ramp</code> &nbsp;<code>otag:draw</code>. Browse all tags at <a href="https://tagger.scryfall.com" target="_blank" rel="noopener noreferrer">tagger.scryfall.com</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════════ UTILITY -->
+      <section class="card reveal" id="utility">
+        <div class="section-head">
+          <span class="eyebrow">Utility &amp; Settings</span>
+          <h2>All Chat Commands</h2>
+        </div>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>General</h3>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall help</code> — Print the full command reference in TTS chat</li>
+              <li><code>Scryfall clear queue</code> — Cancel all pending requests and reset the importer</li>
+              <li><code>Scryfall clear back</code> — Reset all custom card backs to the default</li>
+              <li><code>Scryfall hide</code> — Toggle whether the importer echoes commands in chat (admin only)</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Image &amp; Display</h3>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Quality normal</code> — Standard quality images (default, fastest)</li>
+              <li><code>Scryfall Quality large</code> — Higher resolution images</li>
+              <li><code>Scryfall Quality png</code> — Lossless PNG quality (slowest to load)</li>
+              <li><code>Scryfall Back [ImageURL]</code> — Set a custom card back image for your cards</li>
+              <li><code>Scryfall Lang [code]</code> — Change card language (e.g. <code>en</code>, <code>fr</code>, <code>de</code>, <code>ja</code>)</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Card Info</h3>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall Text [CardName]</code> — Print a card's oracle text in chat</li>
+              <li><code>Scryfall Rules [CardName]</code> — Print comprehensive rules text in chat</li>
+              <li><code>Scryfall Legal [CardName]</code> — Show format legality for a card</li>
+              <li><code>Scryfall Legalities [CardName]</code> — Full legality breakdown</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Format Enforcement (Host only)</h3>
+            <p>Controls whether the importer enforces Commander format legality when spawning cards. On by default.</p>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall format on</code> — Enforce Commander legality</li>
+              <li><code>Scryfall format off</code> — Disable enforcement</li>
+              <li><code>Scryfall format toggle</code> — Switch current state</li>
+              <li><code>Scryfall format status</code> — Show current state in chat</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Auto-Recovery</h3>
+            <p>The importer monitors itself for stuck or hung requests. If a request takes more than 30 seconds it is automatically cancelled and the queue continues. You can also manually clear a stuck queue:</p>
+            <ul class="rule-list compact-list">
+              <li><code>Scryfall clear queue</code> — force-clear everything and restart</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div class="brand">
+            <span class="brand-mark">MTGR</span>
+            <span class="brand-sub">Commander Roguelike</span>
+          </div>
+          <nav class="footer-nav" aria-label="Footer">
+            <a href="rules.html">Rules</a>
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="api-status.html">API Status</a>
+          </nav>
+          <a class="button discord-btn small" href="https://discord.gg/tExmv8DZZG" target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.084.11 18.11.128 18.13a19.895 19.895 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            Discord
+          </a>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
