@@ -62,6 +62,12 @@ proxy. Nginx inside the container forwards `/api/*` requests to
 `https://api.mtginfo.org/*`, allowing the frontend to call the API through the
 same Cloudflare domain.
 
+If you run `cloudflared` in Docker, configure ingress origin to a name that is
+resolvable on the shared Docker network, for example `http://frontend:80`,
+`http://MTGR-Frontend:80`, or `http://MTGRL-Frontend:80` (alias provided in
+`docker-compose.yml`). If logs show `lookup ... no such host`, verify
+`cloudflared` is attached to the same Docker network (`mtg-net`).
+
 ## Leaderboard
 
 Visit `/leaderboard.html` to view live standings pulled from the shared Google

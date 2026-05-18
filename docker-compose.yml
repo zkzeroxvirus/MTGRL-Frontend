@@ -24,7 +24,9 @@ services:
     depends_on:
       - backend
     networks:
-      - mtg-net
+      mtg-net:
+        aliases:
+          - MTGRL-Frontend
 
 networks:
   mtg-net:
