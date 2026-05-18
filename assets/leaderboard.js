@@ -13,15 +13,17 @@ const statElements = {
 
 const sheetUrl = "/leaderboard-data?format=json";
 
-const ACHIEVEMENT_WEIGHT = 50000;
-const CRYPT_BUFF_WEIGHT = 5000;
-const TICKET_WEIGHT = 500;
+const ACHIEVEMENT_WEIGHT = 10000;
+const CRYPT_BUFF_WEIGHT = 7500;
+const TICKET_WEIGHT = 1000;
+const BRAND_WEIGHT = 500;
 const DEFAULT_COLUMN_INDEXES = {
   player: 1,
   essence: 2,
   achievements: 5,
   cryptBuffs: 6,
   tickets: 7,
+  brands: 9,
 };
 
 const updateStatus = (text, tone) => {
@@ -136,6 +138,7 @@ const resolveColumnIndexes = (headerRow) => ({
     DEFAULT_COLUMN_INDEXES.cryptBuffs,
   ),
   tickets: findColumnIndex(headerRow, ["tickets", "ticket"], DEFAULT_COLUMN_INDEXES.tickets),
+  brands: findColumnIndex(headerRow, ["brands", "brand"], DEFAULT_COLUMN_INDEXES.brands),
 });
 
 const renderEmpty = (message, options = {}) => {
@@ -183,7 +186,7 @@ const renderTable = (entries) => {
   }
 
   const headerRowElement = document.createElement("tr");
-  ["Rank", "Player", "Score", "Essence", "Achievements", "Buffs", "Tickets", "Unlocks"].forEach((label) => {
+  ["Rank", "Player", "Score", "Essence", "Achievements", "Buffs", "Tickets", "Brand Ranks", "Unlocks"].forEach((label) => {
     const headerCell = document.createElement("th");
     headerCell.textContent = label;
     headerRowElement.appendChild(headerCell);
@@ -214,6 +217,7 @@ const renderTable = (entries) => {
       String(entry.achCount),
       String(entry.buffCount),
       String(entry.ticketCount),
+      String(entry.brandRankTotal),
       String(entry.totalUnlocks),
     ];
 
@@ -331,6 +335,8 @@ const buildEntries = (rows) => {
     "buffs",
     "tickets",
     "ticket",
+    "brands",
+    "brand",
   ];
   const hasHeader = headerKeywords.some((keyword) => normalizedHeader.includes(keyword));
   const bodyRows = hasHeader ? rows.slice(1) : rows;
@@ -347,14 +353,17 @@ const buildEntries = (rows) => {
       const achievements = parseKvList(row[columnIndexes.achievements]);
       const cryptBuffs = parseKvList(row[columnIndexes.cryptBuffs]);
       const tickets = parseKvList(row[columnIndexes.tickets]);
+      const brands = columnIndexes.brands >= 0 ? parseKvList(row[columnIndexes.brands]) : {};
 
       const achCount = countNonZero(achievements);
       const buffCount = countNonZero(cryptBuffs);
       const ticketCount = countNonZero(tickets);
+      const brandRankTotal = sumValues(brands);
       const totalUnlocks = achCount + buffCount + ticketCount;
       const score = (achCount * ACHIEVEMENT_WEIGHT)
         + (buffCount * CRYPT_BUFF_WEIGHT)
         + (ticketCount * TICKET_WEIGHT)
+        + (brandRankTotal * BRAND_WEIGHT)
         + essence;
 
       return {
@@ -363,6 +372,7 @@ const buildEntries = (rows) => {
         achCount,
         buffCount,
         ticketCount,
+        brandRankTotal,
         totalUnlocks,
         ticketsTotal: sumValues(tickets),
         score: Math.round(score),

@@ -34,9 +34,10 @@
           </p>
           <p class="meta" id="meta">Updated moments ago.</p>
           <div class="badge-row" aria-label="Scoring weights">
-            <span class="badge">Achievement +50,000</span>
-            <span class="badge">Crypt Buff +5,000</span>
-            <span class="badge">Ticket +500</span>
+            <span class="badge">Achievement +10,000</span>
+            <span class="badge">Crypt Buff +7,500</span>
+            <span class="badge">Ticket +1,000</span>
+            <span class="badge">Brand Rank +500</span>
             <span class="badge badge--ok">+ Essence</span>
           </div>
         </div>
@@ -60,7 +61,31 @@
         </div>
       </section>
 
-      <section class="card reveal delay-1">
+      <section class="split-grid reveal delay-1">
+        <article class="card stack">
+          <details open>
+            <summary><span class="eyebrow" style="display:inline">Scoring Formula</span> &mdash; How Rank Is Calculated</summary>
+            <p style="margin-top:0.6rem;">
+              Leaderboard score combines high-impact unlock counts with current Essence,
+              so long-term progression and active play both matter.
+            </p>
+            <p style="margin-top:0.5rem;"><strong>Score = (Achievements × 10,000) + (Buffs × 7,500) + (Tickets × 1,000) + (Brand Ranks × 500) + Essence</strong></p>
+          </details>
+        </article>
+        <article class="card stack">
+          <details open>
+            <summary><span class="eyebrow" style="display:inline">Reading The Table</span> &mdash; What To Track</summary>
+            <ul class="list-clean" style="margin-top:0.6rem;">
+              <li>Score shows overall progression power.</li>
+              <li>Unlocks shows combined achievement, buff, and ticket depth.</li>
+              <li>Brand Ranks is the sum of all Brand ranks owned — each rank is worth 500 pts.</li>
+              <li>Essence is your flexible spend for future upgrades.</li>
+            </ul>
+          </details>
+        </article>
+      </section>
+
+      <section class="card reveal delay-2">
         <div class="section-head">
           <span class="eyebrow">Top Players</span>
           <h2>Current Podium</h2>
@@ -68,34 +93,13 @@
         <div class="podium" id="podium" aria-live="polite"></div>
       </section>
 
-      <section class="card table-card reveal delay-2">
+      <section class="card table-card reveal delay-3">
         <div class="table-wrap">
           <table aria-label="Leaderboard" id="leaderboard">
             <thead></thead>
             <tbody></tbody>
           </table>
         </div>
-      </section>
-
-      <section class="split-grid reveal delay-3">
-        <article class="card stack">
-          <span class="eyebrow">Scoring Formula</span>
-          <h2>How Rank Is Calculated</h2>
-          <p>
-            Leaderboard score combines high-impact unlock counts with current Essence,
-            so long-term progression and active play both matter.
-          </p>
-          <p><strong>Score = (Achievements * 50000) + (Buffs * 5000) + (Tickets * 500) + Essence</strong></p>
-        </article>
-        <article class="card stack">
-          <span class="eyebrow">Reading The Table</span>
-          <h2>What To Track</h2>
-          <ul class="list-clean">
-            <li>Score shows overall progression power.</li>
-            <li>Unlocks shows combined achievement, buff, and ticket depth.</li>
-            <li>Essence is your flexible spend for future upgrades.</li>
-          </ul>
-        </article>
       </section>
     </main>
     <script src="assets/leaderboard.js"></script>

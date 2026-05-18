@@ -67,7 +67,7 @@
               <a href="#quickstart">Overview &amp; Global Rules</a>
               <a href="#banned">Banned &amp; Restricted</a>
               <a href="#resources">Resources</a>
-              <a href="#pre-game">Shop</a>
+              <a href="#shop">Shop &amp; Brands</a>
               <a href="#deckbuilding">Deckbuilding</a>
               <a href="#gameplay">Gameplay Loop</a>
               <a href="#turns">Turn Structure</a>
@@ -91,8 +91,7 @@
               <a href="#crypt-buffs">Crypt Buffs</a>
               <a href="#tickets">Tickets</a>
               <a href="#achievements">Achievements</a>
-              <a href="#brands">Brands</a>
-              <a href="#post-run">Post-Run Shop</a>
+
             </nav>
           </div>
         </div>
@@ -218,11 +217,29 @@
         </div>
       </section>
 
-      <section class="rules-section card reveal" id="pre-game">
-        <h2>🛒 Shop</h2>
-        <p>Essence purchases available before Encounter 1 during deckbuilding. Brands may also be purchased here and carry forward across all runs.</p>
+      <section class="rules-section card reveal" id="shop">
+        <h2>🛒 Shop &amp; Brands</h2>
+        <p>The Shop covers all Essence spending — before, during, and after a run. <strong>Pre-game purchases</strong> apply during deckbuilding before Encounter 1. <strong>Brands</strong> are permanent upgrades that carry across all runs and never occupy inventory slots. <strong>Post-run purchases</strong> (Tickets, Captures, and more) are made with Essence earned from runs.</p>
+
+        <div class="rules-grid" style="margin-bottom:1rem;">
+          <div class="callout">
+            <h3>🏷️ Inventory Slots — Quick Reference</h3>
+            <ul class="rule-list compact-list">
+              <li>4 slots total — shared across: Crypt Buffs, Tickets, Achievements, Captures.</li>
+              <li>Standard items: 1 slot each.</li>
+              <li>Vanguard Ticket: 2 slots.</li>
+              <li>Emblem Ticket: 3 slots.</li>
+              <li><strong>Brands: No slot cost. No slot cap. Tracked separately.</strong></li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>✨ Brand Ranking</h3>
+            <p>Brands may be ranked up any number of times — Ranks must be purchased one at a time. Each additional Rank of the same Brand costs <strong>base price × current rank</strong>. Effects from the same Brand stack with each Rank.</p>
+          </div>
+        </div>
+
         <details class="rules-details" open>
-          <summary>Pregame Purchases (before Encounter 1)</summary>
+          <summary>Pre-Game Purchases (before Encounter 1)</summary>
           <ul class="rule-list">
             <li><strong>0 Essence — Commander Gamble:</strong> Mulligan your Commander for 1 new option. Your next Guild purchase this run is free.</li>
             <li><strong>0 Essence — Partner / Background / etc.:</strong> Choose a Partner, Background, or similar pairing. If it says "Partner with X," you gain X instead.</li>
@@ -230,16 +247,36 @@
             <li><strong>50 Essence — Commander Mulligan:</strong> Discard your current 5 Commander options and generate 5 new legal choices. Repeatable.</li>
           </ul>
         </details>
-        <details class="rules-details">
-          <summary>Brands (persistent — carry across all runs)</summary>
-          <p>Brands are permanent upgrades. They do not occupy the 4-slot inventory. Each additional rank of the same Brand costs <strong>base price × current rank</strong>.</p>
+
+        <details class="rules-details" open>
+          <summary>🔥 Brands (6) — Permanent, Slotless, Cross-Run</summary>
           <ul class="rule-list">
-            <li><strong>Brand of the Cartographer — 500 Essence base:</strong> When drafting, replace 2 basic lands with dual lands or triomes.</li>
-            <li><strong>Brand of the Conclave — 1,000 Essence base:</strong> During deckbuilding and at The Guild, gain 1 additional Commander choice whenever Commanders are generated.</li>
-            <li><strong>Brand of Recurrence — 1,250 Essence base:</strong> During deckbuilding and at The Guild, reroll Commanders 1 additional time for free.</li>
-            <li><strong>Brand of the Open Hand — 1,750 Essence base:</strong> Whenever you open a pack, it contains 1 additional card to choose from.</li>
+            <li><strong>Brand of the Cartographer — 500 Essence base:</strong> When drafting, you may replace 2 basic lands with dual lands or triomes.</li>
+            <li><strong>Brand of the Conclave — 1,000 Essence base:</strong> During deckbuilding and at The Guild, you get 1 additional Commander choice whenever Commanders are generated for you.</li>
+            <li><strong>Brand of Recurrence — 1,250 Essence base:</strong> During deckbuilding and at The Guild, you may reroll Commanders 1 additional time for free. Does not allow rerolling the 100-card nonland draft pile.</li>
+            <li><strong>Brand of the Open Hand — 1,750 Essence base:</strong> Whenever you open a pack, that pack contains 1 additional card to choose from.</li>
             <li><strong>Brand of the Blinded Eye — 2,000 Essence base:</strong> During deckbuilding, choose one color to exclude when rolling Commanders.</li>
             <li><strong>Brand of the Infinite Void — 500 Essence base:</strong> Your deck size minimum is reduced by 1 per Rank of this Brand.</li>
+          </ul>
+        </details>
+
+        <details class="rules-details">
+          <summary>💠 Post-Run Purchases</summary>
+          <h3 style="margin:0.75rem 0 0.25rem;">Tickets</h3>
+          <ul class="rule-list">
+            <li>750 Essence — Arcane Signet Ticket (1 slot)</li>
+            <li>1,500 Essence — Sol Ring Ticket (1 slot)</li>
+            <li>1,500 Essence — Leyline Ticket (1 slot)</li>
+            <li>2,000 Essence — Color Combo Ticket (1 slot)</li>
+            <li>2,500 Essence — Trinket Ticket (1 slot)</li>
+            <li>4,000 Essence — Conspiracy Ticket (1 slot)</li>
+            <li>5,000 Essence — Vanguard Ticket (2 slots)</li>
+            <li>10,000 Essence — Emblem Ticket (3 slots)</li>
+          </ul>
+          <h3 style="margin:0.75rem 0 0.25rem;">End-of-Game Essence Options</h3>
+          <ul class="rule-list">
+            <li><strong>250 Essence — Sell Buffs:</strong> Sell a Crypt Buff back to the Host in exchange for 250 Essence. This option is only available if you obtain a Buff you already have unlocked.</li>
+            <li><strong>Capture Non-Commander (base 500 Essence, 1 slot):</strong> Save 1 card from your deck to your collection. Captured cards may be used in future deck builds but count against your 39 (no free allocation). Cost increases by 250 Essence per additional capture: 1st = 500, 2nd = 750, 3rd = 1,000, and so on.</li>
           </ul>
         </details>
       </section>
@@ -1373,57 +1410,6 @@
             <li><strong>Dimir — Whisper Network</strong> — If blue: once per turn when you cast a spell on an opponent's turn, untap target nonland permanent. If black: once per turn when you target a permanent you don't control, exile target card in any graveyard. | Unlock: All Commanders were blue, black, or Dimir.</li>
             <li><strong>Boros — Charge of Conviction</strong> — If white: once per turn when one or more creatures you control attack, untap one creature you control. If red: once per turn when a creature you control attacks alone, give it +2/+0 until end of turn. | Unlock: All Commanders were red, white, or Boros.</li>
             <li><strong>Azorius — Law of Efficiency</strong> — If white: once per turn when you cast a spell during another player's turn, gain 1 life. If blue: once per turn when you counter a spell or ability, draw a card. | Unlock: All Commanders were white, blue, or Azorius.</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="brands">
-        <h2>🔥 Brands (6)</h2>
-        <p>Brands are permanent progression purchases from the Shop. Brand effects stack and each Brand may be ranked up any number of times — Ranks must be purchased one at a time. Brands are tracked separately from the 4-slot buff inventory — they do not occupy slots. Each additional Rank of the same Brand costs base price × current rank.</p>
-        <details class="rules-details" open>
-          <summary>All 6 Brands</summary>
-          <ul class="rule-list">
-            <li><strong>Brand of the Cartographer — 500 Essence base:</strong> When drafting, you may replace 2 basic lands with dual lands or triomes.</li>
-            <li><strong>Brand of the Conclave — 1,000 Essence base:</strong> During deckbuilding and at The Guild, you get 1 additional Commander choice whenever Commanders are generated for you.</li>
-            <li><strong>Brand of Recurrence — 1,250 Essence base:</strong> During deckbuilding and at The Guild, you may reroll Commanders 1 additional time for free. Does not allow rerolling the 100-card nonland draft pile.</li>
-            <li><strong>Brand of the Open Hand — 1,750 Essence base:</strong> Whenever you open a pack, that pack contains 1 additional card to choose from.</li>
-            <li><strong>Brand of the Blinded Eye — 2,000 Essence base:</strong> During deckbuilding, choose one color to exclude when rolling Commanders.</li>
-            <li><strong>Brand of the Infinite Void — 500 Essence base:</strong> Your deck size minimum is reduced by 1 per Rank of this Brand.</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="post-run">
-        <h2>💠 Post-Run Shop</h2>
-        <p>Use Essence after runs to buy persistent progression. Tickets, Achievements, Crypt Buffs, and Captures share the 4-slot inventory. Brands are purchased in the Pregame Shop and tracked separately — they do not count against slots.</p>
-        <details class="rules-details" open>
-          <summary>Slot Limit Summary</summary>
-          <ul class="rule-list compact-list">
-            <li>4 slots total — shared across: Crypt Buffs, Tickets, Achievements, Captures.</li>
-            <li>Standard items: 1 slot each.</li>
-            <li>Vanguard Ticket: 2 slots.</li>
-            <li>Emblem Ticket: 3 slots.</li>
-            <li>Brands: No slot cost. No slot cap. Tracked separately.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>Tickets</summary>
-          <ul class="rule-list">
-            <li>750 Essence — Arcane Signet Ticket (1 slot)</li>
-            <li>1,500 Essence — Sol Ring Ticket (1 slot)</li>
-            <li>1,500 Essence — Leyline Ticket (1 slot)</li>
-            <li>2,000 Essence — Color Combo Ticket (1 slot)</li>
-            <li>2,500 Essence — Trinket Ticket (1 slot)</li>
-            <li>4,000 Essence — Conspiracy Ticket (1 slot)</li>
-            <li>5,000 Essence — Vanguard Ticket (2 slots)</li>
-            <li>10,000 Essence — Emblem Ticket (3 slots)</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>End-of-Game Essence Options</summary>
-          <ul class="rule-list">
-            <li><strong>250 Essence — Sell Buffs:</strong> Sell a Crypt Buff back to the Host in exchange for 250 Essence. This option is only available if you obtain a Buff you already have unlocked.</li>
-            <li><strong>Capture Non-Commander (base 500 Essence, 1 slot):</strong> Save 1 card from your deck to your collection. Captured cards may be used in future deck builds but count against your 39 (no free allocation). Cost increases by 250 Essence per additional capture: 1st = 500, 2nd = 750, 3rd = 1,000, and so on.</li>
           </ul>
         </details>
       </section>
