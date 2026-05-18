@@ -386,7 +386,7 @@ const loadLeaderboard = async () => {
   try {
     table.setAttribute("aria-busy", "true");
     setLoadingState(true);
-    renderSkeleton(8, 8);
+    renderSkeleton(9, 8);
     const response = await fetch(sheetUrl, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Sheet responded with ${response.status} ${response.statusText}`);
