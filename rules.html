@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -64,50 +64,38 @@
           <div class="panel">
             <div class="panel-title">Table of Contents</div>
             <nav class="toc">
-              <a href="#global">Global Rules</a>
-              <a href="#banned">Banned and Restricted</a>
-              <a href="#limits">Player Limits</a>
+              <a href="#quickstart">Overview &amp; Global Rules</a>
+              <a href="#banned">Banned &amp; Restricted</a>
               <a href="#resources">Resources</a>
-              <a href="#pre-game">Pregame Shop</a>
+              <a href="#pre-game">Shop</a>
               <a href="#deckbuilding">Deckbuilding</a>
               <a href="#gameplay">Gameplay Loop</a>
               <a href="#turns">Turn Structure</a>
-              <a href="#town">Town Buildings</a>
-              <a href="#travelers">Travelers & Wanderers</a>
-              <a href="#cash-outs">Cash Outs & Loot</a>
-              <a href="#encounters">Events & Run Modes</a>
+              <a href="#events">Events</a>
+              <a href="#trinkets">Trinkets</a>
+              <a href="#encounter-types">Encounter Types</a>
+              <a href="#host-health">Host Health</a>
               <a href="#affixes">Affixes</a>
+              <a href="#doom">Doom</a>
+              <a href="#host-authority">Host Authority</a>
+              <a href="#demon-generals">Demon Generals</a>
+              <a href="#cash-outs">Cash Outs &amp; Loot</a>
+              <a href="#town">Town Buildings</a>
+              <a href="#travelers">Travelers</a>
+              <a href="#stay-out">Stay Out</a>
+              <a href="#wanderers">Wanderers</a>
+              <a href="#supply-drop">Supply Drop</a>
               <a href="#crypt-path">Progression to Crypt</a>
-              <a href="#trinkets">Trinket System</a>
               <a href="#crypt">Crypt Rules</a>
-              <a href="#achievements">Season Progression</a>
-              <a href="#post-run">Progression Shop</a>
+              <a href="#death-departure">Death &amp; Departure</a>
+              <a href="#crypt-buffs">Crypt Buffs</a>
+              <a href="#tickets">Tickets</a>
+              <a href="#achievements">Achievements</a>
+              <a href="#brands">Brands</a>
+              <a href="#post-run">Post-Run Shop</a>
             </nav>
           </div>
         </div>
-      </section>
-
-      <section class="overview-strip grid reveal delay-1" aria-label="Run snapshot">
-        <article class="stat card">
-          <span class="stat-label">Setup</span>
-          <div class="stat-value">Commander picks, draft 22</div>
-          <p class="meta">Choose a legal commander, use up to 4 commander mulligans, draft from your own 100-card pool, then finalize lands and progression effects.</p>
-        </article>
-        <article class="stat card">
-          <span class="stat-label">Progress</span>
-          <div class="stat-value">Win fights, earn XP</div>
-          <p class="meta">Victories resolve XP, Cash Outs, and Loot Pool in order while encounter scaling ramps by mode and affix tier.</p>
-        </article>
-        <article class="stat card">
-          <span class="stat-label">Downtime</span>
-          <div class="stat-value">Town or Stay Out</div>
-          <p class="meta">Town gives controlled building usage. Stay Out gives XP, packs, a Supply Drop, a Wanderer, and more Events.</p>
-        </article>
-        <article class="stat card">
-          <span class="stat-label">Endgame</span>
-          <div class="stat-value">3 or 4 fights, then Crypt</div>
-          <p class="meta">Standard mode runs 3 encounters. Variant runs 4 and unlocks Tier 4 affixes before the final boss.</p>
-        </article>
       </section>
 
       <section class="card reveal delay-2" id="quickstart">
@@ -115,25 +103,24 @@
           <span class="eyebrow">Quick Start</span>
           <h2>Run Flow at a Glance</h2>
           <p>
-            Use this section when you need the overall structure fast. The detailed rules
-            below stay authoritative for edge cases and exact limits.
+            Use this section when you need the overall structure fast. Detailed rules below are authoritative for edge cases and exact limits.
           </p>
         </div>
         <div class="flow-grid">
           <article class="flow-card">
             <span class="flow-step">01</span>
             <h3>Build the run</h3>
-            <p>Choose a commander, draft 22 nonlands from your own 100-card pool, add lands, and apply any pregame shop or progression effects.</p>
+            <p>Choose a commander, draft 22 nonlands from your own 100-card pool, add lands, and apply any Shop or progression effects.</p>
           </article>
           <article class="flow-card">
             <span class="flow-step">02</span>
             <h3>Fight encounters</h3>
-            <p>Resolve Event, then Trinket before encounter 1, then fight encounters with shared party sequencing and d20 turn-order rolls.</p>
+            <p>Resolve Event, then Trinket before encounter 1. Fight encounters with shared party sequencing and d20 turn-order rolls.</p>
           </article>
           <article class="flow-card">
             <span class="flow-step">03</span>
             <h3>Resolve rewards</h3>
-            <p>On a win, resolve XP, Cash Out, and Loot Pool in that order, then choose Town or Stay Out before Events.</p>
+            <p>On a win, resolve XP, Cash Out, and Loot Pool (all three must happen, no required order), then choose Town or Stay Out before Events.</p>
           </article>
           <article class="flow-card">
             <span class="flow-step">04</span>
@@ -143,79 +130,65 @@
         </div>
         <div class="rules-grid">
           <div class="callout">
-            <h3>Host reminders</h3>
+            <h3>📜 Global Rules</h3>
             <ul class="rule-list compact-list">
-              <li>Commander legality and color identity always apply.</li>
-              <li>Mode determines encounter count and whether Tier 4 affixes can appear.</li>
-              <li>Host scaling uses player count, encounter stage, affix tier count, Doom, and Authority.</li>
-              <li>On a failed encounter, skip rewards only, then still proceed to Town or Stay Out.</li>
-              <li>High roll on the pre-fight d20 chooses turn order.</li>
+              <li>Commander legality and color identity apply throughout the run.</li>
+              <li>The party plays cooperatively; the Host controls all encounters and opposing forces.</li>
+              <li>Persistent progression (Crypt Buffs, Tickets, Achievements, Brands, Captures) is applied before encounter 1.</li>
+              <li>Each player generates their own 100-card pool — only invalid or illegal individual cards are replaced.</li>
+              <li>Players fully reset to max HP before each new encounter branch.</li>
+              <li>Failed encounters skip XP, Cash Out, and Loot Pool only — the run still proceeds to Town or Stay Out.</li>
+              <li>Scryfall effects and pack generation follow normal legality and Host adjudication.</li>
             </ul>
           </div>
           <div class="callout">
-            <h3>Player reminders</h3>
+            <h3>Host Reminders</h3>
             <ul class="rule-list compact-list">
-              <li>XP is only for the current run. Essence, Brands, Tickets, and other progression persist.</li>
-              <li>Failed encounters skip XP, Cash Out, and Loot Pool only.</li>
-              <li>Base rules apply no XP penalty when a player dies.</li>
+              <li>Mode determines encounter count and whether Tier 4 affixes are active.</li>
+              <li>Host scaling uses player count, encounter stage, affix tier count, Doom, and Authority.</li>
+              <li>High roll on the pre-fight d20 chooses turn order.</li>
+            </ul>
+            <h3 style="margin-top:0.75rem;">Player Reminders</h3>
+            <ul class="rule-list compact-list">
+              <li>XP is run-only. Essence, Brands, Tickets, and other progression persist across runs.</li>
+              <li>No XP penalty when a player dies.</li>
             </ul>
           </div>
         </div>
-      </section>
-
-      <section class="rules-section card reveal" id="global">
-        <h2>📜 Global Rules</h2>
-        <ul class="rule-list">
-          <li>Commander legality applies throughout the run: commander, deck cards, and later additions must remain legal and within color identity.</li>
-          <li>The party plays cooperatively as one team while the Host controls encounters and opposing forces.</li>
-          <li>Persistent progression is applied before encounter 1: Crypt Buffs, Tickets, Achievements, Brands, and Captures.</li>
-          <li>Each player generates their own 100-card pool (any card type except basic lands); once generated, only invalid or illegal cards are replaced.</li>
-          <li>After each encounter stage, players reset to full HP before the next branch resolves.</li>
-          <li>Failed encounters are not replayed and skip rewards only (XP, Cash Out, Loot Pool), then still proceed to Town or Stay Out and Events.</li>
-          <li>Scryfall-based effects and pack generation still follow normal legality and Host adjudication.</li>
-        </ul>
       </section>
 
       <section class="rules-section card reveal" id="banned">
         <h2>🚫 Banned and Restricted</h2>
-        <p>These constraints apply across MTGR runs unless the Host explicitly overrides them.</p>
+        <p>These constraints apply across all MTGR runs unless the Host explicitly overrides them. Cards with Draft-only gameplay text (e.g. "Draft a card") are rerolled during deckbuilding — they are not legal in MTGR.</p>
         <div class="rules-grid">
           <div class="callout">
-            <h3>Fully Banned Highlights</h3>
+            <h3>🚫 Full Ban</h3>
             <ul class="rule-list compact-list">
               <li>Show and Tell</li>
-              <li>Silence effects that stop the Host from casting spells on their turn (except Mandate of Peace)</li>
-              <li>Collective Voyage, Time Vault, and other listed MTGR full-ban cards</li>
-              <li>Cards with Draft-style gameplay text are rerolled during deckbuilding</li>
+              <li>Silence effects — any effect that prevents the Host from casting spells during their turn (<em>exception: Mandate of Peace is legal</em>)</li>
+              <li>Collective Voyage</li>
+              <li>Mana Abundance</li>
+              <li>Time Vault</li>
+              <li>Hermit Druid Avatar</li>
+              <li>Braids, Conjurer Adept Avatar</li>
+              <li>Staying Power</li>
+              <li>Rules Lawyer</li>
+              <li>Summoner's Bond</li>
+              <li>Richard Garfield, Ph.D.</li>
+              <li>Double Stroke</li>
+              <li>Sovereign's Realm</li>
             </ul>
           </div>
           <div class="callout">
-            <h3>Restricted Highlights</h3>
+            <h3>⚠️ Restricted</h3>
+            <p>The following cards are legal but <strong>cannot be obtained via Scryfall search or any targeted card-search effect</strong>. They may still appear through random pack opens.</p>
             <ul class="rule-list compact-list">
-              <li>Join Forces effects are excluded from Scryfall or targeted search sourcing</li>
-              <li>Oath of Lieges and Scholarship Sponsor are excluded from targeted sourcing</li>
-              <li>Tree of Perdition cannot be used with Balloon interactions</li>
-              <li>Use Host adjudication if an effect conflicts with legality constraints</li>
+              <li>Join Forces (keyword) — cannot be fetched via Scryfall or targeted search</li>
+              <li>Oath of Lieges — cannot be fetched via Scryfall or targeted search</li>
+              <li>Scholarship Sponsor — cannot be fetched via Scryfall or targeted search</li>
+              <li>Zur's Weirding — cannot be fetched via Scryfall or targeted search</li>
+              <li>Tree of Perdition — cannot be used in combination with Balloon effects</li>
             </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="rules-section card reveal" id="limits">
-        <h2>📦 Player Limits</h2>
-        <p>Limits apply per player unless a rule explicitly says the party shares a resource or choice.</p>
-        <div class="rules-grid">
-          <div>
-            <h3>Required</h3>
-            <p>1 commander, 39-card library, and a legal deck after every swap, reward, or Guild change.</p>
-          </div>
-          <div>
-            <h3>Inventory Slots</h3>
-            <p>4 shared progression slots across Crypt Buffs, Tickets, Achievements, and Captures. Brands are tracked separately.</p>
-          </div>
-          <div>
-            <h3>Ticket Slot Costs</h3>
-            <p>Most tickets cost 1 slot. Vanguard costs 2 and Emblem costs 3. Trinkets remain capped at one active trinket at a time.</p>
           </div>
         </div>
       </section>
@@ -233,96 +206,171 @@
           <div>
             <h3>🔶 XP</h3>
             <p>
-              XP is your in-run currency. Spend it on Town buildings and Wanderers. Unspent
-              XP disappears when the run ends, but player death no longer causes a base XP penalty.
+              XP is your in-run currency. Spend it on Town buildings and Wanderers. At run end — win or lose — unspent XP converts to Essence. Player death does not cause a base XP penalty.
             </p>
           </div>
           <div>
             <h3>🎒 Progression Inventory</h3>
             <p>
-              Crypt Buffs, Tickets, Achievements, and Captures use the 4-slot inventory.
-              Brands sit outside that cap and can be ranked up repeatedly.
+              Crypt Buffs, Tickets, Achievements, and Captures share 4 slots. Most items cost 1 slot — Vanguard Ticket costs 2, Emblem Ticket costs 3. Brands are slotless and uncapped.
             </p>
           </div>
         </div>
       </section>
 
       <section class="rules-section card reveal" id="pre-game">
-        <h2>🛒 Pregame Shop (Essence)</h2>
-        <p>These one-run purchases are made before encounter 1 during deckbuilding.</p>
-        <ul class="rule-list">
-          <li>🎲 0 Essence — Commander Gamble: mulligan your commander for 1 new option and your next Guild purchase this run is free.</li>
-          <li>👥 0 Essence — Partner or Background etc.: choose a Partner, Background, or similar option. If it says Partner with X, you gain X.</li>
-          <li>🌍 35 Essence — Land Replacement: replace a basic land with a legal dual land or triome. Repeatable.</li>
-          <li>🔁 50 Essence — Commander Mulligan: delete your current 5 commander options and generate 5 new legal choices. Repeatable.</li>
-          <li>🧾 Current Pregame Shop focuses on commander shaping and mana fixing. Persistent tickets now cover effects like free Leylines and other long-term unlocks.</li>
-        </ul>
+        <h2>🛒 Shop</h2>
+        <p>Essence purchases available before Encounter 1 during deckbuilding. Brands may also be purchased here and carry forward across all runs.</p>
+        <details class="rules-details" open>
+          <summary>Pregame Purchases (before Encounter 1)</summary>
+          <ul class="rule-list">
+            <li><strong>0 Essence — Commander Gamble:</strong> Mulligan your Commander for 1 new option. Your next Guild purchase this run is free.</li>
+            <li><strong>0 Essence — Partner / Background / etc.:</strong> Choose a Partner, Background, or similar pairing. If it says "Partner with X," you gain X instead.</li>
+            <li><strong>35 Essence — Land Replacement:</strong> Replace a basic land with a legal dual land or triome within your color identity. Repeatable.</li>
+            <li><strong>50 Essence — Commander Mulligan:</strong> Discard your current 5 Commander options and generate 5 new legal choices. Repeatable.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>Brands (persistent — carry across all runs)</summary>
+          <p>Brands are permanent upgrades. They do not occupy the 4-slot inventory. Each additional rank of the same Brand costs <strong>base price × current rank</strong>.</p>
+          <ul class="rule-list">
+            <li><strong>Brand of the Cartographer — 500 Essence base:</strong> When drafting, replace 2 basic lands with dual lands or triomes.</li>
+            <li><strong>Brand of the Conclave — 1,000 Essence base:</strong> During deckbuilding and at The Guild, gain 1 additional Commander choice whenever Commanders are generated.</li>
+            <li><strong>Brand of Recurrence — 1,250 Essence base:</strong> During deckbuilding and at The Guild, reroll Commanders 1 additional time for free.</li>
+            <li><strong>Brand of the Open Hand — 1,750 Essence base:</strong> Whenever you open a pack, it contains 1 additional card to choose from.</li>
+            <li><strong>Brand of the Blinded Eye — 2,000 Essence base:</strong> During deckbuilding, choose one color to exclude when rolling Commanders.</li>
+            <li><strong>Brand of the Infinite Void — 500 Essence base:</strong> Your deck size minimum is reduced by 1 per Rank of this Brand.</li>
+          </ul>
+        </details>
       </section>
 
       <section class="rules-section card reveal" id="deckbuilding">
         <h2>🎴 Deckbuilding</h2>
-        <p>All cards must remain Commander-legal and fit the current commander's color identity.</p>
-        <ol class="rule-steps">
-          <li>Generate 5 random legal commanders, choose 1, and use up to 4 free commander mulligans before encounter 1 if needed.</li>
-          <li>
-            Generate your own 100-card pool in your color identity (any card type except basic lands), then draft 22
-            cards from that pool. The pool cannot be rerolled as a whole.
-          </li>
-          <li>If an individual card is invalid or illegal for play, reroll and replace only that card.</li>
-          <li>
-            Add 16 total lands. Two colors add 2 duals, three colors add 4 duals, four
-            colors add 6 duals, five colors add 8 duals. Fill the rest with basics.
-          </li>
-          <li>Add 1 free-choice card that is Commander legal, fits color identity, and is not Sol Ring or a Gamechanger.</li>
-          <li>Finalize persistent progression, confirm the deck is Commander plus 39, then resolve pre-first-encounter setup in order: Event, then Trinket (starting Event cannot be Bad Stuff).</li>
-        </ol>
+        <p>Follow these steps in order at the start of each run. Initial deckbuilding is restricted to your Commander's color identity — cards outside it can only be gained during the run through cashouts, Mystery Packs, and other sources.</p>
+
+        <div class="flow-grid">
+          <article class="flow-card">
+            <span class="flow-step">01</span>
+            <h3>Choose Your Commander</h3>
+            <p>Generate 5 random legal Commanders. You have up to <strong>4 free mulligans</strong> to reroll the full set. Pick one.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">02</span>
+            <h3>Draft Your Cards</h3>
+            <p>Generate your own <strong>100-card pool</strong> within your color identity, then draft <strong>22 nonlands</strong> from it. The pool cannot be rerolled as a whole — if an individual card is invalid, reroll and replace only that card.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">03</span>
+            <h3>Add Lands</h3>
+            <p>Add <strong>16 total lands</strong>. Duals by color count: 2 colors → 2 duals, 3 → 4, 4 → 6, 5 → 8. Fill the rest with basics.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">04</span>
+            <h3>Free Pick</h3>
+            <p>Add <strong>1 free-choice card</strong> that is Commander-legal, fits your color identity, and is not Sol Ring or a Gamechanger. Mark it with a <strong>Scryfall decal</strong> after selection.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">05</span>
+            <h3>Apply Progression</h3>
+            <p>Finalize all persistent progression effects (Tickets, Brands, Shop purchases). Confirm the deck is <strong>Commander + 39</strong> at minimum.</p>
+          </article>
+        </div>
+
+        <div class="rules-grid" style="margin-top:1rem;">
+          <div class="callout">
+            <h3>Deck Size — What Changes the Floor</h3>
+            <ul class="rule-list compact-list">
+              <li><strong>Standard start:</strong> Commander + 39 cards minimum (40 total).</li>
+              <li><strong>Can start larger:</strong> Ticket effects (Sol Ring Ticket, Arcane Signet Ticket, Trinket Ticket, etc.) add cards outside the 39 allocation — the deck may begin with more than 40 total.</li>
+              <li><strong>Can drop below during the run:</strong> Brand of the Infinite Void reduces the minimum by 1 per Rank, so a deck can legally fall below its starting count mid-run.</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Key Restrictions</h3>
+            <ul class="rule-list compact-list">
+              <li>Color identity applies at deckbuilding — no exceptions unless a progression effect explicitly grants off-color access.</li>
+              <li>The 100-card pool cannot be rerolled wholesale. Invalid individual cards are replaced one at a time.</li>
+              <li>Stickers, Attractions, and Contraptions cannot appear in the 100-card pool — reroll and replace any immediately.</li>
+              <li>The free pick cannot be Sol Ring, a Gamechanger, or a card banned in Commander.</li>
+              <li>No two-card combos are allowed in any run deck (players or Host).</li>
+              <li>A card marked with a Scryfall decal cannot be part of a three-card combo.</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section class="rules-section card reveal" id="gameplay">
         <h2>🎲 Gameplay Loop</h2>
-        <p>The loop is encounter, rewards, branch choice, Events, then the next encounter until the Crypt.</p>
-        <div class="rules-grid">
-          <div>
+        <p>Each run is a sequence of encounters separated by a Town or Stay Out choice, repeating until the Crypt is reached.</p>
+
+        <div class="flow-grid">
+          <article class="flow-card">
+            <span class="flow-step">01</span>
             <h3>Before Encounter 1</h3>
-            <p>
-              Resolve Event first (starting Event cannot be Bad Stuff), then resolve
-              Trinket using the Trinket System flow.
-            </p>
-          </div>
-          <div>
+            <p>Resolve Event first (opening Event cannot be Bad Stuff), then resolve Trinket using the Trinket System flow.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">02</span>
             <h3>Encounter</h3>
-            <p>Host resolves a random encounter. Both sides roll a d20 and the high roll chooses turn order.</p>
-          </div>
-          <div>
-            <h3>Victory Path</h3>
-            <p>Resolve rewards in strict order: XP, Cash Out, then Loot Pool. After that choose Town or Stay Out, then resolve Event(s).</p>
-          </div>
-          <div>
-            <h3>Failure Path</h3>
-            <p>
-              Failed encounters grant no XP, no Cash Out, and no Loot Pool. Then the party
-              still proceeds through Town or Stay Out, resolves Events, and advances.
-            </p>
-          </div>
+            <p>Host draws a random encounter. Both sides roll a d20 — the higher roll chooses turn order.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">03</span>
+            <h3>Victory — Resolve Rewards</h3>
+            <p>On a win, resolve all three in any order: XP (mode table + Affix bonuses), Cash Out, and Loot Pool.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">03</span>
+            <h3>Defeat — No Rewards</h3>
+            <p>Failed encounters grant no XP, no Cash Out, and no Loot Pool. Skipping rewards is the <em>only</em> penalty — the run continues.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">04</span>
+            <h3>Between Encounters</h3>
+            <p>After every encounter (win or loss), choose: 🏘️ Town or 🏕️ Stay Out. Resolve Events per that choice, then repeat from Step 02.</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">05</span>
+            <h3>Crypt</h3>
+            <p>Clear all encounters in the chosen run mode. The Crypt opens — Host always goes first inside.</p>
+          </article>
         </div>
+
+        <h3 style="margin-top:1.5rem;">🏘️ Town vs 🏕️ Stay Out</h3>
         <div class="rules-grid">
-          <div>
+          <div class="callout">
             <h3>🏘️ Town</h3>
-            <p>
-              Fully heal, use Town buildings, then resolve 1 Event before the next encounter.
-            </p>
+            <ul class="rule-list compact-list">
+              <li>All players fully heal</li>
+              <li>Use Town buildings (limited uses per visit; all reset on entry)</li>
+              <li>Resolve <strong>1 Event</strong> before the next encounter</li>
+            </ul>
+            <p><em>Best for: controlled upgrades, building synergies, recovering safely.</em></p>
           </div>
-          <div>
-            <h3>🏕️ Staying Out</h3>
-            <p>
-              Fully heal, gain XP, open 2 Mystery Packs per player, resolve a Supply Drop,
-              resolve a Wanderer, then resolve scaled Event draws. Consecutive Stay Outs
-              add +5 XP each time and +1 additional Event each time.
-            </p>
+          <div class="callout">
+            <h3>🏕️ Stay Out</h3>
+            <ul class="rule-list compact-list">
+              <li>All players fully heal</li>
+              <li>Each player gains <strong>+10 XP</strong> (scales with consecutive Stay Outs)</li>
+              <li>Each player opens <strong>2 Mystery Packs</strong></li>
+              <li>Resolve a <strong>Supply Drop</strong></li>
+              <li>Resolve a <strong>Wanderer</strong></li>
+              <li>Resolve <strong>2 Events</strong> (instead of 1; each additional consecutive Stay Out adds +1 more)</li>
+            </ul>
+            <p><em>Best for: maximizing XP and cards, high-variance high-reward play.</em></p>
           </div>
         </div>
-        <p>Base rules apply no XP penalty when a player dies. Dead players return in later encounter flow.</p>
-        <p>Scoop timing: individual scoops are sorcery speed only; full-party encounter concession may be declared at instant speed.</p>
+
+        <details class="rules-details">
+          <summary>Death &amp; Scoop Rules</summary>
+          <ul class="rule-list compact-list">
+            <li>Death is not permanent — players return in future encounters.</li>
+            <li>No XP penalty when a player dies.</li>
+            <li>If a player leaves mid-encounter, the rest of the party may pilot their deck until that encounter ends.</li>
+            <li>Individual scoops — <strong>Sorcery speed only.</strong></li>
+            <li>Full-party encounter concession — may be declared at <strong>Instant speed.</strong></li>
+          </ul>
+        </details>
       </section>
 
       <section class="rules-section card reveal" id="turns">
@@ -341,179 +389,843 @@
           </div>
         </div>
         <p>Extra turns belong only to the player who created them unless another rule explicitly overrides that.</p>
-        <p>In the Crypt, the Host always starts first.</p>
       </section>
 
-      <section class="rules-section card reveal" id="town">
-        <h2>🏘️ Town Buildings</h2>
-        <p>
-          Town no longer uses actions. Buildings are either limited-use per Town visit or
-          unlimited-use as long as their XP costs are paid.
-        </p>
-        <p>All building limits reset every time the party returns to Town.</p>
+      <section class="rules-section card reveal" id="events">
+        <h2>🎲 Events</h2>
+        <p>Events occur after post-encounter decisions and provide additional effects, challenges, or rewards before the next encounter begins. Events resolve <strong>one at a time in the order they are drawn</strong>. Each Event must fully complete before the next begins.</p>
         <div class="rules-grid">
           <div class="callout">
-            <h3>Limited-Use Buildings</h3>
+            <h3>Event Timing</h3>
+            <ol class="rule-list">
+              <li>Encounter is defeated.</li>
+              <li>Rewards are resolved.</li>
+              <li>Players choose: Return to Town or Stay Out.</li>
+              <li>Resolve Town or Stay Out effects.</li>
+              <li>Resolve Event(s).</li>
+              <li>Begin next encounter.</li>
+            </ol>
+          </div>
+          <div class="callout">
+            <h3>Event Frequency</h3>
             <ul class="rule-list compact-list">
-              <li>Bank — 1 use per Town</li>
-              <li>Bazaar — 2 uses per Town</li>
-              <li>Cathedral — 1 use per Town</li>
-              <li>Portal — 1 use per Town</li>
-              <li>Tavern — 1 use per Town</li>
+              <li>Return to Town: resolve 1 Event.</li>
+              <li>Stay Out (first): resolve 2 Events.</li>
+              <li>Stay Out (second consecutive): resolve 3 Events.</li>
+              <li>Stay Out (third consecutive): resolve 4 Events.</li>
+              <li>Scaling resets when the party returns to Town.</li>
+              <li>The starting Event (before Encounter 1) cannot be a Bad Stuff Event.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Restrictions</h3>
+            <ul class="rule-list compact-list">
+              <li>No Event is drawn before the Crypt.</li>
+              <li>Life wording: "lose/gain X life" is current life only. Permanent HP changes must explicitly say "Max HP/Life."</li>
             </ul>
           </div>
           <div class="callout">
-            <h3>Unlimited Buildings</h3>
+            <h3>Event Types (Design Layer)</h3>
             <ul class="rule-list compact-list">
-              <li>Blacksmith — Upgrade 25 XP or Augment 50 XP</li>
-              <li>The Guild — 10 XP plus d6 commander change</li>
-              <li>Merchant — paid packs with scaling precision</li>
-              <li>Mystic — 5 XP to prune a nonland for Essence</li>
+              <li>🎁 Reward Events — grant resources, cards, or advantages.</li>
+              <li>⚠️ Risk Events — force difficult choices.</li>
+              <li>🔄 Transformation Events — modify decks or game state.</li>
+              <li>🎲 Chaos Events — high-variance outcomes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules-section card reveal" id="trinkets">
+        <h2>🧿 Trinkets</h2>
+        <p>Trinkets are run modifiers that can be obtained at the start of the game, during the run, or via a Trinket Ticket. The party may hold multiple Trinkets simultaneously — all active Trinkets are in effect.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Selection</h3>
+            <ul class="rule-list compact-list">
+              <li>Present 3 random Trinkets from the pool; players vote on one and it takes effect immediately.</li>
+              <li><strong>Trinket Ticket override:</strong> the ticket owner picks 1 of 3 — no table vote.</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Ownership</h3>
+            <ul class="rule-list compact-list">
+              <li>Normal Trinkets are party property for the run.</li>
+              <li>A Ticket Trinket is tied to the player who used it; if they leave, the Trinket is removed at the end of the current encounter.</li>
+              <li>If that player leaves mid-encounter, the party may pilot their deck until the encounter ends — the Trinket stays active for that encounter only.</li>
             </ul>
           </div>
         </div>
         <details class="rules-details" open>
-          <summary>Building Rules</summary>
+          <summary>Full Trinket Pool</summary>
           <ul class="rule-list">
-            <li>🏦 Bank — move up to 6 cards between deck and sideboard.</li>
-            <li>⚒️ Blacksmith — Upgrade changes stats, keywords, or costs. Augment adds or changes rules text. A card can receive only 1 Blacksmith modification.</li>
-            <li>🛍️ Bazaar — make deals such as card for card, card for Essence, Cash Out trades, or Cash Out to Host for 10 XP.</li>
-            <li>⛪ Cathedral — describe a card request, then either add the provided card to your deck or destroy it for Essence equal to twice its mana value.</li>
-            <li>🏰 The Guild — choose a color combination, pay 10 XP plus a d6 roll, then receive roll + 2 legal commanders in those colors and optionally swap commanders. Your deck must be fixed immediately if legality changes.</li>
-            <li>🛒 Merchant — buy 15-card packs: Mystery 5 XP, ID 10 XP, Pro 20 XP, Mythic 50 XP, OTAG 75 XP. Keep 1 card from each pack unless an explicit Traveler effect says otherwise.</li>
-            <li>🔮 Mystic — pay 5 XP, destroy a nonland card, and gain Essence equal to twice its mana value.</li>
-            <li>🌀 Portal — spend up to 15 XP to generate a type- or keyword-based Temporal pack with size equal to XP spent. Temporal cards cannot be traded, sideboarded, or sacrificed to Town/Traveler effects.</li>
-            <li>🍻 Tavern — either trade deck cards for basics, or swap 3 to 5 basics into up to 2 dual lands for mana smoothing.</li>
+            <li><strong>🔧 The Device</strong> — Once per encounter: counter a spell a party member controls. Conjure 3 random spells; cast 1 for free, exile the rest.</li>
+            <li><strong>🪓 Garruk's Clipper</strong> — Once each combat: target creature gets +2/+0 and deathtouch until end of turn. If it deals combat damage to a player this turn, its controller draws a card.</li>
+            <li><strong>🔥 Torch</strong> — Triggered: at the beginning of each party upkeep, choose a party member. That player ventures into the dungeon.</li>
+            <li><strong>✨ Staff of Light</strong> — Once each session: when a Doom card is played, counter that card. This ability can't be countered. Exile this Trinket.</li>
+            <li><strong>🍷 Jar of Wine</strong> — Enters with 3 wine counters. Sorcery speed: remove a wine counter. Gain 7 life, then discard a card at random; if you did, draw a card. When no counters remain, exile this Trinket.</li>
+            <li><strong>🍯 Jar of Honey</strong> — Enters with 2 honey counters. Sorcery speed: remove a honey counter. Gain 9 life and remove all poison counters from yourself. When no counters remain, exile this Trinket.</li>
+            <li><strong>⛺ Tent</strong> — Modifies Stay Out: whenever the party Stays Out, after normal Stay Out effects, each party member may make up to 2 trades, remove up to 2 cards from their deck, and move up to 6 cards between deck and sideboard.</li>
+            <li><strong>🪓 Thirsting Axe</strong> — At the beginning of combat on the party's turn, target creature gains "Whenever this creature attacks, it deals 1 damage to up to one target creature the Host controls; if that creature dies this turn, put a +1/+1 counter on this creature" until end of turn.</li>
+            <li><strong>👹 Aspect of Malfegor</strong> — Once per encounter: a party member may sacrifice a nontoken permanent. Land → search for up to two basic lands, put them onto the battlefield tapped, shuffle. Creature → create a 4/5 green Spirit token. Noncreature nonland → exile cards from the top of your library until you exile a nonland card with MV ≤ the sacrificed card's MV; cast it for free, put the rest on the bottom in random order.</li>
+            <li><strong>💣 Bomb</strong> — Once each session: deal 10 damage to any target. Exile this Trinket.</li>
+            <li><strong>💥 Big Bomb</strong> — Once each session: deal 15 damage to any target. Exile this Trinket.</li>
+            <li><strong>☢️ Bigger Bomb</strong> — Once each session: deal 20 damage to any target. Exile this Trinket.</li>
+            <li><strong>🛡️ Mirror Shield</strong> — At the beginning of each encounter, choose a party member's commander. It gets +0/+5 and gains "Whenever this creature is dealt combat damage, it deals that much damage to target opponent."</li>
+            <li><strong>🧨 Explosive Barrel</strong> — Once per encounter: if a party member would deal 3 or more noncombat damage, they may instead have it deal 5 damage to each creature target opponent controls.</li>
+            <li><strong>🐱 Mitsy, Abandoned</strong> — At the beginning of each encounter, a party member may begin the game with Marauder's Axe on the battlefield under their control.</li>
+            <li><strong>⚪ Marbles</strong> — Whenever a party member casts an instant or sorcery spell during their turn, create one random token: a 1/1 white Bird with flying, a 1/1 black Rat with deathtouch, or a 1/1 blue Fish.</li>
+            <li><strong>🛒 Crossroads Cart</strong> — When visiting Town, the party chooses two Travelers and resolves one of those two.</li>
+            <li><strong>⚔️ Vogar, Bound for Death</strong> — Once each party turn: party members may sacrifice any number of creatures. For each three sacrificed, a party member creates a 6/5 black Zombie creature token with trample.</li>
+            <li><strong>🗡️ Sal Bidard, Glory Reforged</strong> — At the beginning of each combat, choose one until end of turn: a party commander gains indestructible (Sal Bidard mode), or a party commander gains hexproof (Ludwig mode).</li>
+            <li><strong>🔥 Campfire</strong> — At the beginning of the party's end step, one party member may gain 2 life and discard a card; if they do, they draw a card.</li>
+            <li><strong>☠️ Armament of Death</strong> — Once each turn: target creature gains "Whenever a creature dies, this creature gets a +1/+1 counter (triggers only once each turn)" until end of turn.</li>
+            <li><strong>🛡️ Loch Shield</strong> — At the beginning of each encounter, choose a commander. That commander gains "This permanent enters the battlefield with two shield counters on it."</li>
+            <li><strong>🐉 Aegis of Verix</strong> — At the beginning of each encounter, choose a party member's commander. It gains "Whenever this creature blocks, you may instead conjure a 4/4 red Dragon token with flying to block instead; when you do, this creature loses this ability for the rest of this encounter."</li>
+            <li><strong>👁️ Watcher's Eye</strong> — Continuous: the first two spells the party casts each turn cost {1} less to cast.</li>
+            <li><strong>⚡ Tonitrus, Skullduster</strong> — At the beginning of the party's upkeep, target creature the party controls with power 4 or greater gets +3/+0 and gains trample until end of turn.</li>
+            <li><strong>🐉 Dragovokia</strong> — Town actions that cost XP cost 5 less to activate (cannot reduce below 5).</li>
+            <li><strong>⚔️ Gideon's Training Saber</strong> — At the start of each encounter, choose a party member's commander. It gets +1/+0 and vigilance. Whenever it attacks or blocks, put a training counter on this Trinket. At 6+ counters, +1/+0 and first strike. At 12+ counters, +1/+0 and indestructible during its owner's turn. Training counters persist between encounters.</li>
           </ul>
         </details>
       </section>
 
-      <section class="rules-section card reveal" id="travelers">
-        <h2>🌟 Travelers & Wanderers</h2>
-        <p>Town Travelers and Stay Out Wanderers are now separate systems with different timing and power level.</p>
+      <section class="rules-section card reveal" id="encounter-types">
+        <h2>⚔️ Encounter Types</h2>
+        <p>Encounters are chosen randomly. Encounter 1 cannot be Tribal Warfare or Story Fight — reroll if either appears for Encounter 1.</p>
+        <details class="rules-details" open>
+          <summary>🧠 Master Fight</summary>
+          <ul class="rule-list">
+            <li>Reveal 3 random Tyrants. Players vote to eliminate 1. Host chooses 1 of the remaining 2.</li>
+            <li>Randomly reveal 3 Commander decks from the Masters pool. Players eliminate 1. Host chooses 1 of the remaining 2 to pilot.</li>
+            <li>The chosen Tyrant's Passive Aura and Signature Move are active for the encounter.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>⚔️ Tribal Warfare (+25 XP)</summary>
+          <ul class="rule-list">
+            <li>Host gets one fewer Affix of the highest-tier Affix for this encounter.</li>
+            <li>Randomly reveal 3 Tribes. Players eliminate 1. Host chooses 1 of the remaining 2 and pilots a deck of that tribe.</li>
+            <li>Host begins the game with the <strong>Tribal Warfare Emblem</strong>: "At the beginning of your end step, conjure and cast a random creature of the chosen tribe with mana value less than or equal to the number of lands you control."</li>
+            <li>Cannot be rolled for Encounter 1.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>📦 Precon Battle</summary>
+          <ul class="rule-list">
+            <li>Generate 3 random Precon Commander decks. Players eliminate 1. Host chooses 1 of the remaining 2 and pilots it.</li>
+            <li><em>Note: This encounter type is under review and may be updated in a future version.</em></li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🌍 Plane Fight (Experimental) — extra top-tier Affix</summary>
+          <ul class="rule-list">
+            <li>Randomly reveal 3 Planes. Players eliminate 1. Host chooses 1 of the remaining 2 and pilots a Commander deck themed around that plane.</li>
+            <li>Host gets an <em>additional</em> Affix of the highest tier for this encounter.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>📖 Story Fight (Experimental) — one fewer top-tier Affix, +25 XP</summary>
+          <ul class="rule-list">
+            <li>Host gets one fewer Affix of the highest-tier Affix for this encounter.</li>
+            <li>Reveal 3 Stories. Players eliminate 1. Host chooses 1 of the remaining 2 to pilot.</li>
+            <li>Host starts with 50% additional life (rounded up).</li>
+            <li>This encounter grants an additional +25 XP.</li>
+            <li>Cannot be rolled for Encounter 1.</li>
+          </ul>
+          <h4 style="margin: 1rem 0 .5rem;">Phase Transition</h4>
+          <p>Triggers once when the Host's life reaches half or less of their starting life total, or when a player would win the game:</p>
+          <ul class="rule-list">
+            <li>Host life becomes half of their starting life total (rounded up).</li>
+            <li>Clear the stack; counter all spells and abilities targeting the Host or permanents they control.</li>
+            <li>The Host and all permanents they control phase out. Remove all damage from their permanents. Host loses all poison counters. Shuffle their graveyard and exile into their library.</li>
+            <li>The current turn continues without the Host. At the beginning of the Host's next turn, they phase in.</li>
+            <li>When the Host phases in, they gain their story's Phase Two bonus (Emblem, Vanguard, or other story ability).</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🦹 Villain Fight (Experimental)</summary>
+          <ul class="rule-list">
+            <li>Reveal 5 random Commanders. Players eliminate 1. Host chooses 1 of the remaining 4.</li>
+            <li>Host builds or spawns a high-power (Bracket 3+) deck around the chosen Commander.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🌪 Wildmagic Fight (Experimental) — no Affixes, +25 XP</summary>
+          <ul class="rule-list">
+            <li>Host may use any legal deck (Suggested Bracket 3). No Affixes are applied.</li>
+            <li>This encounter grants +25 XP.</li>
+            <li>Host gains the <strong>Wild Magic Surge</strong> emblem: {0}: Roll a d20 and resolve the corresponding effect. Activate only once each turn.</li>
+          </ul>
+          <h4 style="margin: 1rem 0 .5rem;">Wildmagic d20 Table</h4>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Roll</th><th>Effect</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Reality Collapse — Exile all nonland permanents.</td></tr>
+                <tr><td>2</td><td>Unstable Portal — Each player creates a 1/1 colorless Eldrazi Spawn token with "Sacrifice this creature: Add {C}."</td></tr>
+                <tr><td>3</td><td>Temporal Flux — Each player draws a card.</td></tr>
+                <tr><td>4</td><td>Mana Flare — Until end of turn, if a land would produce mana, it produces an additional mana of any type that land produced.</td></tr>
+                <tr><td>5</td><td>Mind Fracture — Each player discards their hand, then draws that many cards minus one.</td></tr>
+                <tr><td>6</td><td>Chaotic Growth — Put a +1/+1 counter on each creature.</td></tr>
+                <tr><td>7</td><td>Aether Slip — Exile all creatures, then return them to the battlefield under their owners' control at the beginning of the next end step.</td></tr>
+                <tr><td>8</td><td>Reality Warp — Each player shuffles a permanent they control into their library, then reveals cards from the top until they reveal a permanent card and puts it onto the battlefield.</td></tr>
+                <tr><td>9</td><td>Arcane Overload — The next spell the Host casts this turn has cascade.</td></tr>
+                <tr><td>10</td><td>Infernal Surge — Creatures the Host controls get +2/+0 and gain haste until end of turn.</td></tr>
+                <tr><td>11</td><td>Verdant Explosion — The Host creates a 1/1 green Saproling token for each land they control.</td></tr>
+                <tr><td>12</td><td>Planar Distortion — Each opponent returns a nonland permanent they control to their hand.</td></tr>
+                <tr><td>13</td><td>Agonizing Madness — Each opponent discards a card.</td></tr>
+                <tr><td>14</td><td>Wild Growth — The Host searches for a land card with a basic land type, puts it onto the battlefield tapped, then shuffles.</td></tr>
+                <tr><td>15</td><td>Necrotic Drain — Each opponent loses 2 life. The Host gains life equal to the life lost this way.</td></tr>
+                <tr><td>16</td><td>Purifying Light — Destroy all enchantments the Host does not control.</td></tr>
+                <tr><td>17</td><td>Meltdown Wave — Destroy all artifacts the Host does not control.</td></tr>
+                <tr><td>18</td><td>Sudden Wealth — Create three Treasure tokens.</td></tr>
+                <tr><td>19</td><td>Sudden Insight — The Host draws three cards.</td></tr>
+                <tr><td>20</td><td>Arcane Roulette — Each player reveals the top card of their library. If it's a nonland card, the Host may cast it without paying its mana cost.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="host-health">
+        <h2>❤️ Host Health</h2>
+        <p>Host HP is set at the beginning of each encounter based on player count and encounter stage. The Crypt uses its own higher values.</p>
+        <details class="rules-details" open>
+          <summary>Standard Mode — 3 Encounters (Tier 4 Affixes not used)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Players</th><th>Encounter 1</th><th>Encounter 2</th><th>Encounter 3</th><th>Crypt</th></tr></thead>
+              <tbody>
+                <tr><td>1–2</td><td>20</td><td>30</td><td>40</td><td><strong>50</strong></td></tr>
+                <tr><td>3</td><td>25</td><td>40</td><td>55</td><td><strong>70</strong></td></tr>
+                <tr><td>4</td><td>30</td><td>50</td><td>70</td><td><strong>90</strong></td></tr>
+                <tr><td>5</td><td>35</td><td>60</td><td>85</td><td><strong>110</strong></td></tr>
+                <tr><td>6</td><td>40</td><td>70</td><td>100</td><td><strong>130</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="rules-details">
+          <summary>Variant Mode — 4 Encounters (Tier 4 Affixes used)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Players</th><th>E1</th><th>E2</th><th>E3</th><th>E4</th><th>Crypt</th></tr></thead>
+              <tbody>
+                <tr><td>1–2</td><td>20</td><td>30</td><td>40</td><td>50</td><td><strong>60</strong></td></tr>
+                <tr><td>3</td><td>25</td><td>40</td><td>55</td><td>70</td><td><strong>80</strong></td></tr>
+                <tr><td>4</td><td>30</td><td>50</td><td>70</td><td>90</td><td><strong>100</strong></td></tr>
+                <tr><td>5</td><td>35</td><td>60</td><td>85</td><td>110</td><td><strong>120</strong></td></tr>
+                <tr><td>6</td><td>40</td><td>70</td><td>100</td><td>130</td><td><strong>140</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="affixes">
+        <h2>🔥 Affixes</h2>
+        <p>Affixes are global modifiers applied to the Host at the start of each encounter. They increase difficulty and grant bonus XP per tier. Affixes are rerolled each encounter. If a combination is game-breaking, reroll the highest tier.</p>
         <div class="rules-grid">
           <div class="callout">
-            <h3>Town Travelers</h3>
-            <p>Travelers appear when the party goes to Town and offer optional bonuses layered on top of the current building system.</p>
-            <p>Current Town traveler pool includes Bearded Grunt, Bullywug Royal, Card Copier, Card-Eating Ogre, Cats in a Coat, Centaur Scouter, Centepoid Warrior, Commander Mimic, Dwarven Artificer, Elven Demonologist, Fungal Lich, Giff Bandito, Giant Ice Toad, Hell's Librarian, Hollyphant, Kimi the Cat, Silly the Jester, The Trader, Vanguard Mercenaries, Wandering Card Merchant, and Zorbo.</p>
+            <h3>Affix Structure — Standard Mode</h3>
+            <ul class="rule-list compact-list">
+              <li>Encounter 1: Tier 1</li>
+              <li>Encounter 2: Tier 1 + Tier 2</li>
+              <li>Encounter 3: Tier 1 + Tier 2 + Tier 3</li>
+              <li>Tier 4 Affixes are not used in Standard mode.</li>
+            </ul>
           </div>
           <div class="callout">
-            <h3>Stay Out Wanderers</h3>
-            <p>When the party Stays Out, reveal 1 random Wanderer. Each player may interact with that Wanderer once by paying XP.</p>
-            <p>Wanderers are lower impact than Town buildings and focus on deck smoothing, minor upgrades, and resource exchange.</p>
+            <h3>Affix Structure — Variant Mode</h3>
+            <ul class="rule-list compact-list">
+              <li>Encounter 1: Tier 1</li>
+              <li>Encounter 2: Tier 1 + Tier 2</li>
+              <li>Encounter 3: Tier 1 + Tier 2 + Tier 3</li>
+              <li>Encounter 4: Tier 1 + Tier 2 + Tier 3 + Tier 4</li>
+            </ul>
           </div>
         </div>
         <details class="rules-details" open>
-          <summary>Traveler Highlights</summary>
+          <summary>🟦 Tier 1 Affixes (+5 XP reward each) — Combat Basics</summary>
           <ul class="rule-list">
-            <li>Bearded Grunt can grant XP, more building access, or extra basics.</li>
-            <li>Commander Mimic and The Guild effects now matter together because commander-swapping is a full Town strategy.</li>
-            <li>Silly the Jester, Wandering Card Merchant, and Hollyphant all extend Town value without replacing core building rules.</li>
-            <li>Wanderers never replace Town buildings; they are a separate Stay Out reward step.</li>
+            <li><strong>+1/+1 Counters</strong> — Host creatures enter the battlefield with a +1/+1 counter.</li>
+            <li><strong>Life Gain</strong> — Whenever the Host casts a spell, they gain 1 life.</li>
+            <li><strong>Prismatic</strong> — Lands the Host controls have "{T}: Add one mana of any color."</li>
+            <li><strong>Reach</strong> — Host creatures have Reach.</li>
+            <li><strong>Scry 1</strong> — At the beginning of the Host's upkeep, they scry 1.</li>
+            <li><strong>Token Generator</strong> — At the beginning of the Host's end step, create a 1/1 Servo artifact creature token.</li>
+            <li><strong>Vigilance</strong> — Host creatures have Vigilance.</li>
+            <li><strong>Trample</strong> — Host creatures have Trample.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🟧 Tier 2 Affixes (+10 XP reward each) — Mid-level Advantages</summary>
+          <ul class="rule-list">
+            <li><strong>First Strike</strong> — Host creatures have First Strike.</li>
+            <li><strong>Ward 1</strong> — Host permanents have Ward {1}.</li>
+            <li><strong>Flying</strong> — Host creatures have Flying.</li>
+            <li><strong>Hero Power</strong> — The Host gains 1 of 3 random Hero cards.</li>
+            <li><strong>Lifelink</strong> — Host creatures have Lifelink.</li>
+            <li><strong>Mana Ramp</strong> — At the beginning of the Host's precombat main phase, add {C}.</li>
+            <li><strong>Menace</strong> — Host creatures have Menace.</li>
+            <li><strong>Pack Back Up</strong> — Each upkeep, open a Mystery Booster and exile one card face down; the Host may cast it.</li>
+            <li><strong>Setup Battle</strong> — Before the game begins, reveal cards until a land and a nonland permanent with MV ≤ 4 are found; they enter the battlefield.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🟥 Tier 3 Affixes (+15 XP reward each) — Engine Effects</summary>
+          <ul class="rule-list">
+            <li><strong>Aether Anomaly</strong> — Once each turn when the Host casts a spell, they may cast a random card with the same mana value for free.</li>
+            <li><strong>Cascade</strong> — The first spell the Host casts each turn has Cascade.</li>
+            <li><strong>Deathtouch</strong> — Host creatures have Deathtouch.</li>
+            <li><strong>Demonstrate</strong> — Host spells have Demonstrate.</li>
+            <li><strong>Emblem Battle</strong> — The Host gains 1 of 3 random Emblems.</li>
+            <li><strong>Flashback</strong> — Instants and sorceries in the Host's graveyard gain Flashback equal to their mana cost.</li>
+            <li><strong>Free Spell</strong> — Once per turn, the Host may cast a spell with MV ≤ 3 for free.</li>
+            <li><strong>Rebound</strong> — Spells cast from hand are exiled and recast at the Host's next upkeep.</li>
+            <li><strong>Training Grounds</strong> — Activated abilities of Host permanents cost {2} less (minimum 1).</li>
+            <li><strong>Twice the Power</strong> — Triggered abilities of Host permanents trigger an additional time. (Cannot be paired with Annihilator 1.)</li>
+            <li><strong>Vanguard Battlements</strong> — The Host gains 1 of 3 random Vanguards.</li>
+            <li><strong>Vorpal</strong> — Whenever one or more creatures the Host controls deal combat damage to a player, that player sacrifices a permanent.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🟪 Tier 4 Affixes (+20 XP reward each) — Run-Defining, Variant Mode Only</summary>
+          <ul class="rule-list">
+            <li><strong>Annihilator 1</strong> — Non-token creatures the Host controls have Annihilator 1.</li>
+            <li><strong>Arcane Mastery</strong> — The first spell the Host casts each turn is copied. Permanent spells create token copies.</li>
+            <li><strong>Double Mana</strong> — Lands the Host controls produce double mana.</li>
+            <li><strong>Double Strike</strong> — Host creatures have Double Strike.</li>
+            <li><strong>Endless Reinforcements</strong> — At end step, create a token copy of a target creature the Host controls (legend rule ignored).</li>
+            <li><strong>Hexproof</strong> — Host permanents have Hexproof.</li>
+            <li><strong>Indestructible</strong> — Host permanents are Indestructible.</li>
+            <li><strong>Overwhelming Presence</strong> — The Host draws an extra card and may play an additional land each turn.</li>
+            <li><strong>Tyrant's Arsenal</strong> — At the beginning of the Host's upkeep, create three Treasure tokens.</li>
+            <li><strong>War Preparations</strong> — Before the game begins, reveal a land, a creature, and a noncreature permanent; they enter the battlefield.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="doom">
+        <h2>⚠️ Doom</h2>
+        <p>The Doom System provides the Host with a set of powerful triggered abilities during each encounter. Credit to Ashen for this system.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Doom Setup</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Players</th><th>Doom Cards</th></tr></thead>
+                <tbody>
+                  <tr><td>1–2</td><td>0</td></tr>
+                  <tr><td>3–4</td><td>1</td></tr>
+                  <tr><td>5</td><td>2</td></tr>
+                  <tr><td>6</td><td>3</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="callout">
+            <h3>Doom Rules</h3>
+            <ul class="rule-list compact-list">
+              <li>Doom cards are drawn from the Doom Pool at encounter start. Each is unique unless otherwise specified.</li>
+              <li>The Host may use <strong>any number</strong> of Doom cards per turn unless otherwise stated.</li>
+              <li>When triggered, resolve the effect immediately then <strong>set the card aside</strong> — it is removed from the pool for the rest of the encounter.</li>
+              <li>Used Doom cards rejoin the pool at the start of the next encounter.</li>
+              <li><strong>Reroll (once per Host turn):</strong> Return any number of Doom cards to the pool and draw the same number of new ones. Rerolled cards are not triggered and may be redrawn. May happen before or after triggering an effect.</li>
+            </ul>
+          </div>
+        </div>
+        <details class="rules-details" open>
+          <summary>💠 Resource / Value Cards</summary>
+          <ul class="rule-list">
+            <li><strong>I'm Just Getting Started</strong> — Add {4}.</li>
+            <li><strong>A Bit of Artificial Insight</strong> — Draw two cards. Artifact spells you cast this turn cost {2} less to cast.</li>
+            <li><strong>I Will Witness Your Downfall</strong> — Draw four cards.</li>
+            <li><strong>I've Seen What Breaks You</strong> — Search your library for a card, put it into your hand, then shuffle.</li>
+            <li><strong>Welcome to My Reality</strong> — Choose any number of players. Each chosen player shuffles their hand and graveyard into their library, then draws that many cards. If the Host is not among the chosen players, the Host draws cards until they have seven cards in hand.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🔁 Copy / Spell Manipulation Cards</summary>
+          <ul class="rule-list">
+            <li><strong>I Can Do That Too!</strong> — Copy target noncreature spell. You may choose new targets for the copy.</li>
+            <li><strong>Oooooh, I Like You</strong> — Copy target creature spell. You may choose new targets for the copy.</li>
+            <li><strong>No</strong> — Counter target spell.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🛡 Defensive / Protection Cards</summary>
+          <ul class="rule-list">
+            <li><strong>You Are Annoying Me</strong> — Choose a player. Creatures that player controls can't attack you or planeswalkers you control this turn. Spells that player controls can't target you or permanents you control this turn.</li>
+            <li><strong>I Am Inevitable</strong> — Target permanent gains hexproof and indestructible until end of turn.</li>
+            <li><strong>Minions! Protect Me!</strong> — Create a 3/3 black Horror creature token. Prevent all damage that would be dealt to creatures you control this turn.</li>
+            <li><strong>How Do You Like It?</strong> — The next time a source of your choice would deal damage to you this turn, prevent that damage. If damage is prevented this way, it deals that much damage to any target instead.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>💀 Removal / Control Cards</summary>
+          <ul class="rule-list">
+            <li><strong>Death Is Inevitable</strong> — Destroy up to two target creatures an opponent controls.</li>
+            <li><strong>Death Comes for Us All</strong> — Destroy all creatures. They can't be regenerated.</li>
+            <li><strong>You've Outlived Your Usefulness</strong> — Exile target nonland permanent.</li>
+            <li><strong>Offer Tribute</strong> — Each opponent sacrifices a permanent.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🔥 Damage / Pressure Cards</summary>
+          <ul class="rule-list">
+            <li><strong>Did That Sting?</strong> — Deal 4 damage to each opponent.</li>
+            <li><strong>I'll Show You True Pain</strong> — Choose the opponent with the highest life total. That player loses 7 life.</li>
+            <li><strong>My Fury Burns</strong> — Until end of turn, if a source you control would deal damage to an opponent or a creature you don't control, it deals that much damage plus 2 instead. Create a 1/1 red Devil creature token with "When this creature dies, it deals 1 damage to any target."</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🧬 Disruption Cards</summary>
+          <ul class="rule-list">
+            <li><strong>Madness Ensues</strong> — Each opponent discards two cards.</li>
+            <li><strong>I Need You to Stop</strong> — Target player skips their next beginning phase.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🌿 Ramp / Board Development Cards</summary>
+          <ul class="rule-list">
+            <li><strong>Even Nature Cannot Resist</strong> — Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle.</li>
+            <li><strong>Reality Bends to My Will</strong> — Choose one: you may play two additional lands this turn, or you may cast an instant or sorcery spell from your hand without paying its mana cost.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🕵 Steal / Control Cards</summary>
+          <ul class="rule-list">
+            <li><strong>I Will Put This to Good Use</strong> — Search target opponent's library for a card, exile it face down, then that player shuffles. You may look at and cast that card for as long as it remains exiled, and you may spend mana as though it were mana of any color to cast it.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>🌀 Special / Chaos Cards</summary>
+          <ul class="rule-list">
+            <li><strong>You Bear the Mark! You Are Cursed!</strong> — Each opponent becomes enchanted by a random Curse with mana value 4 or less that cannot benefit them or their allies.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="host-authority">
+        <h2>👑 Host Authority</h2>
+        <p>Host Authority scales with the number of players in the encounter, ensuring the Host can withstand the overwhelming action economy of multiple players. It improves tempo, mana development, card flow, and interaction without removing player counterplay.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Players</th><th>Authority Level</th></tr></thead>
+            <tbody>
+              <tr><td>1–2</td><td>I — Minor Influence</td></tr>
+              <tr><td>3</td><td>II — Infernal Momentum</td></tr>
+              <tr><td>4</td><td>III — Demonic Pressure</td></tr>
+              <tr><td>5</td><td>IV — Overwhelming Presence</td></tr>
+              <tr><td>6</td><td>V — Absolute Command</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <details class="rules-details" open>
+          <summary>Authority Level Effects</summary>
+          <ul class="rule-list">
+            <li><strong>Authority I (1–2 players)</strong> — The first spell the Host casts each turn costs {1} less to cast.</li>
+            <li><strong>Authority II (3 players)</strong> — First spell costs {1} less. At the beginning of the encounter, the Host creates a blue enchantment token named <em>Not Today</em> with "Sacrifice this enchantment: Counter target spell, activated ability, or triggered ability."</li>
+            <li><strong>Authority III (4 players)</strong> — First spell costs {1} less. Not Today token (as above). At the end of the Host's draw step, the Host chooses one: draw an additional card, or the Host may play an additional land this turn.</li>
+            <li><strong>Authority IV (5 players)</strong> — First spell costs {1} less. Once per encounter, the Host may cast a copy of Disallow without paying its mana cost. The Host may play one additional land each turn. The Host draws an additional card during each draw step.</li>
+            <li><strong>Authority V (6 players)</strong> — First spell costs {1} less. Not Today token (as above). Once per encounter, the Host may cast a copy of Disallow without paying its mana cost. The Host may play one additional land. The Host draws an additional card during each draw step.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>Global Authority Effects (all encounters regardless of level)</summary>
+          <ul class="rule-list">
+            <li><strong>Demonic Persistence — Tempo Reclamation:</strong> Once each turn, whenever a spell the Host casts is countered, or a permanent the Host controls leaves the battlefield due to an opponent's spell or ability, the Host creates a Treasure token.</li>
+            <li><strong>Arcane Suppression:</strong> At the beginning of each encounter, choose a player. Whenever a player casts a counterspell, if that player is not the chosen player, each other player gets an Arcane Suppression counter. Spells that players cast cost {1} more for each Arcane Suppression counter they have.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>Interaction Rules — Disallow &amp; Not Today</summary>
+          <ul class="rule-list">
+            <li>The free copy of <em>Disallow</em> is cast normally, uses the stack, may be responded to, and may be countered.</li>
+            <li><em>Not Today</em> is sacrificed to counter a spell, activated ability, or triggered ability — it does not use the Disallow copy.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="demon-generals">
+        <h2>🏴 Demon Generals (Tyrants)</h2>
+        <p>During Master Fight encounters, the Host represents one of the Demon King's Generals. Reveal 3 random Tyrants, players eliminate 1, the Host chooses from the remaining 2. Each General grants a <strong>Passive Aura</strong> and a <strong>Signature Move</strong> (cooldown: 3 Host turns after use).</p>
+        <p><strong>Status effects:</strong> Burned (save or take 2 damage each upkeep), Frozen (permanents don't untap; save to remove), Corrupted (creatures get -1/-1; save to remove), Petrified (creature tapped, loses abilities, doesn't untap; save to remove). Saving Roll: d20, 10+ is a pass.</p>
+        <details class="rules-details" open>
+          <summary>All 11 Tyrants</summary>
+          <ul class="rule-list">
+            <li><strong>🔥 Ember Tyrant — General of Ash</strong> | Passive — Scorched Earth: At end of each player's end step, if that player cast two or more spells this turn, Ember Tyrant deals 2 damage to that player. | Signature — Inferno Surge: Each player makes a Saving Roll; on a failed save, take 4 damage and gain Burned.</li>
+            <li><strong>❄️ Winter Tyrant — General of Frost</strong> | Passive — Bitter Cold: Creatures opponents control enter the battlefield tapped. | Signature — Frost Nova: Each player makes a Saving Roll; on a failed save, gain Frozen.</li>
+            <li><strong>☠️ Plague Tyrant — General of Rot</strong> | Passive — Creeping Blight: At the beginning of each player's upkeep, that player mills two cards. | Signature — Plague Burst: Each player makes a Saving Roll; on a failed save, gain Corrupted.</li>
+            <li><strong>⚡ Storm Tyrant — General of Ruin</strong> | Passive — Static Charge: At each player's end step, that player gains a Charge counter for each spell they cast this turn. | Signature — Cataclysmic Discharge: Each player makes a Saving Roll; on a failed save, take damage equal to twice their Charge counter count. Then remove all Charge counters.</li>
+            <li><strong>💀 Grave Tyrant — General of Necromancy</strong> | Passive — Endless Graves: Whenever a creature dies, its controller mills a card. | Signature — Rise the Fallen: Each player makes a Saving Roll; on a failed save, create a 2/2 black Zombie token under the Host's control for each creature card in that player's graveyard (maximum 2 per player).</li>
+            <li><strong>🩸 Blood Tyrant — General of Sacrifice</strong> | Passive — Blood Price: Whenever a creature dies, its controller loses 1 life and the Host gains 1 life. | Signature — Blood Offering: Each player makes a Saving Roll; on a failed save, that player reveals their hand. For each card revealed, choose: exile that card, or lose 1 life and the Host gains 1 life.</li>
+            <li><strong>🪨 Stone Tyrant — General of Fortification</strong> | Passive — Impenetrable Bulwark: Creatures the Host controls have +0/+2. | Signature — Stone Prison: Choose two creatures controlled by different players; those creatures gain Petrified.</li>
+            <li><strong>🌀 Void Tyrant — General of the Abyss</strong> | Passive — Warp the Mind: At each player's upkeep, that player exiles a random card from their hand; until end of their next turn, they may cast it but it costs {2} more. | Signature — Fractured Reality: Each player makes a Saving Roll; on a failed save, exile the top card of their library. The Host may cast any number of those cards without paying mana costs.</li>
+            <li><strong>⚔️ War Tyrant — General of Conquest</strong> | Passive — March of War: Creatures the Host controls gain +1/+0. | Signature — War Cry: Creatures the Host controls gain +2/+0 and Trample until end of turn.</li>
+            <li><strong>🪙 Gold Tyrant — General of Greed</strong> | Passive — Greed's Toll: Whenever a player draws their second card each turn, they lose 3 life. | Signature — Hoard Explosion: Each player makes a Saving Roll; on a failed save, for each nonland permanent that player controls beyond the fourth, choose: sacrifice it, or lose 2 life.</li>
+            <li><strong>🌙 Dream Tyrant — General of Madness</strong> | Passive — Unstable Thoughts: At the beginning of each player's upkeep, that player discards a card at random then draws a card. | Signature — Nightmare Deluge: Exile cards from the top of the Host's library until the total mana value is 10 or greater; the Host may cast one of those cards without paying its mana cost.</li>
           </ul>
         </details>
       </section>
 
       <section class="rules-section card reveal" id="cash-outs">
-        <h2>💎 Cash Outs & Loot</h2>
-        <p>After a win, rewards resolve in this order: XP, Cash Out, then Loot Pool.</p>
-        <p>Cash Outs are free, tradable, and retained until used. Loot Pool cards come directly from the defeated encounter deck.</p>
+        <h2>💎 Cash Outs &amp; Loot</h2>
+        <p>After a win, resolve XP, Cash Out, and Loot Pool — all three must happen, but there is no required order.</p>
+        <p>The Host reveals Cash Outs equal to <strong>player count + 1</strong>. Each player selects one. Unselected Cash Outs are removed from play. Cash Outs are free, tradable, and retained until used.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>📊 Base XP — Standard Mode (3 Encounters)</h3>
+            <ul class="rule-list compact-list">
+              <li>Encounter 1 — <strong>30 XP</strong></li>
+              <li>Encounter 2 — <strong>40 XP</strong></li>
+              <li>Encounter 3 — <strong>50 XP</strong></li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>📊 Base XP — Variant Mode (4 Encounters)</h3>
+            <ul class="rule-list compact-list">
+              <li>Encounter 1 — <strong>10 XP</strong></li>
+              <li>Encounter 2 — <strong>20 XP</strong></li>
+              <li>Encounter 3 — <strong>30 XP</strong></li>
+              <li>Encounter 4 — <strong>40 XP</strong></li>
+            </ul>
+          </div>
+        </div>
+        <p class="meta">Base XP is per player. Affix bonus XP is added on top (T1 +5, T2 +10, T3 +15, T4 +20 per Affix). Failed encounters grant no XP, no Cash Out, and no Loot Pool.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Cash Out Rules</h3>
+            <ul class="rule-list compact-list">
+              <li>Cash Outs are free to claim.</li>
+              <li>Cash Outs are tradable between players.</li>
+              <li>Cash Outs are retained until used (typically in Town).</li>            </ul>
+          </div>
+          <div class="callout">
+            <h3>Loot Pool Rules</h3>
+            <ul class="rule-list compact-list">
+              <li>Shuffle the defeated deck. Reveal cards equal to player count.</li>
+              <li>Reroll any basic lands revealed.</li>
+              <li>Place revealed cards into a shared Loot Pool. Players may take freely.</li>
+              <li>Cards taken follow all normal deckbuilding rules.</li>
+            </ul>
+          </div>
+        </div>
         <details class="rules-details" open>
-          <summary>Cash Out Pool Snapshot</summary>
+          <summary>🎴 Pack Rewards (75% of pool — total weight 300)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cash Out</th><th>Tier</th><th>Weight</th><th>Chance</th></tr></thead>
+              <tbody>
+                <tr><td>Mystery Pack</td><td>T1</td><td>30</td><td>7.5%</td></tr>
+                <tr><td>Mono White Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Blue Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Black Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Red Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Green Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Colorless Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Artifact Pack</td><td>T1</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>ID Pack</td><td>T2</td><td>18</td><td>4.5%</td></tr>
+                <tr><td>Mono Pro Pack White</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Mono Pro Pack Blue</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Mono Pro Pack Black</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Mono Pro Pack Red</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Mono Pro Pack Green</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Mono Pro Pack Colorless</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Artifact Pro Pack</td><td>T2</td><td>12</td><td>3%</td></tr>
+                <tr><td>Alpha Pack</td><td>T2</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Enchantment Pack</td><td>T1</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Enchantment ID Pack</td><td>T2</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Utility Land Pack</td><td>T2</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Mythic Pack</td><td>T2</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Planeswalker Pack</td><td>T1</td><td>6</td><td>1.5%</td></tr>
+                <tr><td>Planeswalker ID Pack</td><td>T2</td><td>6</td><td>1.5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="rules-details">
+          <summary>🏛 Bonus Building Usage (20% — weight 80)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cash Out</th><th>Weight</th><th>Chance</th></tr></thead>
+              <tbody>
+                <tr><td>Bonus Bazaar</td><td>20</td><td>5%</td></tr>
+                <tr><td>Bonus Bank</td><td>14</td><td>3.5%</td></tr>
+                <tr><td>Bonus Mystic</td><td>14</td><td>3.5%</td></tr>
+                <tr><td>Bonus Tavern</td><td>14</td><td>3.5%</td></tr>
+                <tr><td>Bonus Guild</td><td>12</td><td>3%</td></tr>
+                <tr><td>Bonus Cathedral</td><td>6</td><td>1.5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="meta">Each Bonus Building Cash Out grants one free additional use of that building during the next Town visit.</p>
+        </details>
+        <details class="rules-details">
+          <summary>⚒ Blacksmith Services (4.5% — weight 18)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cash Out</th><th>Weight</th><th>Chance</th></tr></thead>
+              <tbody>
+                <tr><td>Free Upgrade</td><td>12</td><td>3%</td></tr>
+                <tr><td>Free Augment</td><td>6</td><td>1.5%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="rules-details">
+          <summary>🎟 Ticket Cash Outs (Ultra Rare — weight 10)</summary>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cash Out</th><th>Weight</th><th>Chance</th></tr></thead>
+              <tbody>
+                <tr><td>Conspiracy Ticket</td><td>4</td><td>1%</td></tr>
+                <tr><td>Trinket Ticket</td><td>3</td><td>0.75%</td></tr>
+                <tr><td>Vanguard Ticket</td><td>2</td><td>0.5%</td></tr>
+                <tr><td>Emblem Ticket</td><td>1</td><td>0.25%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <details class="rules-details">
+          <summary>☠️ Crypt Fight Cash Out (0.5% — weight 2)</summary>
           <ul class="rule-list">
-            <li>Pack rewards include Alpha, Artifact, Enchantment, ID, Mono, Mystery, Mythic, Planeswalker, and Utility Land packs.</li>
-            <li>Free Town service cash outs include Bonus Bank, Bonus Cathedral, Bonus Mystic, Bonus Tavern, Bonus Bazaar, and Free Guild.</li>
-            <li>Blacksmith service cash outs include Free Upgrade and Free Augment.</li>
-            <li>The Host reveals Cash Outs equal to player count, then each player selects one unless another rule says otherwise.</li>
-            <li>Loot Pool reveals cards equal to player count from the defeated deck, rerolling basic lands.</li>
+            <li>This cash out may be held and used immediately before the Crypt Fight begins.</li>
+            <li>When revealed, all players collectively choose which Crypt to fight from the standard pool instead of rolling randomly.</li>
+            <li>Only one Crypt Fight Cash Out may be used per run — additional copies are discarded unused.</li>
+            <li>If unused by the time the Crypt Fight begins, it expires and is discarded.</li>
           </ul>
         </details>
       </section>
 
-      <section class="rules-section card reveal" id="encounters">
-        <h2>🧙 Events & Run Modes</h2>
-        <p>Encounter count, base XP, and the affix ceiling are now defined by the selected run mode.</p>
+      <section class="rules-section card reveal" id="town">
+        <h2>🏘️ Town Buildings</h2>
+        <p>Town is the primary location for deck upgrades and recovery. When the party returns to Town: all players fully heal, use buildings, then resolve 1 Event before the next encounter.</p>
+        <p>All building use limits reset every time the party enters Town. Town does not use actions — each building is available to all players simultaneously.</p>
+
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Limited-Use Buildings <em>(resets each Town visit)</em></h3>
+            <ul class="rule-list compact-list">
+              <li>🏦 Bank — 1 use per Town</li>
+              <li>🛍️ Bazaar — 2 Deals per Town (Cashout Sales are unlimited)</li>
+              <li>⛪ Cathedral — 1 use per Town</li>
+              <li>🌀 Portal — 1 use per Town</li>
+              <li>🍺 Tavern — 1 use per Town</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Unlimited Buildings <em>(use any number of times)</em></h3>
+            <ul class="rule-list compact-list">
+              <li>⚒️ Blacksmith — 25 XP Upgrade or 50 XP Augment</li>
+              <li>⚔️ The Guild — 10 XP + d6, change Commander</li>
+              <li>🛒 Merchant — XP-based packs, keep 1 card each</li>
+              <li>🔮 Mystic — 5 XP, destroy a nonland, gain 2× MV Essence</li>
+            </ul>
+          </div>
+        </div>
+
+        <details class="rules-details">
+          <summary>🏦 Bank — 1 use per Town</summary>
+          <p>Move up to <strong>6 cards</strong> between your deck and sideboard. Bank interactions may only happen while in Town.</p>
+        </details>
+
+        <details class="rules-details">
+          <summary>⚒️ Blacksmith — Unlimited</summary>
+          <p>Enhance <strong>1 card</strong> in your deck. A card may only ever receive <strong>one Blacksmith modification</strong> total.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Option</th><th>Cost</th><th>Effect</th></tr></thead>
+              <tbody>
+                <tr><td>Upgrade</td><td>25 XP</td><td>Modify a card's stats, keywords, or mana cost</td></tr>
+                <tr><td>Augment</td><td>50 XP</td><td>Add or modify rules text or abilities</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="rules-details">
+          <summary>🛍️ Bazaar — 2 Deals per Town + unlimited Cashout Sales</summary>
+          <p>The Bazaar has two distinct functions:</p>
+          <p><strong>Deals (2 uses per Town):</strong> Each deal is one of the following exchanges:</p>
+          <ul class="rule-list compact-list">
+            <li>Card ↔ Card</li>
+            <li>Card ↔ Essence (2× the card's mana value)</li>
+            <li>Cashout ↔ Cashout</li>
+            <li>Cashout ↔ Card</li>
+          </ul>
+          <p><strong>Cashout Sale (free, unlimited):</strong> Sell any number of Cashouts to the Host for <strong>10 XP</strong> each. Cashout Sales do not consume a Deal usage and may be done any number of times.</p>
+        </details>
+
+        <details class="rules-details">
+          <summary>⛪ Cathedral — 1 use per Town</summary>
+          <p>Each player describes a card request. The Host provides a real, legal card matching the description — the description cannot force one specific card. Then choose:</p>
+          <ul class="rule-list compact-list">
+            <li>Add the card to your deck, <em>or</em></li>
+            <li>Destroy it and gain <strong>Essence equal to 2× its mana value</strong></li>
+          </ul>
+        </details>
+
+        <details class="rules-details">
+          <summary>⚔️ The Guild — Unlimited (10 XP + d6)</summary>
+          <p>Change your Commander. Declare a color combination <strong>before rolling</strong>, pay 10 XP, then roll a d6. Receive <strong>(roll + 2)</strong> random legal Commanders in those colors. You may swap your Commander with one of them — your old Commander goes to your deck or sideboard.</p>
+          <p>Your deck must remain legal under the new Commander's color identity. Adjust immediately if colors change.</p>
+        </details>
+
+        <details class="rules-details">
+          <summary>🛒 Merchant — Unlimited (XP-based packs, keep 1)</summary>
+          <p>Open a <strong>15-card pack</strong>, then keep <strong>1 card</strong>. You always keep only 1 card per pack regardless of Brands or other effects — the only exception is a Traveler that explicitly grants additional keeps.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cost</th><th>Pack</th><th>Restrictions</th></tr></thead>
+              <tbody>
+                <tr><td>5 XP</td><td>Mystery Pack</td><td>No restrictions</td></tr>
+                <tr><td>10 XP</td><td>ID Pack</td><td>Within your color identity</td></tr>
+                <tr><td>20 XP</td><td>Pro Pack</td><td>Color identity + 1 search parameter</td></tr>
+                <tr><td>50 XP</td><td>Mythic Pack</td><td>Color identity + 2 search parameters</td></tr>
+                <tr><td>75 XP</td><td>OTAG Pack</td><td>Color identity + OTAG search</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p><em>Search parameters: supertype, type, subtype, keyword, or mana value.</em></p>
+        </details>
+
+        <details class="rules-details">
+          <summary>🔮 Mystic — Unlimited (5 XP)</summary>
+          <p>Pay <strong>5 XP</strong>. Destroy a <strong>nonland card</strong> from your deck. Gain <strong>Essence equal to twice its mana value</strong>. Used for deck pruning and resource conversion.</p>
+        </details>
+
+        <details class="rules-details">
+          <summary>🌀 Portal — 1 use per Town (up to 15 XP)</summary>
+          <p>Spend up to <strong>15 XP</strong>. Generate a randomized pack using type or keyword search criteria. <strong>Pack size equals XP spent.</strong> All generated cards are <strong>Temporal</strong>.</p>
+          <p><strong>Temporal card rules:</strong> Temporal cards must remain in your deck. They cannot be traded, sideboarded, or sacrificed to Town or Traveler effects. Temporal cards cease to exist at the end of the encounter in which they were used.</p>
+        </details>
+
+        <details class="rules-details">
+          <summary>🍺 Tavern — 1 use per Town</summary>
+          <p>Choose one mana-fixing option:</p>
+          <ul class="rule-list compact-list">
+            <li><strong>Option A:</strong> Remove 0–2 cards from your deck and add 0–4 basic lands of your choice.</li>
+            <li><strong>Option B:</strong> Remove 3–5 basic lands and add 0–2 dual lands of your choice.</li>
+          </ul>
+          <p>Tavern is for deck smoothing and mana fixing.</p>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="travelers">
+        <h2>🌟 Travelers</h2>
+        <p>Travelers appear whenever the party returns to Town. They offer optional bonuses layered on top of buildings. Travelers do not cost a Town action.</p>
+        <details class="rules-details" open>
+          <summary>Full Traveler List</summary>
+          <ul class="rule-list">
+            <li><strong>🧔 Bearded Grunt</strong> — Once per Town. Vote: each player gains 15 XP, or use 1 extra building beyond its normal limit, or add up to 2 basic lands to their deck.</li>
+            <li><strong>🐸 Bullywug Royal</strong> — Once per Town. Pay 50 XP and sacrifice any number of creature cards. Choose a creature type and gain that many creatures of that type.</li>
+            <li><strong>🃏 Card Copier</strong> — Once per Town. Pay 25 XP. Create a permanent copy of a card in your deck.</li>
+            <li><strong>👹 Card-Eating Ogre</strong> — Once per Town. Pay 35 XP and destroy a card in your deck. Gain 5 random cards matching the destroyed card’s color(s), mana value, and card type(s).</li>
+            <li><strong>🐱 Cats in a Coat</strong> — Until end of Town, whenever a player uses the Castle, treat the result as a 6.</li>
+            <li><strong>🐎 Centaur Scouter</strong> — Once per Town. Pay 35 XP. A creature in your deck gains trample or haste. When you next use the Tavern this Town, you may add up to 2 additional lands.</li>
+            <li><strong>🪳 Centepoid Warrior</strong> — Once per Town. Pay 25 XP. A creature in your deck has its base power and toughness doubled.</li>
+            <li><strong>🧰 Commander Mimic</strong> — Once per Town. Pay 25 XP. Swap a card in your deck with your commander (the chosen card must be a legal commander).</li>
+            <li><strong>⚒️ Dwarven Artificer</strong> — Reveal 15 random artifacts within the players’ color identities. Each player may choose one.</li>
+            <li><strong>👹 Elven Demonologist</strong> — Once per Town. Pay 25 XP. Gain a background of your choice in your commander’s color identity.</li>
+            <li><strong>🍄 Fungal Lich</strong> — Once per Town. Remove “Temporal” from a card you own. Also, until end of Town, Portal lets you spend up to 20 XP instead of 15.</li>
+            <li><strong>🦢 Giff Bandito</strong> — Once per Town. Pay 15 XP. Sacrifice up to 2 lands and gain that many land cards sharing a color with your commander.</li>
+            <li><strong>🐸 Giant Ice Toad</strong> — Pay any amount of XP to gain three times that amount as Essence.</li>
+            <li><strong>📚 Hell’s Librarian</strong> — Once per Town. Pay 50 XP and lose 5 max HP for the rest of the run. Choose a card in your deck — it begins the game in your opening hand (counts toward starting hand size).</li>
+            <li><strong>🕊️ Hollyphant</strong> — You may use the Cathedral one additional time this Town.</li>
+            <li><strong>😺 Kimi the Cat</strong> — Once per Town. Choose one: the next Upgrade this Town gains an additional keyword, or the next Augment this Town gains an additional augment.</li>
+            <li><strong>🤡 Silly, the Jester</strong> — Until end of Town, Merchant packs cost 50% less (minimum 5 XP, rounded down to nearest 5).</li>
+            <li><strong>💰 The Trader</strong> — Once per Town. Choose one: each player may make 2 additional Bazaar trades this Town, or each player may sell up to 2 cards for XP equal to twice each card’s mana value.</li>
+            <li><strong>⚔️ Vanguard Mercenaries</strong> — Once per Town. Pay 50 XP. Reveal 3 random Vanguards and choose one. (Lost if you die.)</li>
+            <li><strong>🛍️ Wandering Card Merchant</strong> — When buying a pack from the Merchant, you may keep 2 cards instead of 1.</li>
+            <li><strong>🎩 Zorbo</strong> — Once per Town. Pay 50 XP. Reveal 2 random Trinkets and choose one.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="stay-out">
+        <h2>🏕️ Stay Out</h2>
+        <p>After an encounter is resolved, players choose to either Return to Town or Stay Out. Staying Out pushes deeper into the dungeon with immediate rewards and increased Event variance.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Stay Out Flow (in order)</h3>
+            <ol class="rule-list">
+              <li>Gain XP (base +10 XP; +5 more per consecutive Stay Out)</li>
+              <li>Gain 2 Mystery Packs per player</li>
+              <li>Resolve a Supply Drop (roll 1d10)</li>
+              <li>Resolve a Wanderer</li>
+              <li>Resolve Events (scaled)</li>
+              <li>Proceed to next encounter</li>
+            </ol>
+          </div>
+          <div class="callout">
+            <h3>Scaling Rules</h3>
+            <ul class="rule-list compact-list">
+              <li>XP: +10 first Stay Out, +15 second, +20 third, +25 fourth, etc.</li>
+              <li>Events: 2 Events on first Stay Out; +1 Event each consecutive Stay Out.</li>
+              <li>Mystery Packs: always 2 per player, no scaling.</li>
+              <li>Scaling fully resets when the party returns to Town.</li>
+              <li>Players fully heal at the start of Stay Out.</li>
+              <li>Each pack: keep 1 card (no exceptions unless a specific Traveler grants otherwise).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules-section card reveal" id="wanderers">
+        <h2>🛤️ Wanderers</h2>
+        <p>When the party Stays Out, reveal 1 random Wanderer. Each player may interact with that Wanderer once. Wanderers do not consume building uses and are lower-impact than Town buildings, focusing on deck smoothing, minor upgrades, and resource exchange. Most cost 5 XP.</p>
+        <details class="rules-details" open>
+          <summary>Full Wanderer List</summary>
+          <ul class="rule-list">
+            <li><strong>🛍️ Wandering Merchant</strong> — Pay 5 XP. Scryfall 5 random cards within your commander’s color identity. Choose one and add it to your deck or sideboard.</li>
+            <li><strong>🌀 Rift Vendor</strong> — Pay 5 XP. Choose one: create three Temporal cards matching a keyword or type, or create a Temporal copy of an instant or sorcery in your deck. (Temporal cards follow Portal rules.)</li>
+            <li><strong>🎒 Quartermaster</strong> — Pay 5 XP. Move up to 3 cards between your deck and sideboard, then optionally destroy 1 card from your deck.</li>
+            <li><strong>⚒️ Traveling Smith</strong> — Pay 5 XP. Choose a creature in your deck: give it +1/+1, or grant it Flying, Lifelink, or Ward 1. (Does not count as a Blacksmith modification.)</li>
+            <li><strong>🎲 Road Gambler</strong> — Pay 5 XP. Sacrifice a card from your deck and roll a d6. Choose a card type and gain a random card of that type sharing the sacrificed card’s color: 1–2 Common, 3–4 Uncommon, 5 Rare, 6 Mythic.</li>
+            <li><strong>🚶 Wayfarer</strong> — Destroy a card from your deck and gain 5 XP.</li>
+            <li><strong>🔮 Hedge Mystic</strong> — Pay 5 XP. Destroy a card from your deck, then Scryfall 5 random cards within your color identity. Choose one and add it to your deck or sideboard.</li>
+            <li><strong>💎 Essence Broker</strong> — Pay 5 XP. Gain 10 Essence.</li>
+            <li><strong>🗺️ Cartographer</strong> — Pay 5 XP. Choose one: Scryfall a land within your color identity and add it to your deck or sideboard, or replace up to 2 basics with dual lands or triomes within your color identity.</li>
+            <li><strong>🩹 Field Surgeon</strong> — Pay 5 XP. Gain 5 life. (May exceed your max life; excess lasts only until the next encounter begins.)</li>
+            <li><strong>🎭 Masked Courier</strong> — Pay 5 XP. Scryfall 3 random cards within your color identity. You may swap one card in your deck with one of the revealed cards.</li>
+            <li><strong>⚙️ Relic Hunter</strong> — Pay 5 XP. Scryfall a random artifact of Uncommon or greater within your color identity. Add it to your deck or sideboard.</li>
+            <li><strong>🌑 Shadow Broker</strong> — Pay 5 XP. Scryfall 2 random Rare cards within your color identity. Choose one and add it to your sideboard.</li>
+            <li><strong>🕯️ Veiled Trinket Broker</strong> — Pay 40 XP. Reveal 2 random Trinkets and choose one for the party. (Replaces any existing Trinket.)</li>
+            <li><strong>🎵 Wandering Bard</strong> — Free. Each player in the party gains 5 XP.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="supply-drop">
+        <h2>📦 Supply Drop</h2>
+        <p>When the party Stays Out, roll 1d10 and resolve the result. Supply Drops affect each party member unless otherwise stated. They occur outside encounters and do not interact with active battlefield states.</p>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Mode</th>
-                <th>Encounter Count</th>
-                <th>Base XP By Stage</th>
-                <th>Affix Ceiling</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Roll</th><th>Result</th><th>Effect</th></tr></thead>
             <tbody>
-              <tr>
-                <td>Standard</td>
-                <td>3 encounters, then Crypt</td>
-                <td>30 / 40 / 50</td>
-                <td>Tier 1-3 only</td>
-              </tr>
-              <tr>
-                <td>Variant</td>
-                <td>4 encounters, then Crypt</td>
-                <td>10 / 20 / 30 / 40</td>
-                <td>Tier 1-4</td>
-              </tr>
+              <tr><td>1</td><td>Lost Coin Purse</td><td>The party gains 10 XP and may reroll this result once (must keep the second result).</td></tr>
+              <tr><td>2</td><td>Traveling Provisions</td><td>Each player gains 4 HP. Players may exceed max life this way; excess lasts only until the next encounter.</td></tr>
+              <tr><td>3</td><td>Battlefield Salvage</td><td>Reveal 5 nonland cards at random from the defeated deck. The party chooses one and adds it to the Loot Pool.</td></tr>
+              <tr><td>4</td><td>Forgotten Satchel</td><td>Each player gains one Mystery Pack.</td></tr>
+              <tr><td>5</td><td>Hidden Cache</td><td>Reveal 5 random nonland cards within the party's color identities. The party chooses one and adds it to the Loot Pool.</td></tr>
+              <tr><td>6</td><td>Wandering Scholar</td><td>Each player chooses one: Identity Pack, Artifact Pack, or Utility Land Pack.</td></tr>
+              <tr><td>7</td><td>Village Tribute</td><td>Each player gains one Identity Pack.</td></tr>
+              <tr><td>8</td><td>Abandoned Armory</td><td>Each player gains an Arcane Signet.</td></tr>
+              <tr><td>9</td><td>Heirloom Relic</td><td>The party gains two Cash Outs.</td></tr>
+              <tr><td>10</td><td>Legendary Find</td><td>Each player gains one OTAG Pack.</td></tr>
             </tbody>
           </table>
         </div>
-        <details class="rules-details" open>
-          <summary>Event Timing</summary>
-          <ul class="rule-list">
-            <li>Town path resolves 1 Event after building usage.</li>
-            <li>Stay Out resolves 2 Events on the first consecutive Stay Out, then adds +1 Event for each additional consecutive Stay Out.</li>
-            <li>Events happen outside combat, resolve one at a time, and do not occur during the Crypt.</li>
-            <li>After a failed encounter, the party still resolves Town or Stay Out and Event timing normally.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>Scaling Notes</summary>
-          <ul class="rule-list">
-            <li>Host HP, affix tier count, Doom, and Authority scale by player count and encounter stage.</li>
-            <li>Stay Out scaling resets only when the party returns to Town.</li>
-            <li>The reward system stays fast by keeping XP predictable and letting Cash Out and Loot Pool carry the variance.</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="rules-section card reveal" id="affixes">
-        <h2>🔥 Host Scaling & Affixes</h2>
-        <p>Affixes are tiered Host modifiers that increase difficulty and add bonus XP to the encounter reward.</p>
-        <p>Tier bonus XP is +5, +10, +15, and +20 for Tiers 1 through 4.</p>
-        <details class="rules-details" open>
-          <summary>🟦 Tier 1 Affixes (+5 XP reward)</summary>
-          <ul class="rule-list">
-            <li>+1/+1 Counters, Life Gain, Prismatic, Reach, Scry 1, Token Generator, Vigilance, Trample, Ward 1</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>🟧 Tier 2 Affixes (+10 XP reward)</summary>
-          <ul class="rule-list">
-            <li>First Strike, Flying, Hero Power, Lifelink, Mana Ramp, Menace, Pack Back Up, Setup Battle</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>🟥 Tier 3 Affixes (+15 XP reward)</summary>
-          <ul class="rule-list">
-            <li>Aether Anomaly, Cascade, Deathtouch, Demonstrate, Emblem Battle, Flashback, Free Spell, Rebound, Training Grounds, Twice the Power, Vanguard Battlements, Vorpal</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>🟪 Tier 4 Affixes (+20 XP reward)</summary>
-          <ul class="rule-list">
-            <li>Annihilator 1, Arcane Mastery, Double Mana, Double Strike, Endless Reinforcements, Hexproof, Indestructible, Overwhelming Presence, Tyrant's Arsenal, War Preparations</li>
-          </ul>
-        </details>
       </section>
 
       <section class="rules-section card reveal" id="crypt-path">
         <h2>🕱 Progression to the Crypt</h2>
-        <p>
-          You no longer reach the Crypt by hitting an HP threshold. You reach it by completing
-          all encounter stages in the chosen run mode.
-        </p>
+        <p>The Crypt is reached by completing all encounter stages in the chosen run mode.</p>
         <div class="rules-grid">
           <div class="callout">
             <h3>Standard Path</h3>
@@ -527,134 +1239,195 @@
         <p>Each victory increases future difficulty through host scaling. Failed stages still advance the run, skip rewards, and still resolve the post-encounter Town or Stay Out branch.</p>
       </section>
 
-      <section class="rules-section card reveal" id="trinkets">
-        <h2>🧿 Trinket System</h2>
-        <p>Trinkets are a pre-first-encounter run modifier resolved after the starting Event step.</p>
-        <p>Because several individual Trinkets changed across rules revisions, this page now tracks the current selection flow instead of an old itemized list.</p>
+      <section class="rules-section card reveal" id="crypt">
+        <h2>⚔️ The Crypt</h2>
+        <p>The Crypt is the final encounter of the run, reached after clearing all encounter stages in the chosen mode. No Affixes are applied. The Host always takes the first turn. No Events are resolved.</p>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>❌ Losing the Crypt</h3>
+            <p>The run ends. The party does not complete the run. Post-game progression options still apply. Unspent XP converts to Essence.</p>
+          </div>
+          <div class="callout">
+            <h3>🏆 Winning the Crypt</h3>
+            <p>The run completes successfully. Gain Essence rewards, Crypt Buff rewards, and any additional progression rewards. Unspent XP converts to Essence.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules-section card reveal" id="death-departure">
+        <h2>💀 Death &amp; Departure</h2>
+        <div class="rules-grid">
+          <div class="callout">
+            <h3>Player Death</h3>
+            <ul class="rule-list compact-list">
+              <li>Base rules apply <strong>no XP penalty</strong> when a player dies.</li>
+              <li>Hosts may apply optional penalties at their discretion (curse, debuff, or custom negative effect) — this is not part of the base ruleset.</li>
+              <li>Dead players return at the end of the encounter.</li>
+              <li>If a player dies during the Crypt, normal death rules apply.</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <h3>Player Departure</h3>
+            <ul class="rule-list compact-list">
+              <li>If a player departs before the Crypt encounter begins, they do not qualify for Crypt completion rewards.</li>
+              <li>If a player with a Trinket Ticket Trinket departs during an encounter, the party may pilot their deck until the encounter ends; the Trinket is removed at end of that encounter.</li>
+              <li>Players may only Scoop at Sorcery Speed. Full-party encounter concession may be declared at Instant Speed.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules-section card reveal" id="crypt-buffs">
+        <h2>🔮 Crypt Buffs (17)</h2>
+        <p>Crypt Buffs are permanent progression unlocks earned by defeating specific Crypt bosses. Each occupies 1 buff slot. Unless otherwise stated, activated Crypt Buff effects may be used once per encounter.</p>
         <details class="rules-details" open>
-          <summary>Selection Rules</summary>
+          <summary>All 17 Crypt Buffs</summary>
           <ul class="rule-list">
-            <li>Standard flow: present 3 random Trinkets, then the table votes on 1.</li>
-            <li>Trinket Ticket override: the ticket owner chooses 1 of 3 random Trinkets instead of the table vote.</li>
-            <li>Only 1 Trinket may be active at a time unless a separate rule explicitly says otherwise.</li>
-            <li>Normal Trinkets are party property for the run. A Trinket created by a player's ticket is tied to that player and leaves when that player leaves.</li>
-            <li>Pre-first-encounter setup resolves both in order: Event, then Trinket.</li>
+            <li><strong>Quick Spell</strong> — Once per town, you may upgrade a card for free. (Beat Kudo, King Among Bears.)</li>
+            <li><strong>Spiritual Guidance</strong> — Gain +25% Essence. (Beat Hinata, Dawn-Crowned.)</li>
+            <li><strong>The God Tree's Blessing</strong> — You may pick the color of your choice for Merchant packs that have color. You may switch the color identity of encounter rewards you are offered. (Beat Jared Carthalion.)</li>
+            <li><strong>Momentum Engine</strong> — Until end of turn, you do not lose unspent mana as steps and phases end. (Beat Yurlok of Scorch Thrash.)</li>
+            <li><strong>Eternal Servitude</strong> — Once each turn, whenever a creature you control becomes the target of a spell, it phases out. Whenever a creature you control phases in, create a tapped 1/1 white Spirit creature token. (Beat King of the Oathbreakers.)</li>
+            <li><strong>Unearthly Reach</strong> — Gain either an additional upkeep or an additional end step. (Beat Tormod and Ravos.)</li>
+            <li><strong>Respited Gift</strong> — Gain +1 Cash Out per fight. (Beat Kibo, Uktabi Prince.)</li>
+            <li><strong>Fickle Duplicant</strong> — At the beginning of the game, you get 1 free Scryfall creature card, but it is a 1/1 Balloon in addition to its other creature types and abilities. Stamp it with a "Balloon" decal. (Beat The Jolly Balloon Man.)</li>
+            <li><strong>Might of Okaun</strong> — During your upkeep, flip a coin. If you win, draw a card. If you lose, lose 1 life. (Beat Okaun and Zndrsplt.)</li>
+            <li><strong>Finders Keepers</strong> — Once per encounter, you may look at the top 3 cards of target player's library and put them back in any order, then draw a card. (Beat Yuriko, the Tiger's Shadow.)</li>
+            <li><strong>Flame of Progress</strong> — Gain +25% Experience. (Beat Azlask, the Swelling Scourge.)</li>
+            <li><strong>Shapeshifter</strong> — All creatures you own in all zones gain a creature type your Commander has. Pick this buff after deckbuilding. (Current permanent buff.)</li>
+            <li><strong>Undying Legionary</strong> — Gain +5 max HP. (Beat Imotekh the Stormlord.)</li>
+            <li><strong>Treasure Pirate</strong> — At the beginning of every encounter, start with a Treasure token. (Beat Olivia, Opulent Outlaw.)</li>
+            <li><strong>Dark Beginnings</strong> — Your commander is augmented after deck creation. (Beat Maha, Its Feathers Night.)</li>
+            <li><strong>The Chosen Path</strong> — Once per encounter, choose one: pay {2} to search your library for a basic land, put it onto the battlefield tapped, then shuffle; or look at the top six cards, reveal a creature card, put it into your hand, then put the rest on the bottom in any order. (Beat Loot, Exuberant Explorer.)</li>
+            <li><strong>Paragon Adornments</strong> — Equipment costs {1} less to cast and {1} less to equip. (Beat Reyav, Master Smith.)</li>
           </ul>
         </details>
       </section>
 
-      <section class="rules-section card reveal" id="crypt">
-        <h2>⚔️ The Crypt</h2>
-        <div class="rules-grid">
-          <div>
-            <h3>Entering</h3>
-            <p>Reached after all encounter stages in the chosen mode are complete. The Host pulls the final boss.</p>
-          </div>
-          <div>
-            <h3>Rules</h3>
-            <p>The Crypt is the final encounter, uses its own boss setup, and always takes the first turn.</p>
-          </div>
-        </div>
-        <p>Crypt fights are significantly harder than prior stages and decide the run outright.</p>
-        <p>If the party loses to the Crypt, the run ends. If the party wins, the run completes successfully.</p>
-        <div class="rules-grid">
-          <div>
-            <h3>❌ Losing</h3>
-            <p>The run ends and normal post-game progression options still matter, but the party does not complete the run.</p>
-          </div>
-          <div>
-            <h3>🏆 Winning</h3>
-            <p>Gain Essence rewards, Crypt Buff rewards, and additional progression rewards defined by the active systems.</p>
-          </div>
-        </div>
+      <section class="rules-section card reveal" id="tickets">
+        <h2>🎟️ Tickets (7)</h2>
+        <p>Tickets are permanent progression purchases from the Progression Shop. Each ticket is reusable across runs and occupies buff slots. When using a ticket to select a Vanguard, Trinket, or Conspiracy, the player may decline to commit — the ticket is reusable.</p>
+        <details class="rules-details" open>
+          <summary>Ticket Resolution Rules</summary>
+          <ul class="rule-list">
+            <li><strong>Vanguard Ticket:</strong> Reveal 3 random Vanguards. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
+            <li><strong>Trinket Ticket:</strong> Reveal 3 random Trinkets. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
+            <li><strong>Conspiracy Ticket:</strong> Reveal 3 random Conspiracies. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
+            <li><strong>Emblem Ticket:</strong> Reveal 3 random Emblems. Host eliminates 1. Player chooses from the remaining 2 or may decline to commit. Ticket is reusable.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>All 7 Tickets (Progression Shop costs)</summary>
+          <ul class="rule-list">
+            <li><strong>Arcane Signet Ticket — 750 Essence (1 slot):</strong> Free Arcane Signet in your deck, not counting toward your 39.</li>
+            <li><strong>Sol Ring Ticket — 1,500 Essence (1 slot):</strong> Free Sol Ring in your deck, not counting toward your 39. Sol Ring is not banned in this format.</li>
+            <li><strong>Leyline Ticket — 1,500 Essence (1 slot):</strong> Free Leyline of your choice in your deck, not counting toward your 39.</li>
+            <li><strong>Color Combo Ticket — 2,000 Essence (1 slot):</strong> Before deckbuilding, choose your color identity before Commanders are generated.</li>
+            <li><strong>Trinket Ticket — 2,500 Essence (1 slot):</strong> Before Encounter 1, choose 1 Trinket from 3 random options (overrides table vote). Player may decline.</li>
+            <li><strong>Conspiracy Ticket — 4,000 Essence (1 slot):</strong> Before Commander selection, choose 1 Conspiracy from 3 random options. Player may decline.</li>
+            <li><strong>Vanguard Ticket — 5,000 Essence (2 slots):</strong> Begin the game with a Vanguard of your choice from 3 random options. Player may decline.</li>
+            <li><strong>Emblem Ticket — 10,000 Essence (3 slots):</strong> Begin the game with an Emblem: reveal 3, Host eliminates 1, player chooses from remaining 2. Player may decline.</li>
+          </ul>
+        </details>
       </section>
 
       <section class="rules-section card reveal" id="achievements">
-        <h2>✨ Season Progression</h2>
-        <p>Season 1 progression is now organized into Crypt Buffs, Tickets, Brands, Achievements, and Captures.</p>
-        <div class="rules-grid">
-          <div class="callout">
-            <h3>Crypt Buffs</h3>
-            <p>There are currently 14 Season 1 Crypt Buffs. Examples include Quick Spell, Spiritual Guidance, Respited Gift, Treasure Pirate, and Flame of Progress.</p>
-          </div>
-          <div class="callout">
-            <h3>Achievement Buckets</h3>
-            <p>Current achievement groups include General Achievements, Creature-Type Achievements, and Guild Identity Achievements.</p>
-          </div>
-          <div class="callout">
-            <h3>Captures</h3>
-            <p>Capture Non-Commander starts at 500 Essence and increases by 250 for each additional capture. Each capture uses 1 slot.</p>
-          </div>
-        </div>
+        <h2>✨ Achievements (26)</h2>
+        <p>Achievements are permanent unlocks earned by meeting specific in-game conditions. Each occupies 1 buff slot.</p>
         <details class="rules-details" open>
-          <summary>Current Achievement Examples</summary>
+          <summary>General Achievements (9)</summary>
           <ul class="rule-list">
-            <li><strong>Victory Lap</strong> — 2 additional free mulligans after beating 3 Crypt bosses in one session.</li>
-            <li><strong>One with Death</strong> — a second free card during deck creation, with one allowed to be a Game Changer.</li>
-            <li><strong>Dog's Best Friend</strong> — choose 1 of 3 Companions at deckbuilding if you earned the unlock.</li>
-            <li><strong>Nature's Blessing</strong> — swap dual-land gain for triomes after winning a Crypt with 50 or more lands.</li>
-            <li><strong>Adaptive Pattern</strong>, <strong>Harmony's Bloom</strong>, and the other guild buffs are now grouped under Guild Identity Achievements.</li>
+            <li><strong>Chaos</strong> — Once per game, reroll an Event. | Unlock: Open 5 Events in a row before an encounter.</li>
+            <li><strong>Victory Lap</strong> — You have two additional free mulligans. | Unlock: Beat 3 Crypt bosses in a single session.</li>
+            <li><strong>One with Death</strong> — Gain a second free card during deck creation. One of those free cards can be a Game Changer. | Unlock: Beat a Crypt fight on turn one.</li>
+            <li><strong>Dog's Best Friend</strong> — At the beginning of deckbuilding, choose 1 of 3 random Companions. If you do, receive two additional free non-Commander mulligans. You must meet the requirements of your Companion or it will find a new master. | Unlock: Win a Crypt fight while satisfying your Companion restriction for the entire run and casting your Companion during that Crypt fight.</li>
+            <li><strong>Compelling Madness</strong> — Once per encounter, target player gains 5 life (instant speed). | Unlock: Indirectly kill one non-Host player in a session.</li>
+            <li><strong>Gambler's Never Quit</strong> — Once per town, when you choose your first XP-costing building use, you may flip a coin. Win: that use is free. Lose: it costs double XP. You may not use this unless you can pay double. | Unlock: Win a coin flip 6 times in a row.</li>
+            <li><strong>Stick It To Me</strong> — At the beginning of the game, spawn 5 random sticker sheets to create your sticker deck. | Unlock: Beat a Crypt fight with stickers.</li>
+            <li><strong>Happy Fun Land</strong> — At the beginning of the game, spawn 5 random Attractions to create your Attraction deck. | Unlock: Beat a Crypt fight with Attractions.</li>
+            <li><strong>Nature's Blessing</strong> — Instead of gaining dual lands during deck creation, you may get triomes. | Unlock: Beat a Crypt fight with 50 or more lands in your deck.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>Creature-Type Achievements (7)</summary>
+          <ul class="rule-list">
+            <li><strong>Changeling's Land Form</strong> — After opening hand and mulligans, put a random basic land from outside the game into your hand. | Unlock: Beat a Crypt fight with a Changeling Commander.</li>
+            <li><strong>Construct's Salvation</strong> — After opening hand and mulligans, put a Wastes from outside the game into your hand. | Unlock: Beat a Crypt fight with a Construct Commander.</li>
+            <li><strong>Horse's Gallop</strong> — After opening hand and mulligans, put a Forest from outside the game into your hand. | Unlock: Beat a Crypt fight with a Horse Commander.</li>
+            <li><strong>Raccoon's Rage</strong> — After opening hand and mulligans, put a Mountain from outside the game into your hand. | Unlock: Beat a Crypt fight with a Raccoon Commander.</li>
+            <li><strong>Scorpion's Nest</strong> — After opening hand and mulligans, put a Swamp from outside the game into your hand. | Unlock: Beat a Crypt fight with a Scorpion Commander.</li>
+            <li><strong>Fish Pond</strong> — After opening hand and mulligans, put an Island from outside the game into your hand. | Unlock: Beat a Crypt fight with a Fish Commander.</li>
+            <li><strong>Dawn of Crabs</strong> — After opening hand and mulligans, put a Plains from outside the game into your hand. | Unlock: Beat a Crypt fight with a Crab Commander.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
+          <summary>Guild Identity Achievements (10)</summary>
+          <ul class="rule-list">
+            <li><strong>Simic — Adaptive Pattern</strong> — If blue: once per turn when you draw your second card, put a +1/+1 counter on a creature you control. If green: once per turn when a +1/+1 counter is placed on a creature you control, draw a card. | Unlock: Beat a Crypt fight where all Commanders were green, blue, or Simic.</li>
+            <li><strong>Selesnya — Harmony's Bloom</strong> — If white: once per turn when you gain life, put a +1/+1 counter on a creature you control. If green: once per turn when you cast a creature spell, gain 1 life. | Unlock: All Commanders were green, white, or Selesnya.</li>
+            <li><strong>Rakdos — Showstopper's Encore</strong> — If black: once per turn when a creature dies, draw a card and lose 1 life. If red: once per turn when you deal combat damage to an opponent, create a Treasure token. | Unlock: All Commanders were black, red, or Rakdos.</li>
+            <li><strong>Orzhov — Tithe and Toil</strong> — If white: once per turn when a token enters the battlefield under your control, you may populate. If black: once per turn when a nontoken creature you control dies, create a 1/1 black Zombie token. | Unlock: All Commanders were white, black, or Orzhov.</li>
+            <li><strong>Izzet — Experimental Sparks</strong> — If blue: once per turn when you cast an instant, scry 1 then draw 1. If red: once per turn when you cast a sorcery, deal 1 damage to any target. | Unlock: All Commanders were blue, red, or Izzet.</li>
+            <li><strong>Gruul — Primal Fury</strong> — If red: once per turn when a creature you control becomes modified, give it haste until end of turn. If green: once per turn when a creature you control attacks, give it trample until end of turn. | Unlock: All Commanders were red, green, or Gruul.</li>
+            <li><strong>Golgari — Cycle of Rot</strong> — If black: once per turn when a permanent enters your graveyard from the battlefield, put a -1/-1 counter on target creature. If green: once per turn when a creature dies, create a Food token. | Unlock: All Commanders were black, green, or Golgari.</li>
+            <li><strong>Dimir — Whisper Network</strong> — If blue: once per turn when you cast a spell on an opponent's turn, untap target nonland permanent. If black: once per turn when you target a permanent you don't control, exile target card in any graveyard. | Unlock: All Commanders were blue, black, or Dimir.</li>
+            <li><strong>Boros — Charge of Conviction</strong> — If white: once per turn when one or more creatures you control attack, untap one creature you control. If red: once per turn when a creature you control attacks alone, give it +2/+0 until end of turn. | Unlock: All Commanders were red, white, or Boros.</li>
+            <li><strong>Azorius — Law of Efficiency</strong> — If white: once per turn when you cast a spell during another player's turn, gain 1 life. If blue: once per turn when you counter a spell or ability, draw a card. | Unlock: All Commanders were white, blue, or Azorius.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="rules-section card reveal" id="brands">
+        <h2>🔥 Brands (6)</h2>
+        <p>Brands are permanent progression purchases from the Shop. Brand effects stack and each Brand may be ranked up any number of times — Ranks must be purchased one at a time. Brands are tracked separately from the 4-slot buff inventory — they do not occupy slots. Each additional Rank of the same Brand costs base price × current rank.</p>
+        <details class="rules-details" open>
+          <summary>All 6 Brands</summary>
+          <ul class="rule-list">
+            <li><strong>Brand of the Cartographer — 500 Essence base:</strong> When drafting, you may replace 2 basic lands with dual lands or triomes.</li>
+            <li><strong>Brand of the Conclave — 1,000 Essence base:</strong> During deckbuilding and at The Guild, you get 1 additional Commander choice whenever Commanders are generated for you.</li>
+            <li><strong>Brand of Recurrence — 1,250 Essence base:</strong> During deckbuilding and at The Guild, you may reroll Commanders 1 additional time for free. Does not allow rerolling the 100-card nonland draft pile.</li>
+            <li><strong>Brand of the Open Hand — 1,750 Essence base:</strong> Whenever you open a pack, that pack contains 1 additional card to choose from.</li>
+            <li><strong>Brand of the Blinded Eye — 2,000 Essence base:</strong> During deckbuilding, choose one color to exclude when rolling Commanders.</li>
+            <li><strong>Brand of the Infinite Void — 500 Essence base:</strong> Your deck size minimum is reduced by 1 per Rank of this Brand.</li>
           </ul>
         </details>
       </section>
 
       <section class="rules-section card reveal" id="post-run">
-        <h2>💠 Progression Shop</h2>
-        <p>Use Essence before or after runs to buy persistent progression. Tickets, Achievements, Crypt Buffs, and Captures share the 4-slot inventory. Brands do not.</p>
+        <h2>💠 Post-Run Shop</h2>
+        <p>Use Essence after runs to buy persistent progression. Tickets, Achievements, Crypt Buffs, and Captures share the 4-slot inventory. Brands are purchased in the Pregame Shop and tracked separately — they do not count against slots.</p>
         <details class="rules-details" open>
+          <summary>Slot Limit Summary</summary>
+          <ul class="rule-list compact-list">
+            <li>4 slots total — shared across: Crypt Buffs, Tickets, Achievements, Captures.</li>
+            <li>Standard items: 1 slot each.</li>
+            <li>Vanguard Ticket: 2 slots.</li>
+            <li>Emblem Ticket: 3 slots.</li>
+            <li>Brands: No slot cost. No slot cap. Tracked separately.</li>
+          </ul>
+        </details>
+        <details class="rules-details">
           <summary>Tickets</summary>
           <ul class="rule-list">
-            <li>750 Essence — Arcane Signet Ticket (free Arcane Signet, 1 slot)</li>
-            <li>1500 Essence — Sol Ring Ticket (free Sol Ring, 1 slot)</li>
-            <li>1500 Essence — Leyline Ticket (free Leyline, 1 slot)</li>
-            <li>2000 Essence — Color Combo Ticket (choose color identity before commander generation, 1 slot)</li>
-            <li>2500 Essence — Trinket Ticket (choose 1 of 3 Trinkets, 1 slot)</li>
-            <li>4000 Essence — Conspiracy Ticket (choose 1 of 3 Conspiracies, 1 slot)</li>
-            <li>5000 Essence — Vanguard Ticket (choose 1 of 3 Vanguards, 2 slots)</li>
-            <li>10000 Essence — Emblem Ticket (choose 1 of 3 Emblems, 3 slots)</li>
+            <li>750 Essence — Arcane Signet Ticket (1 slot)</li>
+            <li>1,500 Essence — Sol Ring Ticket (1 slot)</li>
+            <li>1,500 Essence — Leyline Ticket (1 slot)</li>
+            <li>2,000 Essence — Color Combo Ticket (1 slot)</li>
+            <li>2,500 Essence — Trinket Ticket (1 slot)</li>
+            <li>4,000 Essence — Conspiracy Ticket (1 slot)</li>
+            <li>5,000 Essence — Vanguard Ticket (2 slots)</li>
+            <li>10,000 Essence — Emblem Ticket (3 slots)</li>
           </ul>
         </details>
         <details class="rules-details">
-          <summary>Brands</summary>
+          <summary>End-of-Game Essence Options</summary>
           <ul class="rule-list">
-            <li>500 Essence — Brand of the Cartographer: when drafting, replace 2 basic lands with dual lands or triomes.</li>
-            <li>1000 Essence — Brand of the Conclave / Additional Commander Choice Brand: gain 1 extra commander choice during deckbuilding and at The Guild.</li>
-            <li>1250 Essence — Brand of Recurrence / Additional Commander Reroll Brand: gain 1 extra free commander reroll during deckbuilding and at The Guild.</li>
-            <li>1750 Essence — Brand of the Open Hand / +1 Extra Card in Pack Brand: every pack has 1 extra card to choose from.</li>
-            <li>2000 Essence — Brand of the Blinded Eye / Commander Color Lockout Brand: exclude 1 color when rolling commanders.</li>
-            <li>500 Essence — Brand of the Infinite Void: your deck size minimum is reduced by 1 per Rank.</li>
-            <li>Brands stack, have ranks, and each additional purchase costs base price multiplied by the current rank.</li>
-          </ul>
-        </details>
-        <details class="rules-details">
-          <summary>End-of-Game Options</summary>
-          <ul class="rule-list">
-            <li>250 Essence — Sell Buffs</li>
-            <li>500 Essence base — Capture Non-Commander, increasing by 250 Essence for each additional capture</li>
+            <li><strong>250 Essence — Sell Buffs:</strong> Sell a Crypt Buff back to the Host in exchange for 250 Essence. This option is only available if you obtain a Buff you already have unlocked.</li>
+            <li><strong>Capture Non-Commander (base 500 Essence, 1 slot):</strong> Save 1 card from your deck to your collection. Captured cards may be used in future deck builds but count against your 39 (no free allocation). Cost increases by 250 Essence per additional capture: 1st = 500, 2nd = 750, 3rd = 1,000, and so on.</li>
           </ul>
         </details>
       </section>
 
-      <section class="card reveal delay-3">
-        <div class="section-head">
-          <span class="eyebrow">Using This Page</span>
-          <h2>Fast Navigation Tips</h2>
-        </div>
-        <div class="rules-grid">
-          <div class="callout">
-            <h3>During deckbuilding</h3>
-            <p>Use the search box for commander, Guild, ticket, or brand to jump directly to setup and progression rules.</p>
-          </div>
-          <div class="callout">
-            <h3>During combat</h3>
-            <p>Search for turns, affixes, rewards, or Crypt when the table needs a mid-fight ruling.</p>
-          </div>
-          <div class="callout">
-            <h3>During downtime</h3>
-            <p>Jump to Town Buildings, Travelers and Wanderers, Cash Outs and Loot, or Progression Shop when the party is spending rewards.</p>
-          </div>
-        </div>
-      </section>
     </main>
 
     <script src="assets/rules.js"></script>
