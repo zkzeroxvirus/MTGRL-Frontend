@@ -1071,6 +1071,16 @@ tr:nth-child(even) td {
   color: #1c1f24;
 }
 
+.kofi-wrap {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.kofi-wrap:hover {
+  opacity: 1;
+  color: #1c1f24;
+}
+
 @media (max-width: 600px) {
   .discord-inner {
     flex-direction: column;
