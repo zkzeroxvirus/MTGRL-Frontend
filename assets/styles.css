@@ -99,6 +99,7 @@ main {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 10px 14px;
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
@@ -232,6 +233,46 @@ h2 {
 h3 {
   margin: 0 0 8px 0;
   font-size: 1.05rem;
+}
+
+.eyebrow-inline {
+  display: inline;
+}
+
+.mt-05 {
+  margin-top: 0.5rem;
+}
+
+.mt-06 {
+  margin-top: 0.6rem;
+}
+
+.mt-075 {
+  margin-top: 0.75rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-15 {
+  margin-top: 1.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.details-intro {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.subhead-tight {
+  margin: 0.75rem 0 0.25rem;
+}
+
+.subsection-title {
+  margin: 1rem 0 0.5rem;
 }
 
 p {
@@ -1119,10 +1160,8 @@ tr:nth-child(even) td {
   .nav {
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     gap: 6px;
     padding-bottom: 2px;
-    scrollbar-width: none;
   }
 
   .nav::-webkit-scrollbar {
