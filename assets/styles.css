@@ -986,6 +986,20 @@ tr:nth-child(even) td {
   border-color: rgba(88, 101, 242, 0.4) !important;
 }
 
+.nav-workshop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(27, 40, 56, 0.1);
+  border-color: rgba(27, 40, 56, 0.26) !important;
+  color: #1b2838 !important;
+}
+
+.nav-workshop:hover {
+  background: rgba(27, 40, 56, 0.18) !important;
+  border-color: rgba(27, 40, 56, 0.42) !important;
+}
+
 /* ── Discord banner ─────────────────────────────────────────── */
 .discord-banner {
   background: linear-gradient(
