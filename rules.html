@@ -112,7 +112,7 @@
           <article class="flow-card">
             <span class="flow-step">02</span>
             <h3>Fight encounters</h3>
-            <p>Before your first fight: the party draws a Trinket, then resolves an Event. Every encounter is a cooperative Commander game against the Host. Roll a d20 — highest roll picks who goes first.</p>
+            <p>Before your first fight: the party resolves a No Bad Stuff Event, then applies Trinket selection. Every encounter is a cooperative Commander game against the Host. Roll a d20 — highest roll picks who goes first.</p>
           </article>
           <article class="flow-card">
             <span class="flow-step">03</span>
@@ -374,7 +374,7 @@
           <article class="flow-card">
             <span class="flow-step">01</span>
             <h3>Before Encounter 1</h3>
-            <p>Before the first fight kicks off, the whole party reveals <strong>3 Trinkets</strong> and picks one together. Then you resolve a <strong>No Bad Stuff Event</strong> — a safe intro event to get things rolling.</p>
+            <p>Before the first fight kicks off, the party first resolves a <strong>No Bad Stuff Event</strong> — a safe intro event to get things rolling. Then the party reveals <strong>3 Trinkets</strong> and picks one together.</p>
           </article>
           <article class="flow-card">
             <span class="flow-step">02</span>
@@ -510,13 +510,14 @@
 
       <section class="rules-section card reveal" id="trinkets">
         <h2>🧿 Trinkets</h2>
-        <p>Trinkets are passive run modifiers that change how encounters play out. You can pick one up at the start of the run, find them during it, or use a Trinket Ticket to grab one on demand. You can hold multiple Trinkets at once — if you have them, they're all active.</p>
+        <p>Trinkets are passive run modifiers that change how encounters play out. You can pick one up at the start of the run, find them during it, or use a Trinket Ticket to grab one on demand. Trinket Ticket ownership and slot usage are tracked per player, not as one shared party slot.</p>
         <div class="rules-grid">
           <div class="callout">
             <h3>How You Pick One</h3>
             <ul class="rule-list compact-list">
               <li>3 random Trinkets are revealed from the pool. The party votes, one is chosen, and it takes effect immediately.</li>
               <li><strong>Trinket Ticket override:</strong> if you have a Ticket, you pick 1 of the 3 yourself — no vote needed.</li>
+              <li>Ticket limits are per player. This does not cap the whole party at one total Trinket.</li>
             </ul>
           </div>
           <div class="callout">
@@ -816,10 +817,12 @@
             <h3>How Doom Works</h3>
             <ul class="rule-list compact-list">
               <li>Doom cards are drawn fresh at the start of each encounter. Each one is unique unless the card says otherwise.</li>
+              <li>Doom cards are tracked in a separate Doom hand/zone, not the Host's normal MTG hand.</li>
+              <li>Doom cards do not count toward hand size limits.</li>
               <li>The Host can trigger any number of Doom cards per turn — no limit unless a card specifies one.</li>
               <li>When a Doom card triggers, resolve it and set it aside. It's out of the pool for the rest of this encounter.</li>
               <li>Set-aside Doom cards rejoin the pool at the start of the next encounter.</li>
-              <li><strong>Reroll (once per Host turn):</strong> The Host can return any Doom cards to the pool and draw the same number of new ones. Rerolled cards aren't triggered and can be redrawn. This can happen before or after triggering an effect.</li>
+              <li><strong>Reroll (once per Host turn):</strong> The Host can return any Doom cards from their Doom hand to the pool and draw the same number of new ones. Rerolled cards aren't triggered and can be redrawn. This can happen before or after triggering an effect.</li>
             </ul>
           </div>
         </div>
@@ -904,7 +907,7 @@
         </details>
 
         <h3 class="mt-15">👑 Host Authority</h3>
-        <p>The more players at the table, the bigger the party's action advantage — Host Authority closes that gap. The scale runs from Minor Influence at 1–2 players up to Absolute Command at 6. Every level builds on the one before it.</p>
+        <p>The more players at the table, the bigger the party's action advantage — Host Authority closes that gap. The scale runs from Minor Influence at 1–2 players up to Absolute Command at 6. For each player count, apply the full listed package for that level.</p>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Players</th><th>Authority Level</th></tr></thead>
@@ -919,7 +922,7 @@
         </div>
         <details class="rules-details" open>
           <summary>Authority Level Effects</summary>
-          <p>Each level is cumulative — Authority III includes everything from I and II.</p>
+          <p>Authority levels are not additive cost-reduction tiers. Authority V is not {5} cheaper; use the full effect package listed at that level.</p>
           <ul class="rule-list">
             <li><strong>Authority I (1–2 players)</strong> — The first spell the Host casts each turn costs {1} less to cast.</li>
             <li><strong>Authority II (3 players)</strong> — First spell costs {1} less. At the beginning of the encounter, the Host creates a blue enchantment token named <em>Not Today</em> with "Sacrifice this enchantment: Counter target spell, activated ability, or triggered ability."</li>
@@ -1426,6 +1429,7 @@
           <ul class="rule-list">
             <li><strong>Vanguard Ticket:</strong> Reveal 3 random Vanguards. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
             <li><strong>Trinket Ticket:</strong> Reveal 3 random Trinkets. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
+            <li>Trinket Ticket ownership and slot usage are per player, not a single shared party Trinket slot.</li>
             <li><strong>Conspiracy Ticket:</strong> Reveal 3 random Conspiracies. Player chooses 1 or may decline to commit. Ticket is reusable.</li>
             <li><strong>Emblem Ticket:</strong> Reveal 3 random Emblems. Host eliminates 1. Player chooses from the remaining 2 or may decline to commit. Ticket is reusable.</li>
           </ul>
