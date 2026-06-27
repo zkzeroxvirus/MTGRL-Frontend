@@ -38,13 +38,13 @@
           <span class="eyebrow">Service Health</span>
           <h1>API Status</h1>
           <p>
-            Live checks against the MTGR backend. Use this page to confirm connectivity,
-            latency, and the status payload powering the app.
+            Fast health view for the MTGR backend and image cache.
+            Everything below is focused on actionable signal only.
           </p>
           <div class="badge-row" aria-label="Monitoring tags">
             <span class="badge badge--ok">Live check</span>
             <span class="badge">No-store fetch</span>
-            <span class="badge badge--warn">Single endpoint</span>
+            <span class="badge">Backend + cache</span>
           </div>
         </div>
         <div class="hero-panel">
@@ -70,25 +70,45 @@
             </div>
           </div>
           <div class="surface">
-            <div class="panel-title">Endpoint</div>
-            <p><strong>/api/</strong> is queried on page load with cache bypass enabled.</p>
+            <div class="panel-title">Checks</div>
+            <p><strong>/api/</strong> and <strong>/api/image-cache/stats</strong> are queried on page load with cache bypass enabled.</p>
+            <div class="refresh-controls" aria-label="Refresh controls">
+              <label class="refresh-toggle" for="auto-refresh-toggle">
+                <input type="checkbox" id="auto-refresh-toggle" />
+                <span>Auto Refresh</span>
+              </label>
+              <label class="refresh-interval" for="auto-refresh-interval">
+                <span>Every</span>
+                <select id="auto-refresh-interval" disabled>
+                  <option value="15000">15s</option>
+                  <option value="30000" selected>30s</option>
+                  <option value="60000">60s</option>
+                </select>
+              </label>
+              <button type="button" class="button secondary small" id="refresh-now">Refresh now</button>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="grid reveal delay-1">
         <div class="card">
-          <div class="panel-title">Status Details</div>
-          <div class="key-values" id="details">
+          <div class="panel-title">API Summary</div>
+          <div class="key-values" id="api-summary">
             <div class="key-value">
-              <span class="key">Status</span>
+              <span class="key">Connection</span>
               <span class="value">Waiting for response</span>
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="panel-title">Raw Response</div>
-          <pre id="response">Waiting for API response.</pre>
+          <div class="panel-title">Image Cache Stats</div>
+          <div class="key-values" id="image-cache-summary">
+            <div class="key-value">
+              <span class="key">Cache</span>
+              <span class="value">Waiting for response</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -98,17 +118,17 @@
           <h2>If Status Is Red</h2>
           <ol class="list-clean">
             <li>Verify backend process is running and reachable from this client.</li>
-            <li>Check CORS or proxy routing if browser can load pages but not the API.</li>
-            <li>Use the HTTP code and response body to pinpoint auth, routing, or server errors.</li>
+            <li>Check reverse proxy routing if the site loads but API checks fail.</li>
+            <li>Use HTTP code first, then server logs for root cause.</li>
           </ol>
         </article>
         <article class="card stack">
           <span class="eyebrow">Signal Guide</span>
-          <h2>How To Read This Panel</h2>
+          <h2>Read Order</h2>
           <ul class="list-clean">
-            <li>Low latency and 2xx code indicates healthy app connectivity.</li>
-            <li>High latency with 2xx suggests backend pressure but still available.</li>
-            <li>4xx or 5xx with a payload usually gives the fastest path to the fix.</li>
+            <li>Current Status: quick answer for up or down.</li>
+            <li>Latency + HTTP Code: immediate health and performance context.</li>
+            <li>API Summary + Cache Stats: what changed and where pressure is building.</li>
           </ul>
         </article>
       </section>
