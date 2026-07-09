@@ -158,9 +158,20 @@
       <section class="card reveal delay-2">
         <div class="section-head">
           <span class="eyebrow">Active Hosts</span>
-          <h2>Ratings Breakdown</h2>
+          <h2>Host Directory</h2>
+          <p>Compact by default so synced Discord roles do not flood the page.</p>
         </div>
-        <div class="host-grid" id="host-grid" aria-live="polite"></div>
+        <div class="host-directory-tools">
+          <div class="stats host-stats" id="host-stats" aria-label="Host summary"></div>
+          <div class="host-filter-row">
+            <input class="search-input" id="host-search" type="search" placeholder="Search hosts" autocomplete="off" />
+            <label class="check-field">
+              <input id="show-all-hosts" type="checkbox" />
+              <span>Show all synced hosts</span>
+            </label>
+          </div>
+        </div>
+        <div class="host-list" id="host-grid" aria-live="polite"></div>
       </section>
 
       <section class="card table-card reveal delay-3">

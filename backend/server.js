@@ -45,24 +45,7 @@ const metricWeights = {
 };
 
 const defaultHostData = {
-  hosts: [
-    {
-      id: "demo-ashen",
-      discordId: "demo-ashen",
-      displayName: "Ashen",
-      avatarUrl: "",
-      status: "active",
-      specialties: ["Doom timing", "Crypt pressure"],
-    },
-    {
-      id: "demo-kevin",
-      discordId: "demo-kevin",
-      displayName: "Kevin",
-      avatarUrl: "",
-      status: "active",
-      specialties: ["New player tables", "Rules clarity"],
-    },
-  ],
+  hosts: [],
   sessions: [],
   participants: [],
   reviews: [],
@@ -73,7 +56,9 @@ const defaultHostData = {
 const readHostData = async () => {
   try {
     const raw = await fs.readFile(hostDataPath, "utf8");
-    return { ...defaultHostData, ...JSON.parse(raw) };
+    const data = { ...defaultHostData, ...JSON.parse(raw) };
+    data.hosts = (data.hosts || []).filter((host) => !["demo-ashen", "demo-kevin"].includes(host.id));
+    return data;
   } catch (error) {
     if (error.code !== "ENOENT") {
       throw error;

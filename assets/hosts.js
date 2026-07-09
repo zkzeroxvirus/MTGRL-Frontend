@@ -10,6 +10,9 @@ const reviewForm = document.getElementById("review-form");
 const reviewTitle = document.getElementById("review-title");
 const ratingGrid = document.getElementById("rating-grid");
 const hostGrid = document.getElementById("host-grid");
+const hostStats = document.getElementById("host-stats");
+const hostSearch = document.getElementById("host-search");
+const showAllHosts = document.getElementById("show-all-hosts");
 const sessionTable = document.getElementById("session-table");
 const sessionCodeElement = document.getElementById("session-code");
 const playerSearch = document.getElementById("player-search");
@@ -55,26 +58,7 @@ let authState = {
 };
 
 const defaultState = () => ({
-  hosts: [
-    {
-      id: "demo-ashen",
-      discordId: "demo-ashen",
-      displayName: "Ashen",
-      status: "active",
-      specialties: ["Doom timing", "Crypt pressure"],
-      hostedRuns: 0,
-      rating: emptyRating(),
-    },
-    {
-      id: "demo-kevin",
-      discordId: "demo-kevin",
-      displayName: "Kevin",
-      status: "active",
-      specialties: ["New player tables", "Rules clarity"],
-      hostedRuns: 0,
-      rating: emptyRating(),
-    },
-  ],
+  hosts: [],
   sessions: [],
   participants: [],
   reviews: [],
@@ -303,47 +287,91 @@ const renderPlayerPicker = () => {
   syncPlayersButton.hidden = !authState.user?.isHost;
 };
 
+const renderHostStats = (hosts) => {
+  const reviewedHosts = hosts.filter((host) => (host.rating?.reviewCount || 0) > 0).length;
+  const activeHosts = hosts.filter((host) => (host.hostedRuns || 0) > 0).length;
+  const totalReviews = hosts.reduce((total, host) => total + (host.rating?.reviewCount || 0), 0);
+  [
+    ["Synced Hosts", hosts.length],
+    ["With Runs", activeHosts],
+    ["Reviewed", reviewedHosts],
+    ["Reviews", totalReviews],
+  ].forEach(([label, value]) => {
+    const stat = document.createElement("div");
+    stat.className = "stat";
+    stat.innerHTML = `<span class="stat-label">${label}</span><span class="stat-value">${Number(value).toLocaleString()}</span>`;
+    hostStats.appendChild(stat);
+  });
+};
+
 const renderHosts = () => {
   hostGrid.replaceChildren();
+  hostStats.replaceChildren();
   if (!state.hosts.length) {
     const empty = document.createElement("p");
     empty.className = "meta";
     empty.textContent = "No hosts yet.";
     hostGrid.appendChild(empty);
+    renderHostStats([]);
     return;
   }
 
-  state.hosts.forEach((host) => {
-    const card = document.createElement("article");
-    card.className = "host-card";
-    const rating = host.rating || emptyRating();
-    const initials = escapeHtml(host.displayName.slice(0, 2).toUpperCase());
-    const metricRows = metrics.map((metric) => `
-      <div class="rating-row">
-        <span>${metricLabels[metric]}</span>
-        <strong>${rating.metrics?.[metric] ? rating.metrics[metric].toFixed(1) : "--"}</strong>
-      </div>
-    `).join("");
+  const query = hostSearch.value.trim().toLowerCase();
+  const sortedHosts = [...state.hosts].sort((a, b) => {
+    const ratingDelta = (b.rating?.overall || 0) - (a.rating?.overall || 0);
+    if (ratingDelta !== 0) {
+      return ratingDelta;
+    }
+    const runDelta = (b.hostedRuns || 0) - (a.hostedRuns || 0);
+    if (runDelta !== 0) {
+      return runDelta;
+    }
+    return a.displayName.localeCompare(b.displayName);
+  });
+  const visibleHosts = sortedHosts
+    .filter((host) => showAllHosts.checked || host.hostedRuns > 0 || (host.rating?.reviewCount || 0) > 0)
+    .filter((host) => !query || host.displayName.toLowerCase().includes(query));
 
-    card.innerHTML = `
+  renderHostStats(sortedHosts);
+
+  if (!visibleHosts.length) {
+    const empty = document.createElement("p");
+    empty.className = "meta";
+    empty.textContent = showAllHosts.checked
+      ? "No hosts match that search."
+      : "No reviewed hosts yet. Toggle Show all synced hosts to browse the full role roster.";
+    hostGrid.appendChild(empty);
+    return;
+  }
+
+  visibleHosts.slice(0, showAllHosts.checked ? 40 : 12).forEach((host) => {
+    const row = document.createElement("article");
+    row.className = "host-row";
+    const rating = host.rating || emptyRating();
+    const initials = host.displayName.slice(0, 2).toUpperCase();
+    row.innerHTML = `
       <div class="host-card-head">
-        <div class="avatar">${initials}</div>
+        <div class="avatar">${escapeHtml(initials)}</div>
         <div>
           <h3>${escapeHtml(host.displayName)}</h3>
-          <p class="meta">${escapeHtml(host.status || "active")} host</p>
+          <p class="meta">${host.hostedRuns || 0} runs logged</p>
         </div>
       </div>
-      <div class="host-score">${rating.overall ? rating.overall.toFixed(2) : "--"}<span>/5</span></div>
-      <div class="stats">
-        <div class="stat"><span class="stat-label">Runs</span><span class="stat-value">${host.hostedRuns || 0}</span></div>
-        <div class="stat"><span class="stat-label">Reviews</span><span class="stat-value">${rating.reviewCount || 0}</span></div>
-        <div class="stat"><span class="stat-label">Replay</span><span class="stat-value">${rating.reviewCount ? `${rating.wouldReplayPercent}%` : "--"}</span></div>
+      <div class="host-row-metrics">
+        <span><strong>${rating.overall ? rating.overall.toFixed(2) : "--"}</strong> /5</span>
+        <span>${rating.reviewCount || 0} reviews</span>
+        <span>${rating.reviewCount ? `${rating.wouldReplayPercent}% replay` : "No replay data"}</span>
       </div>
-      <div class="rating-list">${metricRows}</div>
-      <div class="badge-row">${(host.specialties || []).map((item) => `<span class="badge">${escapeHtml(item)}</span>`).join("")}</div>
     `;
-    hostGrid.appendChild(card);
+    hostGrid.appendChild(row);
   });
+
+  if (visibleHosts.length > (showAllHosts.checked ? 40 : 12)) {
+    const note = document.createElement("p");
+    note.className = "meta";
+    note.textContent = `Showing ${showAllHosts.checked ? 40 : 12} of ${visibleHosts.length} matching hosts. Use search to narrow the list.`;
+    hostGrid.appendChild(note);
+  }
 };
 
 const renderSessions = () => {
@@ -468,6 +496,14 @@ logoutButton.addEventListener("click", async () => {
 
 playerSearch.addEventListener("input", () => {
   renderPlayerResults();
+});
+
+hostSearch.addEventListener("input", () => {
+  renderHosts();
+});
+
+showAllHosts.addEventListener("change", () => {
+  renderHosts();
 });
 
 syncPlayersButton.addEventListener("click", async () => {
