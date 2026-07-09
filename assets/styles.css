@@ -1763,8 +1763,16 @@ tr:nth-child(even) td {
 }
 
 .kofi-wrap {
+  display: inline-flex;
+  align-items: center;
   opacity: 0.6;
   transition: opacity 0.2s;
+}
+
+.kofi-wrap img {
+  display: block;
+  height: 28px;
+  width: auto;
 }
 
 .kofi-wrap:hover {
