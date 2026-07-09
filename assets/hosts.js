@@ -18,6 +18,7 @@ const hostProfileBackdrop = document.getElementById("host-profile-backdrop");
 const hostProfileContent = document.getElementById("host-profile-content");
 const hostProfileClose = document.getElementById("host-profile-close");
 const sessionTable = document.getElementById("session-table");
+const sessionActionsHead = document.getElementById("session-actions-head");
 const sessionCodeElement = document.getElementById("session-code");
 const playerSearch = document.getElementById("player-search");
 const syncPlayersButton = document.getElementById("sync-players");
@@ -95,6 +96,8 @@ const getUser = () => {
   }
   return null;
 };
+
+const canModerate = () => Boolean(authState.user?.isAdmin || authState.user?.isModerator);
 
 const setStatus = (message, tone = "ok") => {
   statusElement.textContent = message;
@@ -597,14 +600,15 @@ const renderHosts = () => {
 
 const renderSessions = () => {
   sessionTable.replaceChildren();
+  sessionActionsHead.hidden = !canModerate();
   if (!state.sessions.length) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td class="empty" colspan="8">No completed sessions logged yet.</td>`;
+    row.innerHTML = `<td class="empty" colspan="${canModerate() ? 9 : 8}">No completed sessions logged yet.</td>`;
     sessionTable.appendChild(row);
     return;
   }
 
-  state.sessions.slice(0, 20).forEach((session) => {
+  state.sessions.slice(0, canModerate() ? 100 : 20).forEach((session) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td><strong>${escapeHtml(session.code)}</strong></td>
@@ -615,6 +619,7 @@ const renderSessions = () => {
       <td>${escapeHtml(session.playerCount)}</td>
       <td>${Array.isArray(session.loggedPlayers) && session.loggedPlayers.length ? session.loggedPlayers.map((player) => escapeHtml(player.displayName)).join(", ") : "--"}</td>
       <td>${formatDate(session.expiresAt)}</td>
+      ${canModerate() ? `<td><button class="button danger small session-delete" type="button" data-session-id="${escapeHtml(session.id)}">Delete</button></td>` : ""}
     `;
     sessionTable.appendChild(row);
   });
@@ -717,6 +722,14 @@ const ensureHostUser = () => {
   return user;
 };
 
+const ensureHostOrAdminUser = () => {
+  const user = ensureUser();
+  if (authState.configured && !user.isHost && !user.isAdmin) {
+    throw new Error("Discord Host or Admin role required.");
+  }
+  return user;
+};
+
 logoutButton.addEventListener("click", async () => {
   try {
     await safeFetch("/auth/logout", { method: "POST" });
@@ -757,7 +770,7 @@ document.addEventListener("keydown", (event) => {
 
 syncPlayersButton.addEventListener("click", async () => {
   try {
-    ensureHostUser();
+    ensureHostOrAdminUser();
     syncPlayersButton.disabled = true;
     syncPlayersButton.textContent = "Syncing...";
     const data = await safeFetch("/discord/sync-members", { method: "POST" });
@@ -770,6 +783,32 @@ syncPlayersButton.addEventListener("click", async () => {
   } finally {
     syncPlayersButton.disabled = false;
     syncPlayersButton.textContent = "Sync Discord Players";
+  }
+});
+
+sessionTable.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-session-id]");
+  if (!button) {
+    return;
+  }
+  const session = state.sessions.find((entry) => entry.id === button.dataset.sessionId);
+  if (!session) {
+    return;
+  }
+  const confirmed = window.confirm(`Delete test run ${session.code} by ${session.hostName}? This also removes attached claims and reviews.`);
+  if (!confirmed) {
+    return;
+  }
+  try {
+    button.disabled = true;
+    button.textContent = "Deleting...";
+    await safeFetch(`/host-sessions/${encodeURIComponent(session.id)}`, { method: "DELETE" });
+    await loadState();
+    setStatus(`Deleted test run ${session.code}.`);
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Delete";
+    setStatus(error.message, "error");
   }
 });
 

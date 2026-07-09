@@ -1083,6 +1083,12 @@ pre {
   border-color: rgba(30, 111, 112, 0.2);
 }
 
+.button.danger {
+  background: rgba(186, 58, 38, 0.1);
+  color: #651c11;
+  border-color: rgba(186, 58, 38, 0.28);
+}
+
 .button:hover {
   background: var(--accent-strong);
   transform: translateY(-1px);
@@ -1104,6 +1110,12 @@ pre {
 .button.tertiary:hover {
   background: rgba(30, 111, 112, 0.2);
   box-shadow: none;
+}
+
+.button.danger:hover {
+  background: #ba3a26;
+  color: #fff8f0;
+  box-shadow: 0 12px 24px rgba(186, 58, 38, 0.22);
 }
 
 .button:focus-visible,

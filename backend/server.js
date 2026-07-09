@@ -263,6 +263,18 @@ const assertUser = (req, res) => {
   return user;
 };
 
+const assertModerator = (req, res) => {
+  const user = assertUser(req, res);
+  if (!user) {
+    return null;
+  }
+  if (!user.isAdmin && !user.isModerator) {
+    res.status(403).json({ error: "Discord Moderator or Admin role required" });
+    return null;
+  }
+  return user;
+};
+
 const sanitizeText = (value, fallback = "") => String(value ?? fallback).trim().slice(0, 400);
 
 const normalizeDiscordId = (value) => {
@@ -729,6 +741,47 @@ app.post("/host-sessions", async (req, res) => {
   });
   await writeHostData(data);
   res.status(201).json({ session, host: { ...host, hostedRuns: 1, rating: getHostAverage(host.id, data.reviews) } });
+});
+
+app.delete("/host-sessions/:sessionId", async (req, res) => {
+  const user = assertModerator(req, res);
+  if (!user) {
+    return;
+  }
+
+  const data = await readHostData();
+  const sessionId = sanitizeText(req.params.sessionId);
+  const session = data.sessions.find((entry) => entry.id === sessionId);
+  if (!session) {
+    return res.status(404).json({ error: "Session not found" });
+  }
+
+  const before = {
+    sessions: data.sessions.length,
+    participants: data.participants.length,
+    reviews: data.reviews.length,
+  };
+  data.sessions = data.sessions.filter((entry) => entry.id !== sessionId);
+  data.participants = data.participants.filter((entry) => entry.sessionId !== sessionId);
+  data.reviews = data.reviews.filter((entry) => entry.sessionId !== sessionId);
+  data.syncMeta = {
+    ...(data.syncMeta || {}),
+    lastModerationAt: new Date().toISOString(),
+    lastModerationBy: user.discordId,
+    lastModerationAction: "delete-session",
+    lastModerationTarget: sessionId,
+  };
+  await writeHostData(data);
+
+  res.status(200).json({
+    ok: true,
+    deleted: {
+      session,
+      sessions: before.sessions - data.sessions.length,
+      participants: before.participants - data.participants.length,
+      reviews: before.reviews - data.reviews.length,
+    },
+  });
 });
 
 app.post("/host-sessions/claim", async (req, res) => {
