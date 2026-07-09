@@ -1,5 +1,7 @@
 # MTGR-Frontend
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U0D81ZUOGR)
+
 Frontend for the MTGR webpage, packaged as a lightweight Unraid-friendly Docker
 container. The container serves a static page and proxies `/api` to
 `https://api.mtginfo.org` so the frontend and API stay on the same domain when
