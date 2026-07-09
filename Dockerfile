@@ -7,6 +7,7 @@ ENV LEADERBOARD_SHEET_GID=0
 COPY default.conf.template /etc/nginx/templates/default.conf.template
 COPY index.html /usr/share/nginx/html/index.html
 COPY leaderboard.html /usr/share/nginx/html/leaderboard.html
+COPY hosts.html /usr/share/nginx/html/hosts.html
 COPY api-status.html /usr/share/nginx/html/api-status.html
 COPY rules.html /usr/share/nginx/html/rules.html
 COPY scryfall.html /usr/share/nginx/html/scryfall.html

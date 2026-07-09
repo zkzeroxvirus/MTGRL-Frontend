@@ -1,41 +1,44 @@
 services:
   backend:
     build: ./backend
-    image: mtgr-leaderboard-backend:local
-    container_name: MTGR-Backend
+    image: mtgr-leaderboard-backend:dev
+    container_name: MTGR-Backend-Dev
     environment:
       LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
       LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-202072059}"
-      GOOGLE_APPLICATION_CREDENTIALS: "/app/service_account.json"
+      GOOGLE_APPLICATION_CREDENTIALS: "${GOOGLE_APPLICATION_CREDENTIALS:-/app/service_account.json}"
       PUBLIC_BASE_URL: "${PUBLIC_BASE_URL:-http://localhost:8080}"
       DISCORD_CLIENT_ID: "${DISCORD_CLIENT_ID:-}"
       DISCORD_CLIENT_SECRET: "${DISCORD_CLIENT_SECRET:-}"
       DISCORD_REDIRECT_URI: "${DISCORD_REDIRECT_URI:-http://localhost:8080/auth/discord/callback}"
       DISCORD_GUILD_ID: "${DISCORD_GUILD_ID:-}"
       DISCORD_HOST_ROLE_ID: "${DISCORD_HOST_ROLE_ID:-}"
-      SESSION_SECRET: "${SESSION_SECRET:-}"
+      SESSION_SECRET: "${SESSION_SECRET:-dev-only-change-me}"
     volumes:
-      - ./backend/service_account.json:/app/service_account.json:ro
-      - ./backend/data:/app/data
+      - host-review-data-dev:/app/data
     networks:
-      - mtg-net
+      - mtgr-dev
+
   frontend:
     build: .
-    image: mtgr-frontend:local
-    container_name: MTGR-Frontend
+    image: mtgr-frontend:dev
+    container_name: MTGR-Frontend-Dev
     ports:
-      - "8080:80"
+      - "${FRONTEND_PORT:-8080}:80"
     environment:
-      API_BACKEND_URL: "${API_BACKEND_URL:-http://mtg-card-importer:3000}"
+      API_BACKEND_URL: "${API_BACKEND_URL:-https://api.mtginfo.org}"
       LEADERBOARD_SHEET_ID: "${LEADERBOARD_SHEET_ID:-15lRLvnGZCEnQrMAk7dDHRmMcobKFelYarlXns7KN7QQ}"
       LEADERBOARD_SHEET_GID: "${LEADERBOARD_SHEET_GID:-202072059}"
     depends_on:
       - backend
     networks:
-      mtg-net:
+      mtgr-dev:
         aliases:
-          - MTGRL-Frontend
+          - MTGRL-Frontend-Dev
 
 networks:
-  mtg-net:
-    external: true
+  mtgr-dev:
+    name: mtgr-dev
+
+volumes:
+  host-review-data-dev:

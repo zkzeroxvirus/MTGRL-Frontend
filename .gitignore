@@ -1,1 +1,7 @@
 backend/service_account.json
+backend/node_modules/
+backend/data/
+.env
+.env.*
+!.env.dev.example
+!.env.prod.example

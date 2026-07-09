@@ -20,6 +20,7 @@
           <a href="index.html">Home</a>
           <a href="rules.html" aria-current="page">Rules</a>
           <a href="leaderboard.html">Leaderboard</a>
+          <a href="hosts.html">Hosts</a>
           <a href="api-status.html">API Status</a>
           <a href="scryfall.html">Card Spawner</a>
           <a class="nav-workshop" href="steam://openurl/https://steamcommunity.com/sharedfiles/filedetails/?id=3689679245" aria-label="Open Steam Workshop">
@@ -547,7 +548,7 @@
             <li><strong>🔧 The Device</strong> — Once per encounter: a party member may counter a spell they own. If they do, conjure 3 random spells. They may cast 1 of those spells for free. Exile the rest.</li>
             <li><strong>🪓 Garruk's Clipper</strong> — At the beginning of the party's upkeep, target creature the party controls gets +2/+0 and gains deathtouch and "Whenever this creature deals combat damage to a player, draw a card" until end of turn.</li>
             <li><strong>🔥 Torch</strong> — At the beginning of the party's upkeep, choose a party member. That player ventures into the dungeon.</li>
-            <li><strong>✨ Staff of Light</strong> — Exile Staff of Light: Counter target Doom card as it is being played. This ability can't be countered.</li>
+            <li><strong>✨ Staff of Light</strong> — Exile Staff of Light: Counter target Doom triggered ability. This ability can't be countered.</li>
             <li><strong>🍷 Jar of Wine</strong> — Jar of Wine enters the run with three wine counters on it. Remove a wine counter from Jar of Wine: You gain 7 life, then discard a card at random. If you discard a card this way, draw a card. Only a party member may activate this ability and only as a sorcery. When the last wine counter is removed from Jar of Wine, exile it.</li>
             <li><strong>🍯 Jar of Honey</strong> — Jar of Honey enters the run with two honey counters on it. Remove a honey counter from Jar of Honey: You gain 9 life and remove all poison counters from yourself. Only a party member may activate this ability and only as a sorcery. When the last honey counter is removed from Jar of Honey, exile it.</li>
             <li><strong>⛺ Tent</strong> — When the party chooses to stay out, each party member may trade up to two times, remove up to two cards from their deck, and sideboard up to six cards.</li>
@@ -857,13 +858,14 @@
           <div class="callout">
             <h3>How Doom Works</h3>
             <ul class="rule-list compact-list">
-              <li>Doom cards are drawn fresh at the start of each encounter. Each one is unique unless the card says otherwise.</li>
-              <li>Doom cards are tracked in a separate Doom hand/zone, not the Host's normal MTG hand.</li>
+              <li>Doom cards are drawn fresh at the start of each encounter and placed face down on the battlefield in the Host's Doom area. Each one is unique unless the card says otherwise.</li>
+              <li>Doom cards are not part of the Host's normal MTG hand.</li>
               <li>Doom cards do not count toward hand size limits.</li>
-              <li>The Host can trigger any number of Doom cards per turn — no limit unless a card specifies one.</li>
-              <li>When a Doom card triggers, resolve it and set it aside. It's out of the pool for the rest of this encounter.</li>
+              <li>The Host may turn 1 Doom card face up each turn unless a card says otherwise: 1 on a player turn and 1 on the Host turn.</li>
+              <li>Turning a Doom card face up is a special action. The turn-up action does not use the stack, but it causes the Doom card's triggered ability to trigger.</li>
+              <li>The Doom triggered ability goes on the stack and can be responded to as normal. After it resolves, set the Doom card aside; it's out of the pool for the rest of this encounter.</li>
               <li>Set-aside Doom cards rejoin the pool at the start of the next encounter.</li>
-              <li><strong>Reroll (once per Host turn):</strong> The Host can return any Doom cards from their Doom hand to the pool and draw the same number of new ones. Rerolled cards aren't triggered and can be redrawn. This can happen before or after triggering an effect.</li>
+              <li><strong>Reroll (once per Host turn):</strong> The Host can return any face-down Doom cards to the pool and draw the same number of new ones. Rerolled cards aren't triggered and can be redrawn. This can happen before or after turning a Doom card face up.</li>
             </ul>
           </div>
         </div>
@@ -1543,6 +1545,7 @@
           <nav class="footer-nav" aria-label="Footer">
             <a href="rules.html">Rules</a>
             <a href="leaderboard.html">Leaderboard</a>
+            <a href="hosts.html">Hosts</a>
             <a href="api-status.html">API Status</a>
             <a class="kofi-wrap" href="https://ko-fi.com/U0D81ZUOGR" target="_blank" rel="noopener noreferrer">Ko-fi</a>
           </nav>

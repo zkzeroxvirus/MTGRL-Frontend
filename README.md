@@ -21,6 +21,35 @@ In Unraid, add a new Docker template that maps port `8080` on the host to port
 docker compose up --build
 ```
 
+For local development without the external `mtg-net` Docker network, use the
+dev compose file instead:
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+If your Docker install uses the older Compose binary, use:
+
+```bash
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+Then open:
+
+```text
+http://localhost:8080
+```
+
+The dev compose file creates its own `mtgr-dev` network and stores Host Registry
+data in a named Docker volume.
+
+To test Discord login locally, copy `.env.dev.example` to `.env.dev`, fill in
+the Discord values, then run:
+
+```bash
+docker-compose --env-file .env.dev -f docker-compose.dev.yml up --build
+```
+
 Override defaults with environment variables as needed:
 
 ```bash
@@ -74,3 +103,48 @@ Visit `/leaderboard.html` to view live standings pulled from the shared Google
 Sheet. Ensure the sheet is publicly readable so the container can fetch it. The
 page expects standard Google Sheets CSV output (avoid multiline cells), and
 `LEADERBOARD_SHEET_ID` should be a valid sheet ID.
+
+## Host Reviews and Discord Login
+
+Visit `/hosts.html` to use the Host Registry. Discord OAuth is optional for
+local static preview, but production should configure it so session logging is
+limited to members with the Discord Host role.
+
+Create an application in the Discord Developer Portal, then add this redirect:
+
+```text
+https://your-domain.example/auth/discord/callback
+```
+
+For the live MTG Info domain, use:
+
+```text
+https://www.mtginfo.org/auth/discord/callback
+```
+
+For local Docker testing, use:
+
+```text
+http://localhost:8080/auth/discord/callback
+```
+
+If clicking Login returns to `/hosts.html?auth=not-configured`, the backend did
+not receive `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, and `SESSION_SECRET`.
+Use the `.env.dev` command above and rebuild the containers.
+
+Set these environment variables on the `backend` service:
+
+```bash
+PUBLIC_BASE_URL=https://your-domain.example
+DISCORD_CLIENT_ID=your_discord_app_client_id
+DISCORD_CLIENT_SECRET=your_discord_app_client_secret
+DISCORD_REDIRECT_URI=https://your-domain.example/auth/discord/callback
+DISCORD_GUILD_ID=your_server_id
+DISCORD_HOST_ROLE_ID=your_host_role_id
+SESSION_SECRET=a_long_random_secret
+```
+
+The OAuth flow requests `identify` and, when `DISCORD_GUILD_ID` is set,
+`guilds.members.read`. The backend stores a signed HttpOnly session cookie and
+uses the configured Host role to decide who can create completed-session review
+codes. Any signed-in Discord user can claim a valid session code and review it.
