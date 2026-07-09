@@ -159,6 +159,9 @@ moderation tools. Admins are treated as moderators, and admins can also run the
 Discord member sync. Hosts should not moderate reviews about themselves.
 On `/hosts.html`, moderators and admins can delete test sessions from the recent
 sessions table. Deleting a session also removes its attached claims and reviews.
+Session rows are clickable; the session profile shows listed players, claims,
+and each player review. Moderators can hide or restore individual reviews and
+exclude or include verified reviews from the numeric rating.
 
 For player autocomplete, add a bot to the same Discord application or use an
 existing bot token. The bot must be in the server and able to read guild members.

@@ -62,6 +62,7 @@ let state = {
 let claimedSession = null;
 let selectedPlayers = [];
 let selectedHostId = null;
+let selectedSessionId = null;
 let authState = {
   configured: false,
   guildRoleCheckConfigured: false,
@@ -168,9 +169,11 @@ const loadAuth = async () => {
 };
 
 const calculateRating = (hostId, reviews) => {
-  const allHostReviews = reviews.filter((review) => review.hostId === hostId);
+  const allHostReviews = reviews.filter((review) => review.hostId === hostId && review.status !== "hidden");
   const hostReviews = allHostReviews.filter((review) => (
-    (review.reviewType || "verified") === "verified" && review.countsTowardRating !== false
+    review.status !== "hidden"
+    && (review.reviewType || "verified") === "verified"
+    && review.countsTowardRating !== false
   ));
   if (!hostReviews.length) {
     return emptyRating();
@@ -270,9 +273,24 @@ const getHostProfileData = (hostId) => {
     .filter((session) => session.hostId === hostId)
     .sort((a, b) => new Date(b.runDate || b.createdAt || 0) - new Date(a.runDate || a.createdAt || 0));
   const reviews = state.reviews
-    .filter((review) => review.hostId === hostId)
+    .filter((review) => review.hostId === hostId && (review.status !== "hidden" || canModerate()))
     .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   return { host, sessions, reviews };
+};
+
+const getSessionProfileData = (sessionId) => {
+  const session = state.sessions.find((entry) => entry.id === sessionId);
+  if (!session) {
+    return null;
+  }
+  const host = state.hosts.find((entry) => entry.id === session.hostId);
+  const reviews = state.reviews
+    .filter((review) => review.sessionId === sessionId)
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  const participants = state.participants
+    .filter((participant) => participant.sessionId === sessionId)
+    .sort((a, b) => String(a.role || "").localeCompare(String(b.role || "")));
+  return { session, host, reviews, participants };
 };
 
 const reviewShortLabel = (review) => {
@@ -286,8 +304,19 @@ const reviewShortLabel = (review) => {
   return "Verified";
 };
 
+const reviewStatusLabel = (review) => {
+  if (review.status === "hidden") {
+    return "Hidden";
+  }
+  if (review.countsTowardRating === false) {
+    return "Excluded";
+  }
+  return "Visible";
+};
+
 const closeHostProfile = () => {
   selectedHostId = null;
+  selectedSessionId = null;
   hostProfileBackdrop.hidden = true;
   document.body.classList.remove("has-open-modal");
 };
@@ -389,7 +418,131 @@ const renderHostProfile = () => {
 
 const openHostProfile = (hostId) => {
   selectedHostId = hostId;
+  selectedSessionId = null;
   renderHostProfile();
+  hostProfileBackdrop.hidden = false;
+  document.body.classList.add("has-open-modal");
+  hostProfileClose.focus();
+};
+
+const sessionPlayersMarkup = (session) => {
+  if (!Array.isArray(session.loggedPlayers) || !session.loggedPlayers.length) {
+    return `<p class="meta">No players were listed by the host.</p>`;
+  }
+  return session.loggedPlayers.map((player) => `
+    <span class="player-chip session-player-chip">${escapeHtml(player.displayName)}</span>
+  `).join("");
+};
+
+const sessionParticipantsMarkup = (participants) => {
+  if (!participants.length) {
+    return `<p class="meta">No claims or participant records yet.</p>`;
+  }
+  return participants.map((participant) => `
+    <div class="profile-session-row">
+      <strong>${escapeHtml(participant.displayName || "Unknown")}</strong>
+      <span>${escapeHtml(participant.role || "participant")}</span>
+      <span>${escapeHtml(participant.reviewType || participant.participantStatus || "--")}</span>
+    </div>
+  `).join("");
+};
+
+const reviewMetricsMarkup = (review) => metrics.map((metric) => `
+  <span>${metricLabels[metric]} <strong>${Number(review.ratings?.[metric] || 0) || "--"}</strong></span>
+`).join("");
+
+const reviewModerationButtons = (review) => {
+  if (!canModerate()) {
+    return "";
+  }
+  const isHidden = review.status === "hidden";
+  const isVerified = (review.reviewType || "verified") === "verified";
+  const canCount = isVerified && review.countsTowardRating !== false;
+  return `
+    <div class="profile-actions">
+      <button class="button ${isHidden ? "secondary" : "danger"} small" type="button" data-review-id="${escapeHtml(review.id)}" data-review-action="${isHidden ? "restore" : "hide"}">${isHidden ? "Restore" : "Hide"}</button>
+      ${isVerified ? `<button class="button secondary small" type="button" data-review-id="${escapeHtml(review.id)}" data-review-action="${canCount ? "exclude" : "include"}">${canCount ? "Exclude Rating" : "Include Rating"}</button>` : ""}
+    </div>
+  `;
+};
+
+const renderSessionProfile = () => {
+  const profile = getSessionProfileData(selectedSessionId);
+  if (!profile) {
+    closeHostProfile();
+    return;
+  }
+
+  const { session, reviews, participants } = profile;
+  const verifiedReviews = reviews.filter((review) => (review.reviewType || "verified") === "verified");
+  const countedReviews = verifiedReviews.filter((review) => review.status !== "hidden" && review.countsTowardRating !== false);
+  const hiddenReviews = reviews.filter((review) => review.status === "hidden");
+  const reviewMarkup = reviews.length
+    ? reviews.map((review) => `
+      <article class="profile-feedback ${review.status === "hidden" ? "is-hidden-review" : ""}">
+        <div>
+          <strong>${escapeHtml(review.reviewerName || "Player")}</strong>
+          <span class="host-badge">${escapeHtml(reviewShortLabel(review))}</span>
+          <span class="host-badge">${escapeHtml(reviewStatusLabel(review))}</span>
+        </div>
+        <p>${escapeHtml(review.comment || "No written comment.")}</p>
+        <div class="review-metric-pills">${reviewMetricsMarkup(review)}</div>
+        <small>${averageReviewRating(review) || "--"} /5 average &middot; ${formatDate(review.createdAt)}${review.wouldReplay ? " &middot; would replay" : ""}</small>
+        ${review.moderationReason ? `<small>Last moderation note: ${escapeHtml(review.moderationReason)}</small>` : ""}
+        ${reviewModerationButtons(review)}
+      </article>
+    `).join("")
+    : `<p class="meta">No reviews have been submitted for this session.</p>`;
+
+  hostProfileContent.innerHTML = `
+    <div class="profile-hero">
+      <div class="avatar profile-avatar">${escapeHtml(session.hostName?.slice(0, 2).toUpperCase() || "MT")}</div>
+      <div>
+        <span class="eyebrow">Session Profile</span>
+        <h2 id="host-profile-title">${escapeHtml(session.code)}</h2>
+        <p>${escapeHtml(session.hostName)} &middot; ${formatDate(session.runDate)} &middot; ${escapeHtml(session.mode)}</p>
+      </div>
+      <div class="profile-score">
+        <strong>${reviews.length}</strong>
+        <span>reviews</span>
+      </div>
+    </div>
+    <div class="profile-stat-grid">
+      <div class="stat"><span class="stat-label">Players</span><span class="stat-value">${escapeHtml(session.playerCount)}</span></div>
+      <div class="stat"><span class="stat-label">Counted</span><span class="stat-value">${countedReviews.length}</span></div>
+      <div class="stat"><span class="stat-label">Hidden</span><span class="stat-value">${hiddenReviews.length}</span></div>
+    </div>
+    <div class="profile-grid">
+      <section class="profile-panel">
+        <h3>Session Details</h3>
+        <div class="key-values">
+          <div class="key-value"><span class="key">Outcome</span><span class="value">${escapeHtml(session.outcome)}${session.cryptReached ? " + Crypt" : ""}</span></div>
+          <div class="key-value"><span class="key">Expires</span><span class="value">${formatDate(session.expiresAt)}</span></div>
+          <div class="key-value"><span class="key">Created</span><span class="value">${formatDate(session.createdAt)}</span></div>
+        </div>
+        ${session.notes ? `<p>${escapeHtml(session.notes)}</p>` : `<p class="meta">No session notes.</p>`}
+        ${canModerate() ? `<button class="button danger small" type="button" data-session-id="${escapeHtml(session.id)}">Delete Session</button>` : ""}
+      </section>
+      <section class="profile-panel">
+        <h3>Listed Players</h3>
+        <div class="selected-players">${sessionPlayersMarkup(session)}</div>
+      </section>
+      <section class="profile-panel">
+        <h3>Claims</h3>
+        <div class="profile-session-list">${sessionParticipantsMarkup(participants)}</div>
+      </section>
+      <section class="profile-panel profile-panel-wide">
+        <h3>Player Reviews</h3>
+        <div class="profile-feedback-list">${reviewMarkup}</div>
+      </section>
+    </div>
+  `;
+};
+
+const openSessionProfile = (sessionId) => {
+  selectedSessionId = sessionId;
+  selectedHostId = null;
+  renderSessionProfile();
   hostProfileBackdrop.hidden = false;
   document.body.classList.add("has-open-modal");
   hostProfileClose.focus();
@@ -610,6 +763,11 @@ const renderSessions = () => {
 
   state.sessions.slice(0, canModerate() ? 100 : 20).forEach((session) => {
     const row = document.createElement("tr");
+    row.className = "session-row";
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
+    row.setAttribute("aria-label", `Open session ${session.code}`);
+    row.dataset.sessionProfileId = session.id;
     row.innerHTML = `
       <td><strong>${escapeHtml(session.code)}</strong></td>
       <td>${escapeHtml(session.hostName)}</td>
@@ -621,6 +779,12 @@ const renderSessions = () => {
       <td>${formatDate(session.expiresAt)}</td>
       ${canModerate() ? `<td><button class="button danger small session-delete" type="button" data-session-id="${escapeHtml(session.id)}">Delete</button></td>` : ""}
     `;
+    row.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openSessionProfile(session.id);
+      }
+    });
     sessionTable.appendChild(row);
   });
 };
@@ -687,8 +851,12 @@ const render = () => {
   renderSessions();
   renderUser();
   renderPlayerPicker();
-  if (selectedHostId && !hostProfileBackdrop.hidden) {
-    renderHostProfile();
+  if (!hostProfileBackdrop.hidden) {
+    if (selectedHostId) {
+      renderHostProfile();
+    } else if (selectedSessionId) {
+      renderSessionProfile();
+    }
   }
 };
 
@@ -786,12 +954,8 @@ syncPlayersButton.addEventListener("click", async () => {
   }
 });
 
-sessionTable.addEventListener("click", async (event) => {
-  const button = event.target.closest("[data-session-id]");
-  if (!button) {
-    return;
-  }
-  const session = state.sessions.find((entry) => entry.id === button.dataset.sessionId);
+const deleteSession = async (sessionId, button = null) => {
+  const session = state.sessions.find((entry) => entry.id === sessionId);
   if (!session) {
     return;
   }
@@ -800,15 +964,61 @@ sessionTable.addEventListener("click", async (event) => {
     return;
   }
   try {
-    button.disabled = true;
-    button.textContent = "Deleting...";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Deleting...";
+    }
     await safeFetch(`/host-sessions/${encodeURIComponent(session.id)}`, { method: "DELETE" });
+    closeHostProfile();
     await loadState();
     setStatus(`Deleted test run ${session.code}.`);
   } catch (error) {
-    button.disabled = false;
-    button.textContent = "Delete";
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Delete";
+    }
     setStatus(error.message, "error");
+  }
+};
+
+sessionTable.addEventListener("click", async (event) => {
+  const deleteButton = event.target.closest("[data-session-id]");
+  if (deleteButton) {
+    await deleteSession(deleteButton.dataset.sessionId, deleteButton);
+    return;
+  }
+  const row = event.target.closest("[data-session-profile-id]");
+  if (row) {
+    openSessionProfile(row.dataset.sessionProfileId);
+  }
+});
+
+hostProfileContent.addEventListener("click", async (event) => {
+  const reviewButton = event.target.closest("[data-review-action]");
+  if (reviewButton) {
+    try {
+      reviewButton.disabled = true;
+      const data = await safeFetch(`/host-reviews/${encodeURIComponent(reviewButton.dataset.reviewId)}/moderate`, {
+        method: "POST",
+        body: JSON.stringify({ action: reviewButton.dataset.reviewAction }),
+      });
+      state.hosts = data.hosts || state.hosts;
+      await loadState();
+      selectedSessionId = selectedSessionId || state.reviews.find((review) => review.id === data.review?.id)?.sessionId || null;
+      if (selectedSessionId) {
+        renderSessionProfile();
+      }
+      setStatus(`Review ${reviewButton.dataset.reviewAction} complete.`);
+    } catch (error) {
+      reviewButton.disabled = false;
+      setStatus(error.message, "error");
+    }
+    return;
+  }
+
+  const sessionButton = event.target.closest("[data-session-id]");
+  if (sessionButton) {
+    await deleteSession(sessionButton.dataset.sessionId, sessionButton);
   }
 });
 

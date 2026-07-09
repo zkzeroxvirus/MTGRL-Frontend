@@ -49,7 +49,9 @@ const metricWeights = {
 const reviewTypes = new Set(["verified", "partial", "unlisted"]);
 
 const countedReviews = (reviews) => reviews.filter((review) => (
-  (review.reviewType || "verified") === "verified" && review.countsTowardRating !== false
+  review.status !== "hidden"
+  && (review.reviewType || "verified") === "verified"
+  && review.countsTowardRating !== false
 ));
 
 const defaultHostData = {
@@ -385,7 +387,7 @@ const syncDiscordMembers = async () => {
 };
 
 const getHostAverage = (hostId, reviews) => {
-  const allHostReviews = reviews.filter((review) => review.hostId === hostId);
+  const allHostReviews = reviews.filter((review) => review.hostId === hostId && review.status !== "hidden");
   const hostReviews = countedReviews(allHostReviews);
   if (!hostReviews.length) {
     return {
@@ -604,13 +606,18 @@ app.get("/leaderboard-data", async (req, res) => {
 app.get("/host-data", async (req, res) => {
   try {
     const data = await readHostData();
+    const user = getSessionUser(req);
+    const canModerateHostData = Boolean(user?.isAdmin || user?.isModerator);
+    const reviews = canModerateHostData
+      ? data.reviews
+      : data.reviews.filter((review) => review.status !== "hidden");
     res.status(200).json({
       hosts: buildHostSummary(data),
       players: buildKnownPlayers(data),
       syncMeta: data.syncMeta || {},
       sessions: data.sessions.slice(-100).reverse(),
       participants: data.participants,
-      reviews: data.reviews.slice(-200).reverse(),
+      reviews: reviews.slice(-200).reverse(),
       metrics: ratingMetrics,
       weights: metricWeights,
     });
@@ -899,6 +906,7 @@ app.post("/host-reviews", async (req, res) => {
     participantStatus: normalizeParticipantStatus(participant.participantStatus),
     wasListed: participant.wasListed !== false,
     countsTowardRating: (participant.reviewType || "verified") === "verified",
+    status: "visible",
     ratings,
     wouldReplay: Boolean(req.body?.wouldReplay),
     comment: sanitizeText(req.body?.comment),
@@ -908,6 +916,61 @@ app.post("/host-reviews", async (req, res) => {
   data.reviews.push(review);
   await writeHostData(data);
   res.status(201).json({ review, hosts: buildHostSummary(data) });
+});
+
+app.post("/host-reviews/:reviewId/moderate", async (req, res) => {
+  const user = assertModerator(req, res);
+  if (!user) {
+    return;
+  }
+
+  const action = sanitizeText(req.body?.action);
+  if (!["hide", "restore", "exclude", "include"].includes(action)) {
+    return res.status(400).json({ error: "Invalid moderation action" });
+  }
+
+  const data = await readHostData();
+  const review = data.reviews.find((entry) => entry.id === sanitizeText(req.params.reviewId));
+  if (!review) {
+    return res.status(404).json({ error: "Review not found" });
+  }
+
+  if (action === "hide") {
+    review.status = "hidden";
+  } else if (action === "restore") {
+    review.status = "visible";
+  } else if (action === "exclude") {
+    review.countsTowardRating = false;
+  } else if (action === "include") {
+    if ((review.reviewType || "verified") !== "verified") {
+      return res.status(400).json({ error: "Only verified reviews can count toward ratings" });
+    }
+    review.countsTowardRating = true;
+  }
+
+  const entry = {
+    action,
+    at: new Date().toISOString(),
+    byDiscordId: user.discordId,
+    byName: user.displayName,
+    reason: sanitizeText(req.body?.reason),
+  };
+  review.moderatedAt = entry.at;
+  review.moderatedBy = user.discordId;
+  review.moderationReason = entry.reason;
+  review.moderationHistory = Array.isArray(review.moderationHistory)
+    ? [...review.moderationHistory, entry].slice(-20)
+    : [entry];
+  data.syncMeta = {
+    ...(data.syncMeta || {}),
+    lastModerationAt: entry.at,
+    lastModerationBy: user.discordId,
+    lastModerationAction: `review-${action}`,
+    lastModerationTarget: review.id,
+  };
+
+  await writeHostData(data);
+  res.status(200).json({ review, hosts: buildHostSummary(data) });
 });
 
 app.get("/health", (req, res) => {

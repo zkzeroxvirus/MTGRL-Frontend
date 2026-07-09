@@ -737,6 +737,10 @@ textarea.search-input {
   gap: 12px;
 }
 
+.profile-panel-wide {
+  grid-column: 1 / -1;
+}
+
 .profile-panel {
   display: grid;
   align-content: start;
@@ -810,6 +814,14 @@ textarea.search-input {
   border-bottom: 1px solid rgba(28, 31, 36, 0.08);
 }
 
+.profile-feedback.is-hidden-review {
+  opacity: 0.72;
+  background: rgba(186, 58, 38, 0.06);
+  border: 1px solid rgba(186, 58, 38, 0.16);
+  border-radius: 12px;
+  padding: 10px;
+}
+
 .profile-feedback:last-child {
   border-bottom: 0;
   padding-bottom: 0;
@@ -820,6 +832,28 @@ textarea.search-input {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.profile-actions,
+.review-metric-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.review-metric-pills span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  background: rgba(28, 31, 36, 0.06);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 4px 8px;
+}
+
+.review-metric-pills strong {
+  color: #1c1f24;
 }
 
 .profile-session-row {
@@ -1451,6 +1485,19 @@ th {
 
 tr:nth-child(even) td {
   background: rgba(244, 237, 225, 0.6);
+}
+
+.session-row {
+  cursor: pointer;
+}
+
+.session-row:hover td {
+  background: rgba(211, 79, 42, 0.08);
+}
+
+.session-row:focus-visible {
+  outline: 3px solid rgba(211, 79, 42, 0.28);
+  outline-offset: -3px;
 }
 
 .leaderboard-row:hover td {
