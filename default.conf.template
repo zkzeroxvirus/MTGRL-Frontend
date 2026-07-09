@@ -36,7 +36,7 @@ server {
     proxy_set_header X-Forwarded-Proto $scheme;
   }
 
-  location ~ ^/(host-data|host-sessions|host-reviews|auth/) {
+  location ~ ^/(host-data|host-sessions|host-reviews|discord/|auth/) {
     add_header Cache-Control "no-store" always;
     proxy_pass http://backend:3000;
     proxy_set_header X-Real-IP $remote_addr;

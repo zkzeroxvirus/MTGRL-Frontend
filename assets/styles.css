@@ -449,6 +449,71 @@ textarea.search-input {
   gap: 12px;
 }
 
+.player-picker {
+  gap: 10px;
+}
+
+.player-picker-tools {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+
+.selected-players,
+.player-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.player-results {
+  align-items: stretch;
+}
+
+.player-chip,
+.player-result {
+  border: 1px solid rgba(28, 31, 36, 0.16);
+  background: #fffaf2;
+  color: #1c1f24;
+  font: inherit;
+}
+
+.player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.player-chip strong {
+  color: var(--muted);
+}
+
+.player-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.player-result:hover,
+.player-chip:hover {
+  border-color: rgba(211, 79, 42, 0.35);
+  background: rgba(211, 79, 42, 0.08);
+}
+
+.player-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  font-size: 0.72rem;
+}
+
 .code-input {
   text-transform: uppercase;
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -1431,6 +1496,10 @@ tr:nth-child(even) td {
 
   .rating-field span {
     grid-column: 1 / -1;
+  }
+
+  .player-picker-tools {
+    grid-template-columns: 1fr;
   }
 
   table {

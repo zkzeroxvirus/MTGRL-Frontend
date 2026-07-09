@@ -13,6 +13,8 @@ services:
       DISCORD_REDIRECT_URI: "${DISCORD_REDIRECT_URI:-http://localhost:8080/auth/discord/callback}"
       DISCORD_GUILD_ID: "${DISCORD_GUILD_ID:-}"
       DISCORD_HOST_ROLE_ID: "${DISCORD_HOST_ROLE_ID:-}"
+      DISCORD_PLAYER_ROLE_ID: "${DISCORD_PLAYER_ROLE_ID:-}"
+      DISCORD_BOT_TOKEN: "${DISCORD_BOT_TOKEN:-}"
       SESSION_SECRET: "${SESSION_SECRET:-dev-only-change-me}"
     volumes:
       - host-review-data-dev:/app/data

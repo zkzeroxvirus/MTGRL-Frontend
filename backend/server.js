@@ -18,6 +18,8 @@ const discordClientSecret = process.env.DISCORD_CLIENT_SECRET || "";
 const discordRedirectUri = process.env.DISCORD_REDIRECT_URI || `${publicBaseUrl}/auth/discord/callback`;
 const discordGuildId = process.env.DISCORD_GUILD_ID || "";
 const discordHostRoleId = process.env.DISCORD_HOST_ROLE_ID || "";
+const discordPlayerRoleId = process.env.DISCORD_PLAYER_ROLE_ID || "";
+const discordBotToken = process.env.DISCORD_BOT_TOKEN || "";
 const sessionSecret = process.env.SESSION_SECRET || "";
 const authConfigured = Boolean(discordClientId && discordClientSecret && sessionSecret);
 const discordApiBase = "https://discord.com/api/v10";
@@ -64,6 +66,8 @@ const defaultHostData = {
   sessions: [],
   participants: [],
   reviews: [],
+  users: [],
+  syncMeta: {},
 };
 
 const readHostData = async () => {
@@ -181,6 +185,19 @@ const discordFetch = async (route, accessToken) => {
   return data;
 };
 
+const discordBotFetch = async (route) => {
+  const response = await fetch(`${discordApiBase}${route}`, {
+    headers: {
+      Authorization: `Bot ${discordBotToken}`,
+    },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || `Discord bot API responded with ${response.status}`);
+  }
+  return data;
+};
+
 const exchangeDiscordCode = async (code) => {
   const response = await fetch(`${discordApiBase}/oauth2/token`, {
     method: "POST",
@@ -217,6 +234,7 @@ const getDiscordProfile = async (accessToken) => {
       : createAvatarUrl(user),
     roles,
     isHost: discordHostRoleId ? roles.includes(discordHostRoleId) : false,
+    isPlayer: discordPlayerRoleId ? roles.includes(discordPlayerRoleId) : true,
   };
 };
 
@@ -230,43 +248,14 @@ const normalizeSessionUser = (payload) => {
     avatarUrl: String(payload.avatarUrl || ""),
     roles: Array.isArray(payload.roles) ? payload.roles : [],
     isHost: Boolean(payload.isHost),
+    isPlayer: payload.isPlayer !== false,
     authProvider: payload.authProvider || "discord",
   };
 };
 
 const getSessionUser = (req) => normalizeSessionUser(readSignedToken(parseCookies(req).mtgr_session));
 
-const normalizeUser = (req) => {
-  const sessionUser = getSessionUser(req);
-  if (sessionUser) {
-    return sessionUser;
-  }
-  if (authConfigured) {
-    return null;
-  }
-  const rawUser = req.get("x-mtgr-user");
-  if (!rawUser) {
-    return null;
-  }
-  try {
-    const parsed = JSON.parse(rawUser);
-    const discordId = String(parsed.discordId || parsed.id || "").trim();
-    const displayName = String(parsed.displayName || parsed.username || "").trim();
-    if (!discordId || !displayName) {
-      return null;
-    }
-    return {
-      discordId,
-      displayName,
-      avatarUrl: String(parsed.avatarUrl || ""),
-      roles: [],
-      isHost: true,
-      authProvider: "local-dev",
-    };
-  } catch (error) {
-    return null;
-  }
-};
+const normalizeUser = (req) => getSessionUser(req);
 
 const assertUser = (req, res) => {
   const user = normalizeUser(req);
@@ -278,6 +267,104 @@ const assertUser = (req, res) => {
 };
 
 const sanitizeText = (value, fallback = "") => String(value ?? fallback).trim().slice(0, 400);
+
+const normalizeDiscordId = (value) => {
+  const text = String(value || "").trim();
+  const mentionMatch = text.match(/^<@!?(\d+)>$/);
+  const id = mentionMatch ? mentionMatch[1] : text.match(/\d{6,}/)?.[0];
+  return id || "";
+};
+
+const parseLoggedPlayers = (value) => {
+  const entries = Array.isArray(value)
+    ? value
+    : String(value || "").split(/\r?\n|,/).map((entry) => ({ raw: entry }));
+
+  const seen = new Set();
+  return entries
+    .map((entry) => {
+      const raw = typeof entry === "string" ? entry : entry.raw || entry.discordId || "";
+      const discordId = normalizeDiscordId(entry.discordId || raw);
+      if (!discordId || seen.has(discordId)) {
+        return null;
+      }
+      seen.add(discordId);
+      const rawName = typeof entry === "object" ? entry.displayName : "";
+      const displayName = sanitizeText(rawName || String(raw).replace(discordId, "").replace(/[<@!>]/g, "").trim(), "Unknown Player");
+      return { discordId, displayName };
+    })
+    .filter(Boolean)
+    .slice(0, 6);
+};
+
+const upsertKnownUser = (data, user) => {
+  if (!user?.discordId) {
+    return null;
+  }
+  const existing = data.users.find((entry) => entry.discordId === user.discordId);
+  const next = {
+    discordId: user.discordId,
+    displayName: sanitizeText(user.displayName, "Unknown Player"),
+    username: sanitizeText(user.username),
+    avatarUrl: String(user.avatarUrl || ""),
+    roles: Array.isArray(user.roles) ? user.roles : [],
+    isHost: Boolean(user.isHost),
+    isPlayer: user.isPlayer !== false,
+    lastSeenAt: new Date().toISOString(),
+  };
+  if (existing) {
+    Object.assign(existing, next);
+    return existing;
+  }
+  data.users.push(next);
+  return next;
+};
+
+const buildKnownPlayers = (data) => [...data.users]
+  .filter((user) => user.isPlayer)
+  .sort((a, b) => a.displayName.localeCompare(b.displayName))
+  .map((user) => ({
+    discordId: user.discordId,
+    displayName: user.displayName,
+    avatarUrl: user.avatarUrl || "",
+  }));
+
+const syncDiscordMembers = async () => {
+  if (!discordBotToken || !discordGuildId) {
+    throw new Error("DISCORD_BOT_TOKEN and DISCORD_GUILD_ID are required for member sync");
+  }
+
+  const members = [];
+  let after = "0";
+  while (true) {
+    const batch = await discordBotFetch(`/guilds/${discordGuildId}/members?limit=1000&after=${after}`);
+    if (!Array.isArray(batch) || !batch.length) {
+      break;
+    }
+    members.push(...batch);
+    after = batch[batch.length - 1]?.user?.id || after;
+    if (batch.length < 1000) {
+      break;
+    }
+  }
+
+  return members
+    .filter((member) => !member.user?.bot)
+    .map((member) => {
+      const roles = Array.isArray(member.roles) ? member.roles : [];
+      return {
+        discordId: member.user.id,
+        displayName: member.nick || member.user.global_name || member.user.username,
+        username: member.user.username,
+        avatarUrl: member.avatar
+          ? `https://cdn.discordapp.com/guilds/${discordGuildId}/users/${member.user.id}/avatars/${member.avatar}.png?size=128`
+          : createAvatarUrl(member.user),
+        roles,
+        isHost: discordHostRoleId ? roles.includes(discordHostRoleId) : false,
+        isPlayer: discordPlayerRoleId ? roles.includes(discordPlayerRoleId) : true,
+      };
+    });
+};
 
 const getHostAverage = (hostId, reviews) => {
   const hostReviews = reviews.filter((review) => review.hostId === hostId);
@@ -350,6 +437,7 @@ app.get("/auth/me", (req, res) => {
   res.status(200).json({
     configured: authConfigured,
     guildRoleCheckConfigured: Boolean(discordGuildId && discordHostRoleId),
+    playerRoleCheckConfigured: Boolean(discordGuildId && discordPlayerRoleId),
     user: getSessionUser(req),
   });
 });
@@ -397,6 +485,13 @@ app.get("/auth/discord/callback", async (req, res) => {
   try {
     const token = await exchangeDiscordCode(String(req.query.code));
     const profile = await getDiscordProfile(token.access_token);
+    try {
+      const data = await readHostData();
+      upsertKnownUser(data, profile);
+      await writeHostData(data);
+    } catch (profileError) {
+      console.error("Failed to store Discord profile", profileError);
+    }
     setCookie(res, "mtgr_session", createSignedToken({
       ...profile,
       authProvider: "discord",
@@ -449,6 +544,8 @@ app.get("/host-data", async (req, res) => {
     const data = await readHostData();
     res.status(200).json({
       hosts: buildHostSummary(data),
+      players: buildKnownPlayers(data),
+      syncMeta: data.syncMeta || {},
       sessions: data.sessions.slice(-20).reverse(),
       participants: data.participants,
       reviews: data.reviews.slice(-50).reverse(),
@@ -458,6 +555,59 @@ app.get("/host-data", async (req, res) => {
   } catch (error) {
     console.error("Failed to load host data", error);
     res.status(500).json({ error: "Failed to load host data" });
+  }
+});
+
+app.post("/discord/sync-members", async (req, res) => {
+  const user = assertUser(req, res);
+  if (!user) {
+    return;
+  }
+  if (discordHostRoleId && !user.isHost) {
+    return res.status(403).json({ error: "Discord Host role required to sync members" });
+  }
+
+  try {
+    const members = await syncDiscordMembers();
+    const data = await readHostData();
+    members.forEach((member) => upsertKnownUser(data, member));
+
+    const hostUsers = members.filter((member) => member.isHost);
+    hostUsers.forEach((hostUser) => {
+      let host = data.hosts.find((entry) => entry.discordId === hostUser.discordId);
+      if (!host) {
+        host = {
+          id: createId("host"),
+          discordId: hostUser.discordId,
+          displayName: hostUser.displayName,
+          avatarUrl: hostUser.avatarUrl,
+          status: "active",
+          specialties: [],
+        };
+        data.hosts.push(host);
+      } else {
+        host.displayName = hostUser.displayName;
+        host.avatarUrl = hostUser.avatarUrl;
+        host.status = "active";
+      }
+    });
+
+    data.syncMeta = {
+      ...(data.syncMeta || {}),
+      discordMembersSyncedAt: new Date().toISOString(),
+      discordMembersSyncedBy: user.discordId,
+      knownPlayerCount: buildKnownPlayers(data).length,
+      knownHostCount: data.hosts.filter((host) => host.status === "active").length,
+    };
+    await writeHostData(data);
+    res.status(200).json({
+      ok: true,
+      players: buildKnownPlayers(data),
+      syncMeta: data.syncMeta,
+    });
+  } catch (error) {
+    console.error("Discord member sync failed", error);
+    res.status(500).json({ error: error.message || "Discord member sync failed" });
   }
 });
 
@@ -501,6 +651,7 @@ app.post("/host-sessions", async (req, res) => {
     outcome: sanitizeText(req.body?.outcome, "completed"),
     cryptReached: Boolean(req.body?.cryptReached),
     playerCount: Math.max(1, Math.min(6, Number.parseInt(req.body?.playerCount || "1", 10) || 1)),
+    loggedPlayers: parseLoggedPlayers(req.body?.participants),
     notes: sanitizeText(req.body?.notes),
     createdAt: now,
     expiresAt: new Date(Date.now() + (72 * 60 * 60 * 1000)).toISOString(),
@@ -514,6 +665,17 @@ app.post("/host-sessions", async (req, res) => {
     displayName: user.displayName,
     role: "host",
     joinedAt: now,
+  });
+  session.loggedPlayers.forEach((player) => {
+    data.participants.push({
+      id: createId("participant"),
+      sessionId: session.id,
+      discordId: player.discordId,
+      displayName: player.displayName,
+      role: "logged-player",
+      loggedByDiscordId: user.discordId,
+      loggedAt: now,
+    });
   });
   await writeHostData(data);
   res.status(201).json({ session, host: { ...host, hostedRuns: 1, rating: getHostAverage(host.id, data.reviews) } });
@@ -537,6 +699,15 @@ app.post("/host-sessions/claim", async (req, res) => {
   if (session.hostDiscordId === user.discordId) {
     return res.status(400).json({ error: "Hosts are already attached to their own sessions" });
   }
+  if (discordPlayerRoleId && !user.isPlayer) {
+    return res.status(403).json({ error: "Discord Player role required to claim sessions" });
+  }
+  const loggedPlayerIds = Array.isArray(session.loggedPlayers)
+    ? session.loggedPlayers.map((player) => player.discordId)
+    : [];
+  if (loggedPlayerIds.length && !loggedPlayerIds.includes(user.discordId)) {
+    return res.status(403).json({ error: "This Discord account was not logged as a participant for this session" });
+  }
 
   let participant = data.participants.find(
     (entry) => entry.sessionId === session.id && entry.discordId === user.discordId,
@@ -551,8 +722,15 @@ app.post("/host-sessions/claim", async (req, res) => {
       joinedAt: new Date().toISOString(),
     };
     data.participants.push(participant);
+  } else if (participant.role === "logged-player") {
+    participant.role = "player";
+    participant.displayName = user.displayName;
+    participant.avatarUrl = user.avatarUrl;
+    participant.joinedAt = new Date().toISOString();
     await writeHostData(data);
+    return res.status(200).json({ session, participant });
   }
+  await writeHostData(data);
 
   res.status(200).json({ session, participant });
 });

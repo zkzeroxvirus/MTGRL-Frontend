@@ -63,18 +63,6 @@
               <button class="button secondary small" id="logout-button" type="button" hidden>Logout</button>
             </div>
           </div>
-          <form class="identity-panel" id="identity-form">
-            <label class="field">
-              <span>Display Name</span>
-              <input class="search-input" id="identity-name" name="displayName" autocomplete="nickname" required />
-            </label>
-            <label class="field">
-              <span>Discord ID or Handle</span>
-              <input class="search-input" id="identity-discord" name="discordId" autocomplete="username" required />
-            </label>
-            <button class="button small" type="submit">Use Identity</button>
-          </form>
-          <p class="meta" id="identity-note">Local identity appears only when Discord OAuth is not configured.</p>
         </div>
       </section>
 
@@ -115,6 +103,17 @@
               <input name="cryptReached" type="checkbox" />
               <span>Crypt was reached</span>
             </label>
+            <div class="field player-picker">
+              <span>Participating Players</span>
+              <div class="player-picker-tools">
+                <input class="search-input" id="player-search" type="search" placeholder="Search synced Discord players" autocomplete="off" />
+                <button class="button secondary small" id="sync-players" type="button">Sync Discord Players</button>
+              </div>
+              <div class="selected-players" id="selected-players" aria-live="polite"></div>
+              <div class="player-results" id="player-results"></div>
+              <input id="participants-value" name="participants" type="hidden" />
+            </div>
+            <p class="meta" id="player-sync-meta">Sync Discord players to enable autocomplete. Selected players are the only accounts that can claim the review code.</p>
             <label class="field">
               <span>Session Notes</span>
               <textarea class="search-input" name="notes" rows="3" placeholder="Optional table context"></textarea>
@@ -175,6 +174,7 @@
                 <th>Mode</th>
                 <th>Outcome</th>
                 <th>Players</th>
+                <th>Logged</th>
                 <th>Expires</th>
               </tr>
             </thead>

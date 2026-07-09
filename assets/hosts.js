@@ -4,10 +4,6 @@ const authName = document.getElementById("auth-name");
 const authRole = document.getElementById("auth-role");
 const discordLogin = document.getElementById("discord-login");
 const logoutButton = document.getElementById("logout-button");
-const identityForm = document.getElementById("identity-form");
-const identityNote = document.getElementById("identity-note");
-const identityName = document.getElementById("identity-name");
-const identityDiscord = document.getElementById("identity-discord");
 const sessionForm = document.getElementById("session-form");
 const claimForm = document.getElementById("claim-form");
 const reviewForm = document.getElementById("review-form");
@@ -16,9 +12,13 @@ const ratingGrid = document.getElementById("rating-grid");
 const hostGrid = document.getElementById("host-grid");
 const sessionTable = document.getElementById("session-table");
 const sessionCodeElement = document.getElementById("session-code");
+const playerSearch = document.getElementById("player-search");
+const syncPlayersButton = document.getElementById("sync-players");
+const selectedPlayersElement = document.getElementById("selected-players");
+const playerResults = document.getElementById("player-results");
+const participantsValue = document.getElementById("participants-value");
+const playerSyncMeta = document.getElementById("player-sync-meta");
 
-const storageKey = "mtgr-host-review-v1";
-const userKey = "mtgr-host-user-v1";
 const metricLabels = {
   rulesClarity: "Rules Clarity",
   runFlow: "Run Flow",
@@ -39,14 +39,18 @@ const weights = {
 
 let state = {
   hosts: [],
+  players: [],
+  syncMeta: {},
   sessions: [],
   participants: [],
   reviews: [],
 };
 let claimedSession = null;
+let selectedPlayers = [];
 let authState = {
   configured: false,
   guildRoleCheckConfigured: false,
+  playerRoleCheckConfigured: false,
   user: null,
 };
 
@@ -74,6 +78,8 @@ const defaultState = () => ({
   sessions: [],
   participants: [],
   reviews: [],
+  players: [],
+  syncMeta: {},
 });
 
 function emptyRating() {
@@ -89,15 +95,7 @@ const getUser = () => {
   if (authState.user) {
     return authState.user;
   }
-  try {
-    return JSON.parse(localStorage.getItem(userKey)) || null;
-  } catch (error) {
-    return null;
-  }
-};
-
-const setUser = (user) => {
-  localStorage.setItem(userKey, JSON.stringify(user));
+  return null;
 };
 
 const setStatus = (message, tone = "ok") => {
@@ -121,12 +119,7 @@ const applyAuthRedirectMessage = () => {
 };
 
 const apiHeaders = () => {
-  const headers = { "Content-Type": "application/json" };
-  const user = authState.user ? null : getUser();
-  if (user && !authState.configured) {
-    headers["x-mtgr-user"] = JSON.stringify(user);
-  }
-  return headers;
+  return { "Content-Type": "application/json" };
 };
 
 const safeFetch = async (url, options = {}) => {
@@ -146,8 +139,6 @@ const safeFetch = async (url, options = {}) => {
   return data;
 };
 
-const isBackendUnavailable = (error) => !error.httpStatus;
-
 const loadAuth = async () => {
   try {
     const response = await fetch("/auth/me", { cache: "no-store" });
@@ -158,38 +149,17 @@ const loadAuth = async () => {
     authState = {
       configured: Boolean(data.configured),
       guildRoleCheckConfigured: Boolean(data.guildRoleCheckConfigured),
+      playerRoleCheckConfigured: Boolean(data.playerRoleCheckConfigured),
       user: data.user || null,
     };
   } catch (error) {
     authState = {
       configured: false,
       guildRoleCheckConfigured: false,
+      playerRoleCheckConfigured: false,
       user: null,
     };
   }
-};
-
-const readLocalState = () => {
-  try {
-    return { ...defaultState(), ...JSON.parse(localStorage.getItem(storageKey)) };
-  } catch (error) {
-    return defaultState();
-  }
-};
-
-const writeLocalState = () => {
-  localStorage.setItem(storageKey, JSON.stringify(state));
-};
-
-const createId = (prefix) => `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
-
-const createCode = () => {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let code = "MTGR-";
-  for (let index = 0; index < 4; index += 1) {
-    code += alphabet[Math.floor(Math.random() * alphabet.length)];
-  }
-  return code;
 };
 
 const calculateRating = (hostId, reviews) => {
@@ -239,6 +209,100 @@ const escapeHtml = (value) => String(value ?? "")
   .replace(/"/g, "&quot;")
   .replace(/'/g, "&#039;");
 
+const updateParticipantsValue = () => {
+  participantsValue.value = selectedPlayers.map((player) => player.discordId).join("\n");
+};
+
+const renderSelectedPlayers = () => {
+  selectedPlayersElement.replaceChildren();
+  if (!selectedPlayers.length) {
+    const empty = document.createElement("p");
+    empty.className = "meta";
+    empty.textContent = "No players selected.";
+    selectedPlayersElement.appendChild(empty);
+    updateParticipantsValue();
+    return;
+  }
+
+  selectedPlayers.forEach((player) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "player-chip";
+    chip.innerHTML = `<span>${escapeHtml(player.displayName)}</span><strong>x</strong>`;
+    chip.addEventListener("click", () => {
+      selectedPlayers = selectedPlayers.filter((entry) => entry.discordId !== player.discordId);
+      renderPlayerPicker();
+    });
+    selectedPlayersElement.appendChild(chip);
+  });
+  updateParticipantsValue();
+};
+
+const getFilteredPlayers = () => {
+  const query = playerSearch.value.trim().toLowerCase();
+  return (state.players || [])
+    .filter((player) => !selectedPlayers.some((entry) => entry.discordId === player.discordId))
+    .filter((player) => {
+      if (!query) {
+        return true;
+      }
+      return player.displayName.toLowerCase().includes(query) || player.discordId.includes(query);
+    })
+    .slice(0, 8);
+};
+
+const renderPlayerResults = () => {
+  playerResults.replaceChildren();
+  const matches = getFilteredPlayers();
+  if (!matches.length) {
+    const empty = document.createElement("p");
+    empty.className = "meta";
+    empty.textContent = state.players?.length ? "No matching synced players." : "No synced players yet.";
+    playerResults.appendChild(empty);
+    return;
+  }
+
+  matches.forEach((player) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "player-result";
+    const avatar = document.createElement("span");
+    avatar.className = "avatar player-avatar";
+    if (player.avatarUrl) {
+      avatar.style.backgroundImage = `url("${player.avatarUrl}")`;
+    } else {
+      avatar.textContent = player.displayName.slice(0, 2).toUpperCase();
+    }
+    const name = document.createElement("span");
+    name.textContent = player.displayName;
+    button.appendChild(avatar);
+    button.appendChild(name);
+    button.addEventListener("click", () => {
+      selectedPlayers.push(player);
+      playerSearch.value = "";
+      renderPlayerPicker();
+    });
+    playerResults.appendChild(button);
+  });
+};
+
+const renderSyncMeta = () => {
+  const syncedAt = state.syncMeta?.discordMembersSyncedAt;
+  const count = state.syncMeta?.knownPlayerCount ?? state.players?.length ?? 0;
+  if (!syncedAt) {
+    playerSyncMeta.textContent = "Sync Discord players to enable autocomplete. Selected players are the only accounts that can claim the review code.";
+    return;
+  }
+  playerSyncMeta.textContent = `Synced ${count} player${count === 1 ? "" : "s"} from Discord on ${new Date(syncedAt).toLocaleString()}.`;
+};
+
+const renderPlayerPicker = () => {
+  renderSelectedPlayers();
+  renderPlayerResults();
+  renderSyncMeta();
+  syncPlayersButton.hidden = !authState.user?.isHost;
+};
+
 const renderHosts = () => {
   hostGrid.replaceChildren();
   if (!state.hosts.length) {
@@ -286,7 +350,7 @@ const renderSessions = () => {
   sessionTable.replaceChildren();
   if (!state.sessions.length) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td class="empty" colspan="7">No completed sessions logged yet.</td>`;
+    row.innerHTML = `<td class="empty" colspan="8">No completed sessions logged yet.</td>`;
     sessionTable.appendChild(row);
     return;
   }
@@ -300,6 +364,7 @@ const renderSessions = () => {
       <td>${escapeHtml(session.mode)}</td>
       <td>${escapeHtml(session.outcome)}${session.cryptReached ? " + Crypt" : ""}</td>
       <td>${escapeHtml(session.playerCount)}</td>
+      <td>${Array.isArray(session.loggedPlayers) && session.loggedPlayers.length ? session.loggedPlayers.map((player) => escapeHtml(player.displayName)).join(", ") : "--"}</td>
       <td>${formatDate(session.expiresAt)}</td>
     `;
     sessionTable.appendChild(row);
@@ -308,15 +373,13 @@ const renderSessions = () => {
 
 const renderUser = () => {
   const user = getUser();
-  identityForm.hidden = authState.configured;
-  identityNote.hidden = authState.configured;
-  discordLogin.hidden = authState.configured && Boolean(user);
-  logoutButton.hidden = !authState.configured || !user;
+  discordLogin.hidden = Boolean(user);
+  logoutButton.hidden = !user;
 
   if (!authState.configured) {
-    authAvatar.textContent = "DEV";
+    authAvatar.textContent = "--";
     authName.textContent = "Discord OAuth not configured";
-    authRole.textContent = "Using local identity for development and static preview.";
+    authRole.textContent = "Configure Discord OAuth before using Host Registry actions.";
   } else if (!user) {
     authAvatar.textContent = "--";
     authAvatar.style.backgroundImage = "";
@@ -328,16 +391,10 @@ const renderUser = () => {
     authName.textContent = user.displayName;
     authRole.textContent = user.isHost
       ? "Host role verified. You can log completed runs."
-      : "Player verified. You can claim sessions and submit reviews.";
+      : user.isPlayer
+        ? "Player role verified. You can claim sessions and submit reviews."
+        : "Signed in, but the Player role was not found on this Discord account.";
   }
-
-  if (!user) {
-    identityName.value = "";
-    identityDiscord.value = "";
-    return;
-  }
-  identityName.value = user.displayName;
-  identityDiscord.value = user.discordId;
 };
 
 const renderRatings = () => {
@@ -364,6 +421,7 @@ const render = () => {
   renderHosts();
   renderSessions();
   renderUser();
+  renderPlayerPicker();
 };
 
 const loadState = async () => {
@@ -373,8 +431,8 @@ const loadState = async () => {
     state = normalizeState(data);
     setStatus(authState.user ? "Signed in with Discord. Host registry loaded." : "Host registry loaded from backend.");
   } catch (error) {
-    state = normalizeState(readLocalState());
-    setStatus("Using browser storage until the host backend is available.", "error");
+    state = normalizeState(defaultState());
+    setStatus("Unable to reach the Host Registry backend.", "error");
   }
   render();
   applyAuthRedirectMessage();
@@ -383,7 +441,7 @@ const loadState = async () => {
 const ensureUser = () => {
   const user = getUser();
   if (!user) {
-    throw new Error(authState.configured ? "Login with Discord first." : "Enter your display name and Discord ID first.");
+    throw new Error("Login with Discord first.");
   }
   return user;
 };
@@ -396,112 +454,38 @@ const ensureHostUser = () => {
   return user;
 };
 
-const localCreateSession = (payload) => {
-  const user = ensureUser();
-  let host = state.hosts.find((entry) => entry.discordId === user.discordId);
-  if (!host) {
-    host = {
-      id: createId("host"),
-      discordId: user.discordId,
-      displayName: user.displayName,
-      status: "active",
-      specialties: [],
-    };
-    state.hosts.push(host);
-  }
-  let code = createCode();
-  while (state.sessions.some((session) => session.code === code)) {
-    code = createCode();
-  }
-  const session = {
-    id: createId("session"),
-    code,
-    hostId: host.id,
-    hostDiscordId: host.discordId,
-    hostName: host.displayName,
-    ...payload,
-    createdAt: new Date().toISOString(),
-    expiresAt: new Date(Date.now() + (72 * 60 * 60 * 1000)).toISOString(),
-  };
-  state.sessions.unshift(session);
-  state.participants.push({
-    id: createId("participant"),
-    sessionId: session.id,
-    discordId: user.discordId,
-    displayName: user.displayName,
-    role: "host",
-  });
-  writeLocalState();
-  return { session };
-};
-
-const localClaimSession = (code) => {
-  const user = ensureUser();
-  const session = state.sessions.find((entry) => entry.code.toUpperCase() === code.toUpperCase());
-  if (!session) {
-    throw new Error("Session code not found.");
-  }
-  if (session.hostDiscordId === user.discordId) {
-    throw new Error("Hosts are already attached to their own sessions.");
-  }
-  if (!state.participants.some((entry) => entry.sessionId === session.id && entry.discordId === user.discordId)) {
-    state.participants.push({
-      id: createId("participant"),
-      sessionId: session.id,
-      discordId: user.discordId,
-      displayName: user.displayName,
-      role: "player",
-    });
-    writeLocalState();
-  }
-  return { session };
-};
-
-const localSubmitReview = (payload) => {
-  const user = ensureUser();
-  const session = state.sessions.find((entry) => entry.id === payload.sessionId);
-  if (!session) {
-    throw new Error("Session not found.");
-  }
-  if (state.reviews.some((review) => review.sessionId === session.id && review.reviewerDiscordId === user.discordId)) {
-    throw new Error("You already reviewed this session.");
-  }
-  state.reviews.push({
-    id: createId("review"),
-    sessionId: session.id,
-    hostId: session.hostId,
-    reviewerDiscordId: user.discordId,
-    reviewerName: user.displayName,
-    ...payload,
-    createdAt: new Date().toISOString(),
-  });
-  writeLocalState();
-};
-
-identityForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const displayName = identityName.value.trim();
-  const discordId = identityDiscord.value.trim();
-  if (!displayName || !discordId) {
-    setStatus("Identity needs both fields.", "error");
-    return;
-  }
-  setUser({ displayName, discordId });
-  setStatus(`Using identity ${displayName}.`);
-});
-
 logoutButton.addEventListener("click", async () => {
   try {
     await safeFetch("/auth/logout", { method: "POST" });
   } catch (error) {
-    localStorage.removeItem(userKey);
   }
   authState.user = null;
-  localStorage.removeItem(userKey);
   claimedSession = null;
   reviewForm.hidden = true;
   await loadState();
   setStatus("Logged out.");
+});
+
+playerSearch.addEventListener("input", () => {
+  renderPlayerResults();
+});
+
+syncPlayersButton.addEventListener("click", async () => {
+  try {
+    ensureHostUser();
+    syncPlayersButton.disabled = true;
+    syncPlayersButton.textContent = "Syncing...";
+    const data = await safeFetch("/discord/sync-members", { method: "POST" });
+    state.players = data.players || [];
+    state.syncMeta = data.syncMeta || {};
+    renderPlayerPicker();
+    setStatus("Discord player roster synced.");
+  } catch (error) {
+    setStatus(error.message, "error");
+  } finally {
+    syncPlayersButton.disabled = false;
+    syncPlayersButton.textContent = "Sync Discord Players";
+  }
 });
 
 sessionForm.addEventListener("submit", async (event) => {
@@ -513,24 +497,18 @@ sessionForm.addEventListener("submit", async (event) => {
     outcome: formData.get("outcome"),
     playerCount: Number(formData.get("playerCount")),
     cryptReached: formData.get("cryptReached") === "on",
+    participants: formData.get("participants"),
     notes: formData.get("notes"),
   };
   try {
     ensureHostUser();
-    let data;
-    try {
-      data = await safeFetch("/host-sessions", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
-      await loadState();
-    } catch (error) {
-      if (!isBackendUnavailable(error)) {
-        throw error;
-      }
-      data = localCreateSession(payload);
-      render();
-    }
+    const data = await safeFetch("/host-sessions", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    await loadState();
+    selectedPlayers = [];
+    renderPlayerPicker();
     sessionCodeElement.hidden = false;
     sessionCodeElement.innerHTML = `<span>Review Code</span><strong>${data.session.code}</strong><small>Expires in 72 hours</small>`;
     setStatus("Completed session logged.");
@@ -544,20 +522,11 @@ claimForm.addEventListener("submit", async (event) => {
   const code = new FormData(claimForm).get("code").trim();
   try {
     ensureUser();
-    let data;
-    try {
-      data = await safeFetch("/host-sessions/claim", {
-        method: "POST",
-        body: JSON.stringify({ code }),
-      });
-      await loadState();
-    } catch (error) {
-      if (!isBackendUnavailable(error)) {
-        throw error;
-      }
-      data = localClaimSession(code);
-      render();
-    }
+    const data = await safeFetch("/host-sessions/claim", {
+      method: "POST",
+      body: JSON.stringify({ code }),
+    });
+    await loadState();
     claimedSession = data.session;
     reviewTitle.textContent = `Review ${claimedSession.hostName}`;
     reviewForm.hidden = false;
@@ -582,19 +551,11 @@ reviewForm.addEventListener("submit", async (event) => {
     comment: formData.get("comment"),
   };
   try {
-    try {
-      await safeFetch("/host-reviews", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
-      await loadState();
-    } catch (error) {
-      if (!isBackendUnavailable(error)) {
-        throw error;
-      }
-      localSubmitReview(payload);
-      render();
-    }
+    await safeFetch("/host-reviews", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    await loadState();
     reviewForm.hidden = true;
     reviewForm.reset();
     renderRatings();

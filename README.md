@@ -141,10 +141,29 @@ DISCORD_CLIENT_SECRET=your_discord_app_client_secret
 DISCORD_REDIRECT_URI=https://your-domain.example/auth/discord/callback
 DISCORD_GUILD_ID=your_server_id
 DISCORD_HOST_ROLE_ID=your_host_role_id
+DISCORD_PLAYER_ROLE_ID=your_player_role_id
+DISCORD_BOT_TOKEN=your_discord_bot_token
 SESSION_SECRET=a_long_random_secret
 ```
 
 The OAuth flow requests `identify` and, when `DISCORD_GUILD_ID` is set,
 `guilds.members.read`. The backend stores a signed HttpOnly session cookie and
 uses the configured Host role to decide who can create completed-session review
-codes. Any signed-in Discord user can claim a valid session code and review it.
+codes. If `DISCORD_PLAYER_ROLE_ID` is set, only members with that Player role
+can claim a valid session code and review it.
+
+For player autocomplete, add a bot to the same Discord application or use an
+existing bot token. The bot must be in the server and able to read guild members.
+If the server is large or Discord requires it, enable the **Server Members
+Intent** in the Discord Developer Portal. Hosts can then press **Sync Discord
+Players** on `/hosts.html` to refresh the cached Player-role roster.
+
+High level bot setup:
+
+1. Open the Discord Developer Portal application.
+2. Go to **Bot** and create or reset the bot token.
+3. Put that token in `DISCORD_BOT_TOKEN`.
+4. Enable **Server Members Intent** under privileged gateway intents if available.
+5. Invite the bot to your server.
+6. Restart the containers.
+7. Log in as a Host and press **Sync Discord Players**.
