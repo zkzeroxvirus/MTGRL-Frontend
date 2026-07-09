@@ -425,11 +425,40 @@ const openHostProfile = (hostId) => {
   hostProfileClose.focus();
 };
 
-const sessionPlayersMarkup = (session) => {
-  if (!Array.isArray(session.loggedPlayers) || !session.loggedPlayers.length) {
+const getSessionListedPlayers = (session, participants = []) => {
+  const playerMap = new Map();
+  (Array.isArray(session.loggedPlayers) ? session.loggedPlayers : []).forEach((player) => {
+    if (player.discordId) {
+      playerMap.set(player.discordId, {
+        discordId: player.discordId,
+        displayName: player.displayName || "Unknown Player",
+      });
+    }
+  });
+  participants
+    .filter((participant) => ["logged-player", "player"].includes(participant.role))
+    .forEach((participant) => {
+      if (!participant.discordId) {
+        return;
+      }
+      const existing = playerMap.get(participant.discordId);
+      const displayName = participant.displayName || existing?.displayName || "Unknown Player";
+      if (!existing || existing.displayName === "Unknown Player") {
+        playerMap.set(participant.discordId, {
+          discordId: participant.discordId,
+          displayName,
+        });
+      }
+    });
+  return [...playerMap.values()];
+};
+
+const sessionPlayersMarkup = (session, participants = []) => {
+  const players = getSessionListedPlayers(session, participants);
+  if (!players.length) {
     return `<p class="meta">No players were listed by the host.</p>`;
   }
-  return session.loggedPlayers.map((player) => `
+  return players.map((player) => `
     <span class="player-chip session-player-chip">${escapeHtml(player.displayName)}</span>
   `).join("");
 };
@@ -525,7 +554,7 @@ const renderSessionProfile = () => {
       </section>
       <section class="profile-panel">
         <h3>Listed Players</h3>
-        <div class="selected-players">${sessionPlayersMarkup(session)}</div>
+        <div class="selected-players">${sessionPlayersMarkup(session, participants)}</div>
       </section>
       <section class="profile-panel">
         <h3>Claims</h3>
@@ -762,6 +791,10 @@ const renderSessions = () => {
   }
 
   state.sessions.slice(0, canModerate() ? 100 : 20).forEach((session) => {
+    const listedPlayers = getSessionListedPlayers(
+      session,
+      state.participants.filter((participant) => participant.sessionId === session.id),
+    );
     const row = document.createElement("tr");
     row.className = "session-row";
     row.tabIndex = 0;
@@ -775,7 +808,7 @@ const renderSessions = () => {
       <td>${escapeHtml(session.mode)}</td>
       <td>${escapeHtml(session.outcome)}${session.cryptReached ? " + Crypt" : ""}</td>
       <td>${escapeHtml(session.playerCount)}</td>
-      <td>${Array.isArray(session.loggedPlayers) && session.loggedPlayers.length ? session.loggedPlayers.map((player) => escapeHtml(player.displayName)).join(", ") : "--"}</td>
+      <td>${listedPlayers.length ? listedPlayers.map((player) => escapeHtml(player.displayName)).join(", ") : "--"}</td>
       <td>${formatDate(session.expiresAt)}</td>
       ${canModerate() ? `<td><button class="button danger small session-delete" type="button" data-session-id="${escapeHtml(session.id)}">Delete</button></td>` : ""}
     `;
@@ -959,7 +992,7 @@ const deleteSession = async (sessionId, button = null) => {
   if (!session) {
     return;
   }
-  const confirmed = window.confirm(`Delete test run ${session.code} by ${session.hostName}? This also removes attached claims and reviews.`);
+  const confirmed = window.confirm(`Delete session ${session.code} by ${session.hostName}? This also removes attached claims and reviews.`);
   if (!confirmed) {
     return;
   }
@@ -971,7 +1004,7 @@ const deleteSession = async (sessionId, button = null) => {
     await safeFetch(`/host-sessions/${encodeURIComponent(session.id)}`, { method: "DELETE" });
     closeHostProfile();
     await loadState();
-    setStatus(`Deleted test run ${session.code}.`);
+    setStatus(`Deleted session ${session.code}.`);
   } catch (error) {
     if (button) {
       button.disabled = false;
@@ -1031,7 +1064,10 @@ sessionForm.addEventListener("submit", async (event) => {
     outcome: formData.get("outcome"),
     playerCount: Number(formData.get("playerCount")),
     cryptReached: formData.get("cryptReached") === "on",
-    participants: formData.get("participants"),
+    participants: selectedPlayers.map((player) => ({
+      discordId: player.discordId,
+      displayName: player.displayName,
+    })),
     notes: formData.get("notes"),
   };
   try {

@@ -529,6 +529,10 @@ textarea.search-input {
   padding: 16px;
 }
 
+.session-code[hidden] {
+  display: none;
+}
+
 .session-code span,
 .session-code small {
   color: var(--muted);

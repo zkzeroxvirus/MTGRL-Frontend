@@ -157,7 +157,7 @@ can claim a valid session code and review it.
 `DISCORD_ADMIN_ROLE_ID` and `DISCORD_MOD_ROLE_ID` are reserved for Host Registry
 moderation tools. Admins are treated as moderators, and admins can also run the
 Discord member sync. Hosts should not moderate reviews about themselves.
-On `/hosts.html`, moderators and admins can delete test sessions from the recent
+On `/hosts.html`, moderators and admins can delete sessions from the recent
 sessions table. Deleting a session also removes its attached claims and reviews.
 Session rows are clickable; the session profile shows listed players, claims,
 and each player review. Moderators can hide or restore individual reviews and
