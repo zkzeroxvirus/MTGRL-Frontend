@@ -134,12 +134,25 @@
               <span>Review Code</span>
               <input class="search-input code-input" name="code" placeholder="MTGR-8K4Q" required />
             </label>
+            <label class="field">
+              <span>Participation</span>
+              <select class="search-input" name="participantStatus">
+                <option value="completed">I was there when the session ended</option>
+                <option value="leftEarly">I left before the session ended</option>
+                <option value="joinedLate">I joined after the session started</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Claim Note</span>
+              <textarea class="search-input" name="claimNote" rows="2" placeholder="Optional context if you were not listed or left early"></textarea>
+            </label>
             <button class="button secondary" type="submit">Claim Session</button>
           </form>
           <form class="host-form" id="review-form" hidden>
             <div class="section-head">
               <span class="eyebrow">Review</span>
               <h3 id="review-title">Review Session</h3>
+              <p class="meta" id="review-context"></p>
             </div>
             <div class="rating-grid" id="rating-grid"></div>
             <label class="check-field">

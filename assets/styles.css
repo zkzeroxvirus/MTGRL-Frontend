@@ -609,6 +609,27 @@ textarea.search-input {
   color: #7b2e17;
 }
 
+.host-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.host-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(30, 111, 112, 0.22);
+  background: rgba(30, 111, 112, 0.1);
+  color: #0d3f40;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+}
+
 .host-card {
   background: #fffaf2;
   border: 1px solid rgba(28, 31, 36, 0.12);

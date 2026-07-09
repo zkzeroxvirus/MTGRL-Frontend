@@ -167,3 +167,14 @@ High level bot setup:
 5. Invite the bot to your server.
 6. Restart the containers.
 7. Log in as a Host and press **Sync Discord Players**.
+
+Review scoring in the Host Registry is intentionally conservative:
+
+- Listed players who completed the session submit **verified** reviews that count
+  toward the numeric rating.
+- Listed players who left early or joined late submit **partial** reviews that
+  remain visible but do not count toward the numeric rating.
+- Players with the code who were not listed can submit **unlisted** feedback.
+  That feedback is visible context but does not count toward the numeric rating.
+
+Host badges are earned from counted review data and logged-session history.

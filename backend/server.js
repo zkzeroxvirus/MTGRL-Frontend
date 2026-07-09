@@ -44,6 +44,12 @@ const metricWeights = {
   playerExperience: 0.1,
 };
 
+const reviewTypes = new Set(["verified", "partial", "unlisted"]);
+
+const countedReviews = (reviews) => reviews.filter((review) => (
+  (review.reviewType || "verified") === "verified" && review.countsTowardRating !== false
+));
+
 const defaultHostData = {
   hosts: [],
   sessions: [],
@@ -282,6 +288,11 @@ const parseLoggedPlayers = (value) => {
     .slice(0, 6);
 };
 
+const normalizeParticipantStatus = (value) => {
+  const status = String(value || "completed").trim();
+  return ["completed", "leftEarly", "joinedLate"].includes(status) ? status : "completed";
+};
+
 const upsertKnownUser = (data, user) => {
   if (!user?.discordId) {
     return null;
@@ -352,10 +363,12 @@ const syncDiscordMembers = async () => {
 };
 
 const getHostAverage = (hostId, reviews) => {
-  const hostReviews = reviews.filter((review) => review.hostId === hostId);
+  const allHostReviews = reviews.filter((review) => review.hostId === hostId);
+  const hostReviews = countedReviews(allHostReviews);
   if (!hostReviews.length) {
     return {
       reviewCount: 0,
+      visibleReviewCount: allHostReviews.length,
       overall: 0,
       metrics: Object.fromEntries(ratingMetrics.map((metric) => [metric, 0])),
       wouldReplayPercent: 0,
@@ -371,18 +384,58 @@ const getHostAverage = (hostId, reviews) => {
 
   return {
     reviewCount: hostReviews.length,
+    visibleReviewCount: allHostReviews.length,
     overall: Number(overall.toFixed(2)),
     metrics,
     wouldReplayPercent: Math.round((wouldReplayCount / hostReviews.length) * 100),
   };
 };
 
+const buildHostBadges = (host, rating) => {
+  const badges = [];
+  const reviewCount = rating.reviewCount || 0;
+  const hostedRuns = host.hostedRuns || 0;
+  const metricValues = rating.metrics || {};
+
+  if (reviewCount >= 10 && rating.overall >= 4.5) {
+    badges.push({ id: "consistent-host", label: "Consistent Host", reason: "4.5+ overall across 10+ counted reviews" });
+  }
+  if (hostedRuns >= 10) {
+    badges.push({ id: "veteran-host", label: "Veteran Host", reason: "10+ logged sessions" });
+  } else if (hostedRuns >= 1) {
+    badges.push({ id: "first-run", label: "First Run Logged", reason: "Has logged a completed session" });
+  }
+  if (reviewCount >= 5 && metricValues.rulesClarity >= 4.6) {
+    badges.push({ id: "rules-anchor", label: "Rules Anchor", reason: "High Rules Clarity rating" });
+  }
+  if (reviewCount >= 5 && metricValues.runFlow >= 4.6) {
+    badges.push({ id: "smooth-operator", label: "Smooth Operator", reason: "High Run Flow rating" });
+  }
+  if (reviewCount >= 5 && metricValues.fairness >= 4.7) {
+    badges.push({ id: "fair-table", label: "Fair Table", reason: "High Fairness rating" });
+  }
+  if (reviewCount >= 5 && metricValues.tableManagement >= 4.6) {
+    badges.push({ id: "table-captain", label: "Table Captain", reason: "High Table Management rating" });
+  }
+  if (reviewCount >= 5 && metricValues.challengeQuality >= 4.6) {
+    badges.push({ id: "boss-crafter", label: "Boss Crafter", reason: "High Challenge Quality rating" });
+  }
+  if (reviewCount >= 5 && rating.wouldReplayPercent >= 90) {
+    badges.push({ id: "replay-favorite", label: "Replay Favorite", reason: "90%+ would replay" });
+  }
+
+  return badges.slice(0, 3);
+};
+
 const buildHostSummary = (data) => data.hosts.map((host) => {
   const sessions = data.sessions.filter((session) => session.hostId === host.id);
+  const hostedRuns = sessions.length;
+  const rating = getHostAverage(host.id, data.reviews);
+  const hostWithRuns = { ...host, hostedRuns };
   return {
-    ...host,
-    hostedRuns: sessions.length,
-    rating: getHostAverage(host.id, data.reviews),
+    ...hostWithRuns,
+    rating,
+    badges: buildHostBadges(hostWithRuns, rating),
   };
 });
 
@@ -690,9 +743,11 @@ app.post("/host-sessions/claim", async (req, res) => {
   const loggedPlayerIds = Array.isArray(session.loggedPlayers)
     ? session.loggedPlayers.map((player) => player.discordId)
     : [];
-  if (loggedPlayerIds.length && !loggedPlayerIds.includes(user.discordId)) {
-    return res.status(403).json({ error: "This Discord account was not logged as a participant for this session" });
-  }
+  const participantStatus = normalizeParticipantStatus(req.body?.participantStatus);
+  const wasListed = !loggedPlayerIds.length || loggedPlayerIds.includes(user.discordId);
+  const reviewType = wasListed
+    ? (participantStatus === "completed" ? "verified" : "partial")
+    : "unlisted";
 
   let participant = data.participants.find(
     (entry) => entry.sessionId === session.id && entry.discordId === user.discordId,
@@ -704,6 +759,10 @@ app.post("/host-sessions/claim", async (req, res) => {
       discordId: user.discordId,
       displayName: user.displayName,
       role: "player",
+      reviewType,
+      participantStatus,
+      wasListed,
+      claimNote: sanitizeText(req.body?.claimNote),
       joinedAt: new Date().toISOString(),
     };
     data.participants.push(participant);
@@ -711,9 +770,23 @@ app.post("/host-sessions/claim", async (req, res) => {
     participant.role = "player";
     participant.displayName = user.displayName;
     participant.avatarUrl = user.avatarUrl;
+    participant.reviewType = reviewType;
+    participant.participantStatus = participantStatus;
+    participant.wasListed = wasListed;
+    participant.claimNote = sanitizeText(req.body?.claimNote);
     participant.joinedAt = new Date().toISOString();
     await writeHostData(data);
     return res.status(200).json({ session, participant });
+  } else {
+    if (participant.role !== "player") {
+      participant.role = "player";
+    }
+    participant.displayName = user.displayName;
+    participant.avatarUrl = user.avatarUrl;
+    participant.reviewType = reviewType;
+    participant.participantStatus = participantStatus;
+    participant.wasListed = wasListed;
+    participant.claimNote = sanitizeText(req.body?.claimNote);
   }
   await writeHostData(data);
 
@@ -757,6 +830,10 @@ app.post("/host-reviews", async (req, res) => {
     hostId: session.hostId,
     reviewerDiscordId: user.discordId,
     reviewerName: user.displayName,
+    reviewType: reviewTypes.has(participant.reviewType) ? participant.reviewType : "verified",
+    participantStatus: normalizeParticipantStatus(participant.participantStatus),
+    wasListed: participant.wasListed !== false,
+    countsTowardRating: (participant.reviewType || "verified") === "verified",
     ratings,
     wouldReplay: Boolean(req.body?.wouldReplay),
     comment: sanitizeText(req.body?.comment),

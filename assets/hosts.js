@@ -8,6 +8,7 @@ const sessionForm = document.getElementById("session-form");
 const claimForm = document.getElementById("claim-form");
 const reviewForm = document.getElementById("review-form");
 const reviewTitle = document.getElementById("review-title");
+const reviewContext = document.getElementById("review-context");
 const ratingGrid = document.getElementById("rating-grid");
 const hostGrid = document.getElementById("host-grid");
 const hostStats = document.getElementById("host-stats");
@@ -40,6 +41,12 @@ const weights = {
   playerExperience: 0.1,
 };
 
+const reviewTypeLabels = {
+  verified: "Verified participant. Counts toward rating.",
+  partial: "Partial participant. Visible feedback, not counted toward rating.",
+  unlisted: "Unlisted participant. Visible feedback, not counted toward rating.",
+};
+
 let state = {
   hosts: [],
   players: [],
@@ -69,6 +76,7 @@ const defaultState = () => ({
 function emptyRating() {
   return {
     reviewCount: 0,
+    visibleReviewCount: 0,
     overall: 0,
     metrics: Object.fromEntries(metrics.map((metric) => [metric, 0])),
     wouldReplayPercent: 0,
@@ -147,7 +155,10 @@ const loadAuth = async () => {
 };
 
 const calculateRating = (hostId, reviews) => {
-  const hostReviews = reviews.filter((review) => review.hostId === hostId);
+  const allHostReviews = reviews.filter((review) => review.hostId === hostId);
+  const hostReviews = allHostReviews.filter((review) => (
+    (review.reviewType || "verified") === "verified" && review.countsTowardRating !== false
+  ));
   if (!hostReviews.length) {
     return emptyRating();
   }
@@ -159,19 +170,62 @@ const calculateRating = (hostId, reviews) => {
   const wouldReplayCount = hostReviews.filter((review) => review.wouldReplay).length;
   return {
     reviewCount: hostReviews.length,
+    visibleReviewCount: allHostReviews.length,
     overall: Number(overall.toFixed(2)),
     metrics: metricAverages,
     wouldReplayPercent: Math.round((wouldReplayCount / hostReviews.length) * 100),
   };
 };
 
+const buildBadges = (host) => {
+  const rating = host.rating || emptyRating();
+  const reviewCount = rating.reviewCount || 0;
+  const hostedRuns = host.hostedRuns || 0;
+  const values = rating.metrics || {};
+  const badges = [];
+
+  if (reviewCount >= 10 && rating.overall >= 4.5) {
+    badges.push({ label: "Consistent Host" });
+  }
+  if (hostedRuns >= 10) {
+    badges.push({ label: "Veteran Host" });
+  } else if (hostedRuns >= 1) {
+    badges.push({ label: "First Run Logged" });
+  }
+  if (reviewCount >= 5 && values.rulesClarity >= 4.6) {
+    badges.push({ label: "Rules Anchor" });
+  }
+  if (reviewCount >= 5 && values.runFlow >= 4.6) {
+    badges.push({ label: "Smooth Operator" });
+  }
+  if (reviewCount >= 5 && values.fairness >= 4.7) {
+    badges.push({ label: "Fair Table" });
+  }
+  if (reviewCount >= 5 && values.tableManagement >= 4.6) {
+    badges.push({ label: "Table Captain" });
+  }
+  if (reviewCount >= 5 && values.challengeQuality >= 4.6) {
+    badges.push({ label: "Boss Crafter" });
+  }
+  if (reviewCount >= 5 && rating.wouldReplayPercent >= 90) {
+    badges.push({ label: "Replay Favorite" });
+  }
+  return badges.slice(0, 3);
+};
+
 const normalizeState = (incoming) => {
   const base = { ...defaultState(), ...incoming };
-  const hosts = base.hosts.map((host) => ({
-    ...host,
-    hostedRuns: base.sessions.filter((session) => session.hostId === host.id).length,
-    rating: calculateRating(host.id, base.reviews),
-  }));
+  const hosts = base.hosts.map((host) => {
+    const normalizedHost = {
+      ...host,
+      hostedRuns: base.sessions.filter((session) => session.hostId === host.id).length,
+      rating: calculateRating(host.id, base.reviews),
+    };
+    return {
+      ...normalizedHost,
+      badges: Array.isArray(host.badges) ? host.badges : buildBadges(normalizedHost),
+    };
+  });
   return { ...base, hosts };
 };
 
@@ -291,11 +345,13 @@ const renderHostStats = (hosts) => {
   const reviewedHosts = hosts.filter((host) => (host.rating?.reviewCount || 0) > 0).length;
   const activeHosts = hosts.filter((host) => (host.hostedRuns || 0) > 0).length;
   const totalReviews = hosts.reduce((total, host) => total + (host.rating?.reviewCount || 0), 0);
+  const visibleReviews = hosts.reduce((total, host) => total + (host.rating?.visibleReviewCount || host.rating?.reviewCount || 0), 0);
   [
     ["Synced Hosts", hosts.length],
     ["With Runs", activeHosts],
     ["Reviewed", reviewedHosts],
-    ["Reviews", totalReviews],
+    ["Counted Reviews", totalReviews],
+    ["All Feedback", visibleReviews],
   ].forEach(([label, value]) => {
     const stat = document.createElement("div");
     stat.className = "stat";
@@ -349,17 +405,20 @@ const renderHosts = () => {
     row.className = "host-row";
     const rating = host.rating || emptyRating();
     const initials = host.displayName.slice(0, 2).toUpperCase();
+    const badges = (host.badges || []).map((badge) => `<span class="host-badge">${escapeHtml(badge.label)}</span>`).join("");
     row.innerHTML = `
       <div class="host-card-head">
         <div class="avatar">${escapeHtml(initials)}</div>
         <div>
           <h3>${escapeHtml(host.displayName)}</h3>
-          <p class="meta">${host.hostedRuns || 0} runs logged</p>
+          <p class="meta">${host.hostedRuns || 0} runs logged${badges ? "" : " · no badges yet"}</p>
+          ${badges ? `<div class="host-badges">${badges}</div>` : ""}
         </div>
       </div>
       <div class="host-row-metrics">
         <span><strong>${rating.overall ? rating.overall.toFixed(2) : "--"}</strong> /5</span>
-        <span>${rating.reviewCount || 0} reviews</span>
+        <span>${rating.reviewCount || 0} counted</span>
+        <span>${rating.visibleReviewCount || rating.reviewCount || 0} feedback</span>
         <span>${rating.reviewCount ? `${rating.wouldReplayPercent}% replay` : "No replay data"}</span>
       </div>
     `;
@@ -555,16 +614,22 @@ sessionForm.addEventListener("submit", async (event) => {
 
 claimForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const code = new FormData(claimForm).get("code").trim();
+  const formData = new FormData(claimForm);
+  const code = formData.get("code").trim();
   try {
     ensureUser();
     const data = await safeFetch("/host-sessions/claim", {
       method: "POST",
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({
+        code,
+        participantStatus: formData.get("participantStatus"),
+        claimNote: formData.get("claimNote"),
+      }),
     });
     await loadState();
     claimedSession = data.session;
     reviewTitle.textContent = `Review ${claimedSession.hostName}`;
+    reviewContext.textContent = reviewTypeLabels[data.participant?.reviewType || "verified"] || reviewTypeLabels.verified;
     reviewForm.hidden = false;
     setStatus("Session claimed. Review is now available.");
   } catch (error) {
