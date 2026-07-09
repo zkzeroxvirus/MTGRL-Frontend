@@ -14,6 +14,9 @@ const hostGrid = document.getElementById("host-grid");
 const hostStats = document.getElementById("host-stats");
 const hostSearch = document.getElementById("host-search");
 const showAllHosts = document.getElementById("show-all-hosts");
+const hostProfileBackdrop = document.getElementById("host-profile-backdrop");
+const hostProfileContent = document.getElementById("host-profile-content");
+const hostProfileClose = document.getElementById("host-profile-close");
 const sessionTable = document.getElementById("session-table");
 const sessionCodeElement = document.getElementById("session-code");
 const playerSearch = document.getElementById("player-search");
@@ -57,6 +60,7 @@ let state = {
 };
 let claimedSession = null;
 let selectedPlayers = [];
+let selectedHostId = null;
 let authState = {
   configured: false,
   guildRoleCheckConfigured: false,
@@ -240,6 +244,148 @@ const formatDate = (value) => {
   return date.toLocaleDateString();
 };
 
+const averageReviewRating = (review) => {
+  const values = metrics.map((metric) => Number(review.ratings?.[metric] || 0)).filter(Boolean);
+  if (!values.length) {
+    return 0;
+  }
+  return Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(1));
+};
+
+const getHostProfileData = (hostId) => {
+  const host = state.hosts.find((entry) => entry.id === hostId);
+  if (!host) {
+    return null;
+  }
+  const sessions = state.sessions
+    .filter((session) => session.hostId === hostId)
+    .sort((a, b) => new Date(b.runDate || b.createdAt || 0) - new Date(a.runDate || a.createdAt || 0));
+  const reviews = state.reviews
+    .filter((review) => review.hostId === hostId)
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  return { host, sessions, reviews };
+};
+
+const reviewShortLabel = (review) => {
+  const type = review.reviewType || "verified";
+  if (type === "partial") {
+    return "Partial";
+  }
+  if (type === "unlisted") {
+    return "Unlisted";
+  }
+  return "Verified";
+};
+
+const closeHostProfile = () => {
+  selectedHostId = null;
+  hostProfileBackdrop.hidden = true;
+  document.body.classList.remove("has-open-modal");
+};
+
+const renderHostProfile = () => {
+  const profile = getHostProfileData(selectedHostId);
+  if (!profile) {
+    closeHostProfile();
+    return;
+  }
+
+  const { host, sessions, reviews } = profile;
+  const rating = host.rating || emptyRating();
+  const initials = host.displayName.slice(0, 2).toUpperCase();
+  const badges = host.badges || [];
+  const metricRows = metrics.map((metric) => {
+    const value = Number(rating.metrics?.[metric] || 0);
+    const percent = Math.max(0, Math.min(100, (value / 5) * 100));
+    return `
+      <div class="profile-metric-row">
+        <span>${metricLabels[metric]}</span>
+        <div class="profile-meter" aria-hidden="true"><span style="width: ${percent}%"></span></div>
+        <strong>${value ? value.toFixed(2) : "--"}</strong>
+      </div>
+    `;
+  }).join("");
+  const badgeMarkup = badges.length
+    ? badges.map((badge) => `
+        <div class="profile-badge">
+          <strong>${escapeHtml(badge.label)}</strong>
+          <span>${escapeHtml(badge.reason || "Earned from logged sessions and reviews.")}</span>
+        </div>
+      `).join("")
+    : `<p class="meta">No badges yet. Badges appear after logged sessions and strong counted reviews.</p>`;
+  const reviewMarkup = reviews.length
+    ? reviews.slice(0, 6).map((review) => `
+        <article class="profile-feedback">
+          <div>
+            <strong>${escapeHtml(review.reviewerName || "Player")}</strong>
+            <span class="host-badge">${escapeHtml(reviewShortLabel(review))}</span>
+          </div>
+          <p>${escapeHtml(review.comment || "No written comment.")}</p>
+          <small>${averageReviewRating(review) || "--"} /5 average &middot; ${formatDate(review.createdAt)}${review.wouldReplay ? " &middot; would replay" : ""}</small>
+        </article>
+      `).join("")
+    : `<p class="meta">No visible feedback for this host yet.</p>`;
+  const sessionMarkup = sessions.length
+    ? sessions.slice(0, 6).map((session) => `
+        <div class="profile-session-row">
+          <strong>${formatDate(session.runDate)}</strong>
+          <span>${escapeHtml(session.mode)} &middot; ${escapeHtml(session.outcome)}${session.cryptReached ? " + Crypt" : ""}</span>
+          <span>${escapeHtml(session.playerCount)} player${Number(session.playerCount) === 1 ? "" : "s"}</span>
+        </div>
+      `).join("")
+    : `<p class="meta">No logged sessions found in the recent host data.</p>`;
+
+  hostProfileContent.innerHTML = `
+    <div class="profile-hero">
+      <div class="avatar profile-avatar">${host.avatarUrl ? "" : escapeHtml(initials)}</div>
+      <div>
+        <span class="eyebrow">Host Profile</span>
+        <h2 id="host-profile-title">${escapeHtml(host.displayName)}</h2>
+        <p>${rating.visibleReviewCount || rating.reviewCount || 0} visible feedback entries &middot; ${host.hostedRuns || 0} logged runs</p>
+      </div>
+      <div class="profile-score">
+        <strong>${rating.overall ? rating.overall.toFixed(2) : "--"}</strong>
+        <span>/5</span>
+      </div>
+    </div>
+    <div class="profile-stat-grid">
+      <div class="stat"><span class="stat-label">Counted</span><span class="stat-value">${rating.reviewCount || 0}</span></div>
+      <div class="stat"><span class="stat-label">All Feedback</span><span class="stat-value">${rating.visibleReviewCount || rating.reviewCount || 0}</span></div>
+      <div class="stat"><span class="stat-label">Replay</span><span class="stat-value">${rating.reviewCount ? `${rating.wouldReplayPercent}%` : "--"}</span></div>
+    </div>
+    <div class="profile-grid">
+      <section class="profile-panel">
+        <h3>Badges</h3>
+        <div class="profile-badge-list">${badgeMarkup}</div>
+      </section>
+      <section class="profile-panel">
+        <h3>Category Ratings</h3>
+        <div class="profile-metric-list">${metricRows}</div>
+      </section>
+      <section class="profile-panel">
+        <h3>Recent Feedback</h3>
+        <div class="profile-feedback-list">${reviewMarkup}</div>
+      </section>
+      <section class="profile-panel">
+        <h3>Recent Sessions</h3>
+        <div class="profile-session-list">${sessionMarkup}</div>
+      </section>
+    </div>
+  `;
+  const avatar = hostProfileContent.querySelector(".profile-avatar");
+  if (avatar && host.avatarUrl) {
+    avatar.style.backgroundImage = `url("${host.avatarUrl}")`;
+  }
+};
+
+const openHostProfile = (hostId) => {
+  selectedHostId = hostId;
+  renderHostProfile();
+  hostProfileBackdrop.hidden = false;
+  document.body.classList.add("has-open-modal");
+  hostProfileClose.focus();
+};
+
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
@@ -403,6 +549,9 @@ const renderHosts = () => {
   visibleHosts.slice(0, showAllHosts.checked ? 40 : 12).forEach((host) => {
     const row = document.createElement("article");
     row.className = "host-row";
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
+    row.setAttribute("aria-label", `Open ${host.displayName} host profile`);
     const rating = host.rating || emptyRating();
     const initials = host.displayName.slice(0, 2).toUpperCase();
     const badges = (host.badges || []).map((badge) => `<span class="host-badge">${escapeHtml(badge.label)}</span>`).join("");
@@ -411,7 +560,7 @@ const renderHosts = () => {
         <div class="avatar">${escapeHtml(initials)}</div>
         <div>
           <h3>${escapeHtml(host.displayName)}</h3>
-          <p class="meta">${host.hostedRuns || 0} runs logged${badges ? "" : " · no badges yet"}</p>
+          <p class="meta">${host.hostedRuns || 0} runs logged${badges ? "" : " &middot; no badges yet"}</p>
           ${badges ? `<div class="host-badges">${badges}</div>` : ""}
         </div>
       </div>
@@ -422,6 +571,13 @@ const renderHosts = () => {
         <span>${rating.reviewCount ? `${rating.wouldReplayPercent}% replay` : "No replay data"}</span>
       </div>
     `;
+    row.addEventListener("click", () => openHostProfile(host.id));
+    row.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openHostProfile(host.id);
+      }
+    });
     hostGrid.appendChild(row);
   });
 
@@ -509,6 +665,9 @@ const render = () => {
   renderSessions();
   renderUser();
   renderPlayerPicker();
+  if (selectedHostId && !hostProfileBackdrop.hidden) {
+    renderHostProfile();
+  }
 };
 
 const loadState = async () => {
@@ -563,6 +722,20 @@ hostSearch.addEventListener("input", () => {
 
 showAllHosts.addEventListener("change", () => {
   renderHosts();
+});
+
+hostProfileClose.addEventListener("click", closeHostProfile);
+
+hostProfileBackdrop.addEventListener("click", (event) => {
+  if (event.target === hostProfileBackdrop) {
+    closeHostProfile();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !hostProfileBackdrop.hidden) {
+    closeHostProfile();
+  }
 });
 
 syncPlayersButton.addEventListener("click", async () => {

@@ -584,9 +584,9 @@ app.get("/host-data", async (req, res) => {
       hosts: buildHostSummary(data),
       players: buildKnownPlayers(data),
       syncMeta: data.syncMeta || {},
-      sessions: data.sessions.slice(-20).reverse(),
+      sessions: data.sessions.slice(-100).reverse(),
       participants: data.participants,
-      reviews: data.reviews.slice(-50).reverse(),
+      reviews: data.reviews.slice(-200).reverse(),
       metrics: ratingMetrics,
       weights: metricWeights,
     });
