@@ -65,6 +65,8 @@ let authState = {
   configured: false,
   guildRoleCheckConfigured: false,
   playerRoleCheckConfigured: false,
+  adminRoleCheckConfigured: false,
+  moderatorRoleCheckConfigured: false,
   user: null,
 };
 
@@ -146,6 +148,8 @@ const loadAuth = async () => {
       configured: Boolean(data.configured),
       guildRoleCheckConfigured: Boolean(data.guildRoleCheckConfigured),
       playerRoleCheckConfigured: Boolean(data.playerRoleCheckConfigured),
+      adminRoleCheckConfigured: Boolean(data.adminRoleCheckConfigured),
+      moderatorRoleCheckConfigured: Boolean(data.moderatorRoleCheckConfigured),
       user: data.user || null,
     };
   } catch (error) {
@@ -153,6 +157,8 @@ const loadAuth = async () => {
       configured: false,
       guildRoleCheckConfigured: false,
       playerRoleCheckConfigured: false,
+      adminRoleCheckConfigured: false,
+      moderatorRoleCheckConfigured: false,
       user: null,
     };
   }
@@ -484,7 +490,7 @@ const renderPlayerPicker = () => {
   renderSelectedPlayers();
   renderPlayerResults();
   renderSyncMeta();
-  syncPlayersButton.hidden = !authState.user?.isHost;
+  syncPlayersButton.hidden = !(authState.user?.isHost || authState.user?.isAdmin);
 };
 
 const renderHostStats = (hosts) => {
@@ -632,11 +638,22 @@ const renderUser = () => {
     authAvatar.textContent = user.avatarUrl ? "" : user.displayName.slice(0, 2).toUpperCase();
     authAvatar.style.backgroundImage = user.avatarUrl ? `url("${user.avatarUrl}")` : "";
     authName.textContent = user.displayName;
-    authRole.textContent = user.isHost
-      ? "Host role verified. You can log completed runs."
-      : user.isPlayer
-        ? "Player role verified. You can claim sessions and submit reviews."
-        : "Signed in, but the Player role was not found on this Discord account.";
+    const roles = [];
+    if (user.isAdmin) {
+      roles.push("Admin");
+    }
+    if (user.isModerator) {
+      roles.push("Moderator");
+    }
+    if (user.isHost) {
+      roles.push("Host");
+    }
+    if (user.isPlayer) {
+      roles.push("Player");
+    }
+    authRole.textContent = roles.length
+      ? `${roles.join(", ")} role${roles.length === 1 ? "" : "s"} verified.`
+      : "Signed in, but no configured MTGR role was found on this Discord account.";
   }
 };
 

@@ -19,6 +19,8 @@ const discordRedirectUri = process.env.DISCORD_REDIRECT_URI || `${publicBaseUrl}
 const discordGuildId = process.env.DISCORD_GUILD_ID || "";
 const discordHostRoleId = process.env.DISCORD_HOST_ROLE_ID || "";
 const discordPlayerRoleId = process.env.DISCORD_PLAYER_ROLE_ID || "";
+const discordAdminRoleId = process.env.DISCORD_ADMIN_ROLE_ID || "";
+const discordModRoleId = process.env.DISCORD_MOD_ROLE_ID || "";
 const discordBotToken = process.env.DISCORD_BOT_TOKEN || "";
 const sessionSecret = process.env.SESSION_SECRET || "";
 const authConfigured = Boolean(discordClientId && discordClientSecret && sessionSecret);
@@ -226,6 +228,8 @@ const getDiscordProfile = async (accessToken) => {
     roles,
     isHost: discordHostRoleId ? roles.includes(discordHostRoleId) : false,
     isPlayer: discordPlayerRoleId ? roles.includes(discordPlayerRoleId) : true,
+    isAdmin: discordAdminRoleId ? roles.includes(discordAdminRoleId) : false,
+    isModerator: discordModRoleId ? roles.includes(discordModRoleId) : false,
   };
 };
 
@@ -240,6 +244,8 @@ const normalizeSessionUser = (payload) => {
     roles: Array.isArray(payload.roles) ? payload.roles : [],
     isHost: Boolean(payload.isHost),
     isPlayer: payload.isPlayer !== false,
+    isAdmin: Boolean(payload.isAdmin),
+    isModerator: Boolean(payload.isModerator || payload.isAdmin),
     authProvider: payload.authProvider || "discord",
   };
 };
@@ -306,6 +312,8 @@ const upsertKnownUser = (data, user) => {
     roles: Array.isArray(user.roles) ? user.roles : [],
     isHost: Boolean(user.isHost),
     isPlayer: user.isPlayer !== false,
+    isAdmin: Boolean(user.isAdmin),
+    isModerator: Boolean(user.isModerator || user.isAdmin),
     lastSeenAt: new Date().toISOString(),
   };
   if (existing) {
@@ -358,6 +366,8 @@ const syncDiscordMembers = async () => {
         roles,
         isHost: discordHostRoleId ? roles.includes(discordHostRoleId) : false,
         isPlayer: discordPlayerRoleId ? roles.includes(discordPlayerRoleId) : true,
+        isAdmin: discordAdminRoleId ? roles.includes(discordAdminRoleId) : false,
+        isModerator: discordModRoleId ? roles.includes(discordModRoleId) : false,
       };
     });
 };
@@ -476,6 +486,8 @@ app.get("/auth/me", (req, res) => {
     configured: authConfigured,
     guildRoleCheckConfigured: Boolean(discordGuildId && discordHostRoleId),
     playerRoleCheckConfigured: Boolean(discordGuildId && discordPlayerRoleId),
+    adminRoleCheckConfigured: Boolean(discordGuildId && discordAdminRoleId),
+    moderatorRoleCheckConfigured: Boolean(discordGuildId && discordModRoleId),
     user: getSessionUser(req),
   });
 });
@@ -601,8 +613,8 @@ app.post("/discord/sync-members", async (req, res) => {
   if (!user) {
     return;
   }
-  if (discordHostRoleId && !user.isHost) {
-    return res.status(403).json({ error: "Discord Host role required to sync members" });
+  if (discordHostRoleId && !user.isHost && !user.isAdmin) {
+    return res.status(403).json({ error: "Discord Host or Admin role required to sync members" });
   }
 
   try {

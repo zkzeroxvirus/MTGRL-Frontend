@@ -142,6 +142,8 @@ DISCORD_REDIRECT_URI=https://your-domain.example/auth/discord/callback
 DISCORD_GUILD_ID=your_server_id
 DISCORD_HOST_ROLE_ID=your_host_role_id
 DISCORD_PLAYER_ROLE_ID=your_player_role_id
+DISCORD_ADMIN_ROLE_ID=your_admin_role_id
+DISCORD_MOD_ROLE_ID=your_moderator_role_id
 DISCORD_BOT_TOKEN=your_discord_bot_token
 SESSION_SECRET=a_long_random_secret
 ```
@@ -151,6 +153,10 @@ The OAuth flow requests `identify` and, when `DISCORD_GUILD_ID` is set,
 uses the configured Host role to decide who can create completed-session review
 codes. If `DISCORD_PLAYER_ROLE_ID` is set, only members with that Player role
 can claim a valid session code and review it.
+
+`DISCORD_ADMIN_ROLE_ID` and `DISCORD_MOD_ROLE_ID` are reserved for Host Registry
+moderation tools. Admins are treated as moderators, and admins can also run the
+Discord member sync. Hosts should not moderate reviews about themselves.
 
 For player autocomplete, add a bot to the same Discord application or use an
 existing bot token. The bot must be in the server and able to read guild members.
