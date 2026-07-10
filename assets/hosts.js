@@ -7,6 +7,10 @@ const logoutButton = document.getElementById("logout-button");
 const sessionForm = document.getElementById("session-form");
 const claimForm = document.getElementById("claim-form");
 const reviewForm = document.getElementById("review-form");
+const actionModalBackdrop = document.getElementById("action-modal-backdrop");
+const actionLaunchButtons = document.querySelectorAll("[data-action-modal]");
+const actionPanels = document.querySelectorAll("[data-action-panel]");
+const actionModalCloseButtons = document.querySelectorAll(".action-modal-close");
 const reviewTitle = document.getElementById("review-title");
 const reviewContext = document.getElementById("review-context");
 const ratingGrid = document.getElementById("rating-grid");
@@ -319,7 +323,29 @@ const closeHostProfile = () => {
   selectedHostId = null;
   selectedSessionId = null;
   hostProfileBackdrop.hidden = true;
-  document.body.classList.remove("has-open-modal");
+  if (actionModalBackdrop.hidden) {
+    document.body.classList.remove("has-open-modal");
+  }
+};
+
+const closeActionModal = () => {
+  actionModalBackdrop.hidden = true;
+  actionPanels.forEach((panel) => {
+    panel.hidden = true;
+  });
+  if (hostProfileBackdrop.hidden) {
+    document.body.classList.remove("has-open-modal");
+  }
+};
+
+const openActionModal = (action) => {
+  actionPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.actionPanel !== action;
+  });
+  actionModalBackdrop.hidden = false;
+  document.body.classList.add("has-open-modal");
+  const activePanel = [...actionPanels].find((panel) => panel.dataset.actionPanel === action);
+  activePanel?.querySelector(".action-modal-close")?.focus();
 };
 
 const renderHostProfile = () => {
@@ -1075,6 +1101,20 @@ showAllHosts.addEventListener("change", () => {
   renderHosts();
 });
 
+actionLaunchButtons.forEach((button) => {
+  button.addEventListener("click", () => openActionModal(button.dataset.actionModal));
+});
+
+actionModalCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeActionModal);
+});
+
+actionModalBackdrop.addEventListener("click", (event) => {
+  if (event.target === actionModalBackdrop) {
+    closeActionModal();
+  }
+});
+
 hostProfileClose.addEventListener("click", closeHostProfile);
 
 hostProfileBackdrop.addEventListener("click", (event) => {
@@ -1084,7 +1124,12 @@ hostProfileBackdrop.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !hostProfileBackdrop.hidden) {
+  if (event.key !== "Escape") {
+    return;
+  }
+  if (!actionModalBackdrop.hidden) {
+    closeActionModal();
+  } else if (!hostProfileBackdrop.hidden) {
     closeHostProfile();
   }
 });
@@ -1232,6 +1277,7 @@ claimForm.addEventListener("submit", async (event) => {
     reviewTitle.textContent = `Review ${claimedSession.hostName}`;
     reviewContext.textContent = reviewTypeLabels[data.participant?.reviewType || "verified"] || reviewTypeLabels.verified;
     reviewForm.hidden = false;
+    openActionModal("player");
     setStatus("Session claimed. Review is now available.");
   } catch (error) {
     setStatus(error.message, "error");

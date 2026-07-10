@@ -47,6 +47,10 @@
             <span class="badge">One review per run</span>
             <span class="badge">Discord-ready identity</span>
           </div>
+          <div class="hero-action-row" aria-label="Host registry actions">
+            <button class="button small" type="button" data-action-modal="host">Log Session</button>
+            <button class="button secondary small" type="button" data-action-modal="player">Claim Code</button>
+          </div>
         </div>
         <div class="hero-panel">
           <div class="status" id="host-status">Loading host registry...</div>
@@ -70,12 +74,45 @@
         </div>
       </section>
 
-      <section class="split-grid reveal delay-1">
-        <article class="card stack">
+      <section class="card registry-board reveal delay-1">
+        <div class="section-head">
+          <span class="eyebrow">Host Registry</span>
+          <h2>Leaderboard & Directory</h2>
+          <p>Rankings use counted reviews, logged-session history, and replay confidence.</p>
+        </div>
+        <div class="registry-layout">
+          <aside class="registry-standings" aria-label="Host standings">
+            <div class="panel-title">Standings</div>
+            <div class="host-standings" id="host-standings" aria-live="polite"></div>
+          </aside>
+          <section class="registry-directory" aria-label="Host directory">
+            <div class="registry-directory-head">
+              <div>
+                <span class="eyebrow">Active Hosts</span>
+                <h3>Host Directory</h3>
+              </div>
+              <div class="host-filter-row">
+                <input class="search-input" id="host-search" type="search" placeholder="Search hosts" autocomplete="off" />
+                <label class="check-field">
+                  <input id="show-all-hosts" type="checkbox" />
+                  <span>Show all synced hosts</span>
+                </label>
+              </div>
+            </div>
+            <div class="host-directory-tools">
+              <div class="stats host-stats" id="host-stats" aria-label="Host summary"></div>
+            </div>
+            <div class="host-list" id="host-grid" aria-live="polite"></div>
+          </section>
+        </div>
+      </section>
+
+      <div class="action-modal-backdrop" id="action-modal-backdrop" hidden>
+        <section class="action-modal card" id="host-action-panel" data-action-panel="host" role="dialog" aria-modal="true" aria-labelledby="host-action-title" hidden>
+          <button class="button secondary small action-modal-close" type="button">Close</button>
           <div class="section-head">
             <span class="eyebrow">Host Action</span>
-            <h2>Log Completed Session</h2>
-            <p>Create the review code players use after a completed run.</p>
+            <h2 id="host-action-title">Log Completed Session</h2>
           </div>
           <form class="host-form" id="session-form">
             <div class="form-grid">
@@ -125,13 +162,13 @@
             <button class="button" type="submit">Generate Review Code</button>
           </form>
           <div class="session-code" id="session-code" hidden></div>
-        </article>
+        </section>
 
-        <article class="card stack">
+        <section class="action-modal card" id="player-action-panel" data-action-panel="player" role="dialog" aria-modal="true" aria-labelledby="player-action-title" hidden>
+          <button class="button secondary small action-modal-close" type="button">Close</button>
           <div class="section-head">
             <span class="eyebrow">Player Action</span>
-            <h2>Claim Session Code</h2>
-            <p>Claiming a code proves review eligibility for that session.</p>
+            <h2 id="player-action-title">Claim Session Code</h2>
           </div>
           <form class="host-form" id="claim-form">
             <label class="field">
@@ -169,36 +206,8 @@
             </label>
             <button class="button" type="submit">Submit Review</button>
           </form>
-        </article>
-      </section>
-
-      <section class="card reveal delay-2">
-        <div class="section-head">
-          <span class="eyebrow">Host Standings</span>
-          <h2>Host Leaderboard</h2>
-          <p>Rankings use counted reviews, logged-session history, and replay confidence.</p>
-        </div>
-        <div class="host-standings" id="host-standings" aria-live="polite"></div>
-      </section>
-
-      <section class="card reveal delay-2">
-        <div class="section-head">
-          <span class="eyebrow">Active Hosts</span>
-          <h2>Host Directory</h2>
-          <p>Compact by default so synced Discord roles do not flood the page.</p>
-        </div>
-        <div class="host-directory-tools">
-          <div class="stats host-stats" id="host-stats" aria-label="Host summary"></div>
-          <div class="host-filter-row">
-            <input class="search-input" id="host-search" type="search" placeholder="Search hosts" autocomplete="off" />
-            <label class="check-field">
-              <input id="show-all-hosts" type="checkbox" />
-              <span>Show all synced hosts</span>
-            </label>
-          </div>
-        </div>
-        <div class="host-list" id="host-grid" aria-live="polite"></div>
-      </section>
+        </section>
+      </div>
 
       <section class="card table-card reveal delay-3">
         <div class="table-wrap">
