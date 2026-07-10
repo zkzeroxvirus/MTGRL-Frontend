@@ -12,6 +12,7 @@ const reviewContext = document.getElementById("review-context");
 const ratingGrid = document.getElementById("rating-grid");
 const hostGrid = document.getElementById("host-grid");
 const hostStats = document.getElementById("host-stats");
+const hostStandings = document.getElementById("host-standings");
 const hostSearch = document.getElementById("host-search");
 const showAllHosts = document.getElementById("show-all-hosts");
 const hostProfileBackdrop = document.getElementById("host-profile-backdrop");
@@ -697,6 +698,124 @@ const renderHostStats = (hosts) => {
   });
 };
 
+const hostLeaderboardScore = (host) => {
+  const rating = host.rating || emptyRating();
+  const reviewCount = rating.reviewCount || 0;
+  const hostedRuns = host.hostedRuns || 0;
+  if (!reviewCount && !hostedRuns) {
+    return 0;
+  }
+  const ratingScore = (rating.overall || 0) * 20;
+  const reviewSignal = Math.min(reviewCount, 20) * 1.5;
+  const activitySignal = Math.min(hostedRuns, 20);
+  const replaySignal = reviewCount ? (rating.wouldReplayPercent || 0) * 0.15 : 0;
+  return Number((ratingScore + reviewSignal + activitySignal + replaySignal).toFixed(1));
+};
+
+const compareHostsByName = (a, b) => a.displayName.localeCompare(b.displayName);
+
+const hostStandingRows = (hosts, metricValue, detailValue) => hosts.map((host, index) => {
+  const rank = index + 1;
+  return `
+    <button class="standing-row" type="button" data-host-id="${escapeHtml(host.id)}" aria-label="Open ${escapeHtml(host.displayName)} host profile">
+      <span class="standing-rank">${rank}</span>
+      <span class="standing-main">
+        <strong>${escapeHtml(host.displayName)}</strong>
+        <small>${escapeHtml(detailValue(host))}</small>
+      </span>
+      <span class="standing-value">${escapeHtml(metricValue(host))}</span>
+    </button>
+  `;
+}).join("");
+
+const renderStandingBoard = ({ title, hosts, metricValue, detailValue, emptyText }) => `
+  <article class="standing-board">
+    <h3>${escapeHtml(title)}</h3>
+    <div class="standing-list">
+      ${hosts.length ? hostStandingRows(hosts, metricValue, detailValue) : `<p class="meta">${escapeHtml(emptyText)}</p>`}
+    </div>
+  </article>
+`;
+
+const renderHostStandings = () => {
+  hostStandings.replaceChildren();
+  const signalHosts = state.hosts.filter((host) => (
+    (host.hostedRuns || 0) > 0
+    || (host.rating?.reviewCount || 0) > 0
+  ));
+
+  if (!signalHosts.length) {
+    const empty = document.createElement("p");
+    empty.className = "meta";
+    empty.textContent = "No host standings yet.";
+    hostStandings.appendChild(empty);
+    return;
+  }
+
+  const topOverall = [...signalHosts]
+    .sort((a, b) => hostLeaderboardScore(b) - hostLeaderboardScore(a) || compareHostsByName(a, b))
+    .slice(0, 5);
+  const topRated = signalHosts
+    .filter((host) => (host.rating?.reviewCount || 0) > 0)
+    .sort((a, b) => (
+      (b.rating?.overall || 0) - (a.rating?.overall || 0)
+      || (b.rating?.reviewCount || 0) - (a.rating?.reviewCount || 0)
+      || compareHostsByName(a, b)
+    ))
+    .slice(0, 5);
+  const mostActive = signalHosts
+    .filter((host) => (host.hostedRuns || 0) > 0)
+    .sort((a, b) => (
+      (b.hostedRuns || 0) - (a.hostedRuns || 0)
+      || (b.rating?.reviewCount || 0) - (a.rating?.reviewCount || 0)
+      || compareHostsByName(a, b)
+    ))
+    .slice(0, 5);
+  const replayFavorites = signalHosts
+    .filter((host) => (host.rating?.reviewCount || 0) > 0)
+    .sort((a, b) => (
+      (b.rating?.wouldReplayPercent || 0) - (a.rating?.wouldReplayPercent || 0)
+      || (b.rating?.reviewCount || 0) - (a.rating?.reviewCount || 0)
+      || compareHostsByName(a, b)
+    ))
+    .slice(0, 5);
+
+  hostStandings.innerHTML = [
+    renderStandingBoard({
+      title: "Overall Score",
+      hosts: topOverall,
+      metricValue: (host) => hostLeaderboardScore(host).toFixed(1),
+      detailValue: (host) => `${(host.rating?.overall || 0).toFixed(2)} /5, ${host.rating?.reviewCount || 0} counted, ${host.hostedRuns || 0} runs`,
+      emptyText: "No leaderboard signal yet.",
+    }),
+    renderStandingBoard({
+      title: "Top Rated",
+      hosts: topRated,
+      metricValue: (host) => `${(host.rating?.overall || 0).toFixed(2)} /5`,
+      detailValue: (host) => `${host.rating?.reviewCount || 0} counted review${(host.rating?.reviewCount || 0) === 1 ? "" : "s"}`,
+      emptyText: "No counted reviews yet.",
+    }),
+    renderStandingBoard({
+      title: "Most Active",
+      hosts: mostActive,
+      metricValue: (host) => `${host.hostedRuns || 0}`,
+      detailValue: (host) => `${host.rating?.reviewCount || 0} counted, ${(host.rating?.overall || 0).toFixed(2)} /5`,
+      emptyText: "No logged runs yet.",
+    }),
+    renderStandingBoard({
+      title: "Replay Favorites",
+      hosts: replayFavorites,
+      metricValue: (host) => `${host.rating?.wouldReplayPercent || 0}%`,
+      detailValue: (host) => `${host.rating?.reviewCount || 0} counted review${(host.rating?.reviewCount || 0) === 1 ? "" : "s"}`,
+      emptyText: "No replay data yet.",
+    }),
+  ].join("");
+
+  hostStandings.querySelectorAll("[data-host-id]").forEach((row) => {
+    row.addEventListener("click", () => openHostProfile(row.dataset.hostId));
+  });
+};
+
 const renderHosts = () => {
   hostGrid.replaceChildren();
   hostStats.replaceChildren();
@@ -880,6 +999,7 @@ const renderRatings = () => {
 
 const render = () => {
   state = normalizeState(state);
+  renderHostStandings();
   renderHosts();
   renderSessions();
   renderUser();
@@ -1081,7 +1201,13 @@ sessionForm.addEventListener("submit", async (event) => {
     renderPlayerPicker();
     sessionCodeElement.hidden = false;
     sessionCodeElement.innerHTML = `<span>Review Code</span><strong>${data.session.code}</strong><small>Expires in 72 hours</small>`;
-    setStatus("Completed session logged.");
+    if (data.discordNotification?.sent) {
+      setStatus("Completed session logged and players notified in Discord.");
+    } else if (data.discordNotification?.error) {
+      setStatus("Completed session logged, but Discord notification failed.", "error");
+    } else {
+      setStatus("Completed session logged.");
+    }
   } catch (error) {
     setStatus(error.message, "error");
   }

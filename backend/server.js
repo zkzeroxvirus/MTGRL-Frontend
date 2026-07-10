@@ -22,6 +22,7 @@ const discordPlayerRoleId = process.env.DISCORD_PLAYER_ROLE_ID || "";
 const discordAdminRoleId = process.env.DISCORD_ADMIN_ROLE_ID || "";
 const discordModRoleId = process.env.DISCORD_MOD_ROLE_ID || "";
 const discordBotToken = process.env.DISCORD_BOT_TOKEN || "";
+const discordReviewChannelId = process.env.DISCORD_REVIEW_CHANNEL_ID || "";
 const sessionSecret = process.env.SESSION_SECRET || "";
 const authConfigured = Boolean(discordClientId && discordClientSecret && sessionSecret);
 const discordApiBase = "https://discord.com/api/v10";
@@ -191,6 +192,45 @@ const discordBotFetch = async (route) => {
     throw new Error(data.message || `Discord bot API responded with ${response.status}`);
   }
   return data;
+};
+
+const sendSessionReviewMessage = async (session) => {
+  if (!discordBotToken || !discordReviewChannelId || !session.loggedPlayers?.length) {
+    return { sent: false, skipped: true };
+  }
+
+  const userIds = session.loggedPlayers
+    .map((player) => player.discordId)
+    .filter(Boolean);
+  if (!userIds.length) {
+    return { sent: false, skipped: true };
+  }
+
+  const mentions = userIds.map((discordId) => `<@${discordId}>`).join(" ");
+  const response = await fetch(`${discordApiBase}/channels/${discordReviewChannelId}/messages`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bot ${discordBotToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content: [
+        `${mentions}`,
+        `A completed MTGR session hosted by **${session.hostName}** is ready for review.`,
+        `Review code: \`${session.code}\``,
+        `Claim and review here: ${publicBaseUrl}/hosts.html`,
+      ].join("\n"),
+      allowed_mentions: {
+        parse: [],
+        users: userIds,
+      },
+    }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || `Discord message failed with ${response.status}`);
+  }
+  return { sent: true, messageId: data.id || "" };
 };
 
 const exchangeDiscordCode = async (code) => {
@@ -747,7 +787,18 @@ app.post("/host-sessions", async (req, res) => {
     });
   });
   await writeHostData(data);
-  res.status(201).json({ session, host: { ...host, hostedRuns: 1, rating: getHostAverage(host.id, data.reviews) } });
+  let discordNotification = { sent: false, skipped: true };
+  try {
+    discordNotification = await sendSessionReviewMessage(session);
+  } catch (error) {
+    console.error("Failed to send Discord review notification", error);
+    discordNotification = { sent: false, skipped: false, error: error.message };
+  }
+  res.status(201).json({
+    session,
+    host: { ...host, hostedRuns: 1, rating: getHostAverage(host.id, data.reviews) },
+    discordNotification,
+  });
 });
 
 app.delete("/host-sessions/:sessionId", async (req, res) => {

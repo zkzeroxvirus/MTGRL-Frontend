@@ -147,6 +147,7 @@ DISCORD_PLAYER_ROLE_ID=your_player_role_id
 DISCORD_ADMIN_ROLE_ID=your_admin_role_id
 DISCORD_MOD_ROLE_ID=your_moderator_role_id
 DISCORD_BOT_TOKEN=your_discord_bot_token
+DISCORD_REVIEW_CHANNEL_ID=your_review_channel_id
 SESSION_SECRET=a_long_random_secret
 ```
 
@@ -171,15 +172,21 @@ If the server is large or Discord requires it, enable the **Server Members
 Intent** in the Discord Developer Portal. Hosts can then press **Sync Discord
 Players** on `/hosts.html` to refresh the cached Player-role roster.
 
+If `DISCORD_REVIEW_CHANNEL_ID` is set, logging a completed session with selected
+players makes the bot post the review code in that channel and mention only
+those selected players. The bot needs permission to view the channel and send
+messages there.
+
 High level bot setup:
 
 1. Open the Discord Developer Portal application.
 2. Go to **Bot** and create or reset the bot token.
 3. Put that token in `DISCORD_BOT_TOKEN`.
-4. Enable **Server Members Intent** under privileged gateway intents if available.
-5. Invite the bot to your server.
-6. Restart the containers.
-7. Log in as a Host and press **Sync Discord Players**.
+4. Put the review-code channel ID in `DISCORD_REVIEW_CHANNEL_ID`.
+5. Enable **Server Members Intent** under privileged gateway intents if available.
+6. Invite the bot to your server.
+7. Restart the containers.
+8. Log in as a Host and press **Sync Discord Players**.
 
 Review scoring in the Host Registry is intentionally conservative:
 

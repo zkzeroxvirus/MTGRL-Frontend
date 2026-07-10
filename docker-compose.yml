@@ -17,6 +17,7 @@ services:
       DISCORD_ADMIN_ROLE_ID: "${DISCORD_ADMIN_ROLE_ID:-}"
       DISCORD_MOD_ROLE_ID: "${DISCORD_MOD_ROLE_ID:-}"
       DISCORD_BOT_TOKEN: "${DISCORD_BOT_TOKEN:-}"
+      DISCORD_REVIEW_CHANNEL_ID: "${DISCORD_REVIEW_CHANNEL_ID:-}"
       SESSION_SECRET: "${SESSION_SECRET:-}"
     volumes:
       - ./backend/service_account.json:/app/service_account.json:ro
