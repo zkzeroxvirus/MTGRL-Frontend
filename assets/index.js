@@ -98,7 +98,7 @@ if (statusElement) {
       },
       {
         key: "Disk Cache",
-        value: `${disk.totalFiles ?? 0} files, ${mb(disk.bytes)}`
+        value: `${disk.cachedImages ?? disk.binFiles ?? 0} images, ${mb(disk.bytes)}`
       },
       {
         key: "Disk Limit",
